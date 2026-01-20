@@ -5,6 +5,7 @@ const useHomeController = () => {
     return {
         text,
         setText
+        
     }
 };
 
