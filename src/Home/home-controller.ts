@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const useHomeController = () => {
     const [text, setText] = useState("Hello")
-    return{
+    return {
         text,
         setText
     }
