@@ -1,14 +1,11 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./Home/home";
-
+// import AppProvider from "./ContextAPI/AppContext";
+import Routers from "./Roters";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </BrowserRouter>
+    // <AppProvider>
+      <Routers />
+    // </AppProvider>
   );
 }
 
