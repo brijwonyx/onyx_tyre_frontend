@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  /*COLORS */
+  --color-primary: #2E7D32;
+  --color-black: #000000;
+  --color-white: #ffffff;
+
+  /* FONTS */
+  --font-sans: "Open Sans", system-ui, sans-serif;
+  --font-montserrat: "Montserrat", system-ui, sans-serif;
+
+  /*BORDER RADIUS */
+  --radius-card: 12px;
+
+  /*SHADOWS */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-dropdown: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  /*MAX WIDTHS */
+  --max-w-container: 1440px;
+  --max-w-content: 1280px;
+  --max-w-narrow: 1024px;
+
+  /* GRADIENTS */
+  --gradient-banner: linear-gradient(
+    90deg,
+    rgba(27, 11, 0, 0.8) 0%,
+    rgba(46, 125, 50, 0.8) 100%
+  );
+  --gradient-hero : linear-gradient(180deg, #2E7D32 0%, #005950 100%);
+
+}

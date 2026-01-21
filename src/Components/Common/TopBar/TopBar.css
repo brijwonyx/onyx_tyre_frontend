@@ -1,0 +1,18 @@
+@layer components {
+  .topbar {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .topbar-link {
+    text-decoration: none;
+  }
+
+  .topbar-search {
+    cursor: pointer;
+  }
+
+  .topbar-search:hover {
+    opacity: 0.8;
+  }
+}
