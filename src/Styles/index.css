@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Button Clip */
+.button-primary {
+  background: transparent;
+}
+
+.button-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0 100%
+  );
+  border: 2px solid #15803d; /* green-700 */
+  pointer-events: none;
+}
+
+.button-primary:hover::before {
+  background: #15803d;
+}
+
