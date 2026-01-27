@@ -1,13 +1,17 @@
+import social from "../../../assets/social-icons.png";
+import payment   from "../../../assets/payment-methods.png";
+
+
 const Footer = () => {
   return (
     <>
-      <footer className="footer py-2 px-8 bg-black text-white">
+      <footer className="flex flex-col gap-12 py-10 px-16 bg-black text-white">
         {/* Footer Links */}
         <section className="footer-links grid grid-cols-5 gap-20 py-8">
             <div>
-                <h3 className=" py-2">Tyres</h3>
+                <h3 className="font-openSans font-bold text-xs leading-[18px]">Tyres</h3>
                 <div className="h-px bg-white/30 my-3"></div>
-                <ul>
+                <ul className="font-openSans font-regular text-xs leading-[16px] space-y-1.5">
                     <li>Car tyres</li>
                     <li>Car tyres</li>
                     <li>Car tyres</li>
@@ -15,9 +19,9 @@ const Footer = () => {
                 </ul>
             </div>
                         <div>
-                <h3 className=" py-2">Tyre Manufacturers</h3>
+                <h3 className=" font-openSans font-bold text-xs leading-[18px]">Tyre Manufacturers</h3>
                 <div className="h-px bg-white/30 my-3"></div>
-                <ul>
+                <ul  className="font-openSans font-regular text-xs leading-[16px] space-y-1.5">
                     <li>Car tyres</li>
                     <li>Car tyres</li>
                     <li>Car tyres</li>
@@ -25,9 +29,9 @@ const Footer = () => {
                 </ul>
             </div>
                         <div>
-                <h3 className=" py-2">Garage Services</h3>
+                <h3 className="font-openSans font-bold text-xs leading-[18px]">Garage Services</h3>
                 <div className="h-px bg-white/30 my-3"></div>
-                <ul>
+                <ul className="font-openSans font-regular text-xs leading-[16px] space-y-1.5">
                     <li>Car tyres</li>
                     <li>Car tyres</li>
                     <li>Car tyres</li>
@@ -35,9 +39,9 @@ const Footer = () => {
                 </ul>
             </div>
                         <div>
-                <h3 className=" py-2">Popular Sizes</h3>
+                <h3 className=" font-openSans font-bold text-xs leading-[18px]">Popular Sizes</h3>
                 <div className="h-px bg-white/30 my-3"></div>
-                <ul>
+                <ul className="font-openSans font-regular text-xs leading-[16px] space-y-1.5">
                     <li>Car tyres</li>
                     <li>Car tyres</li>
                     <li>Car tyres</li>
@@ -45,9 +49,9 @@ const Footer = () => {
                 </ul>
             </div>
                         <div>
-                <h3 className=" py-2">Help and Advice</h3>
+                <h3 className=" font-openSans font-bold text-xs leading-[18px]">Help and Advice</h3>
                 <div className="h-px bg-white/30 my-3"></div>
-                <ul>
+                <ul className="font-openSans font-regular text-xs leading-[16px] space-y-1.5">
                     <li>Car tyres</li>
                     <li>Car tyres</li>
                     <li>Car tyres</li>
@@ -81,9 +85,12 @@ const Footer = () => {
           <div>
             <div>
               <h3>Stay connected</h3>
+              <img src={social} alt="Social icons"/>
             </div>
             <div>
               <h3>Payment methods</h3>
+              <img src={payment} alt="Payment icons"/>
+
             </div>
           </div>
         </section>

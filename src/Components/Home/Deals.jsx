@@ -1,4 +1,5 @@
 import { DealCard } from "./DealCard";
+import dealsImg from "../../assets/deals-1.png";
 
 const Deals = () => {
   return (
@@ -10,11 +11,11 @@ const Deals = () => {
       </div>
       <div>
         {/* Card */}
-        <div className="flex gap-4">
+        <div className="flex gap-4 pt-20">
           {Array.from({ length: 3 }).map((_, index) => (
             <DealCard
               key={index}
-              image=""
+              image={dealsImg}
               title="Fast, Free Delivery to You or Your Fitter"
               description="We’ll ship your tyres quickly and at no extra charge  straight to your installer or your home. Most orders arrive the next working day."
             />
