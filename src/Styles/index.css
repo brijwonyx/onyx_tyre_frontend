@@ -26,3 +26,12 @@
   background: #15803d;
 }
 
+/* Heading */
+@layer components {
+  .main-heading {
+    @apply text-black font-montserrat font-semibold text-5xl leading-[72px] tracking-normal;
+  }
+  .sub-heading {
+    @apply text-secondary font-openSans font-normal text-2xl leading-[18px] tracking-normal
+  }
+}
