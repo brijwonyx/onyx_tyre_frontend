@@ -1,7 +1,7 @@
-const Button = ({ children, solid = false ,onClick  }) => {
+const Button = ({ children, solid = false ,onClick,className  }) => {
   return (
     <button className={`btn-primary relative px-4 py-[10px] text-sm font-semibold font-montserrat uppercase 
-      ${solid ? " text-white" : " text-primary"}
+      ${solid ? " text-white" : " text-primary"} ${className}
     `} onClick={onClick}>
       <svg
         className="absolute inset-0 w-full h-full"
