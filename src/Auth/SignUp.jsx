@@ -11,17 +11,26 @@ const SignUp = () => {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Regex pattern: exactly 10 digits
+  const phoneRegex = /^\d{10}$/;
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // 🔒 STRICT GUARD
     if (loading) return;
+
+    // Validate mobile number length
+    if (!phoneRegex.test(mobile)) {
+      setError("Phone number must be exactly 10 digits");
+      return;
+    }
 
     setLoading(true);
     setError("");
@@ -30,6 +39,9 @@ const SignUp = () => {
       await axios.post(
         "http://3.26.11.176/api/v1/auth/register",
         {
+          // firstName,
+          // lastName,
+          mobile,
           email,
           password,
         },
@@ -41,15 +53,19 @@ const SignUp = () => {
         }
       );
 
-      // ✅ redirect ONLY after successful POST response
       navigate("/login");
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Registration failed"
-      );
+      setError(err.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
     }
+  };
+
+  // Only allow digits and max length 10
+  const handlePhoneChange = (e) => {
+    let value = e.target.value.replace(/\D/g, ""); // remove non-digits
+    if (value.length > 10) value = value.slice(0, 10); // limit to 10 digits
+    setMobile(value);
   };
 
   return (
@@ -64,7 +80,6 @@ const SignUp = () => {
           </p>
         </div>
 
-        {/* ✅ FORM */}
         <form className="px-6 pt-6" onSubmit={handleRegister}>
           <Input
             label="First Name"
@@ -85,6 +100,15 @@ const SignUp = () => {
           />
 
           <Input
+            label="Phone Number *"
+            type="text"
+            placeholder="Phone Number"
+            value={mobile}
+            disabled={loading}
+            onChange={handlePhoneChange}
+          />
+
+          <Input
             label="Email Address *"
             type="text"
             placeholder="Email Address"
@@ -101,9 +125,7 @@ const SignUp = () => {
           />
 
           {error && (
-            <p className="text-red-500 text-sm text-center mt-3">
-              {error}
-            </p>
+            <p className="text-red-500 text-sm text-center mt-3">{error}</p>
           )}
 
           <div className="flex gap-6 pt-6">
