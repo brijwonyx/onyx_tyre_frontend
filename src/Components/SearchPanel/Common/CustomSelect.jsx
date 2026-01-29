@@ -50,7 +50,7 @@ const CustomSelect = ({ label, placeholder, options, value, onChange }) => {
               }}
               className="px-4 py-2 cursor-pointer text-black hover:bg-green-100"
             >
-              {option}
+              {option.name}
             </div>
           ))}
         </div>
