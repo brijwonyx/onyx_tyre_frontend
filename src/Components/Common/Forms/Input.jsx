@@ -3,12 +3,13 @@ const Input = ({
   type = "text",
   placeholder,
   error,
+  textWhite,
   ...props
 }) => {
   return (
     <div className="mb-6">
       {label && (
-        <label className="font-openSans text-sm font-normal text-black">
+        <label className={`font-openSans text-sm font-normal ${textWhite ? "text-white" : "text-black"}`}>
           {label}
         </label>
       )}
