@@ -14,7 +14,7 @@ import TyreTips from "../Components/Home/TyreTips";
 const Home = () => {
   return (
     <>
-      <HeroSection/>
+      <HeroSection/> 
       <Deals/>
       <HowItWorks/>
       <ServicBanner/>
