@@ -35,3 +35,9 @@
     @apply text-secondary font-openSans font-normal text-2xl leading-[18px] tracking-normal
   }
 }
+
+.sp {
+      box-shadow: 5px 12px 22.8px 0px #00000014;
+    backdrop-filter: blur(121.0999984741211px);
+    background: #00000075;
+}
