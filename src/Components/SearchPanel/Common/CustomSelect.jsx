@@ -16,9 +16,14 @@ const CustomSelect = ({ label, placeholder, options, value, onChange }) => {
         onClick={() => setOpen((prev) => !prev)}
         className="w-full bg-white px-3 py-[13.5px] flex justify-between items-center mt-1"
       >
-        <span className={`font-openSans font-normal text-base leading-5 ${value ? "text-black" : "text-black "}`}>
+        <span
+          className={`font-openSans font-normal text-base leading-5 ${
+            value ? "text-black" : "text-black"
+          }`}
+        >
           {value || `Select ${placeholder}`}
         </span>
+
         <span className="text-sm">
           <svg
             width="12"
@@ -30,9 +35,9 @@ const CustomSelect = ({ label, placeholder, options, value, onChange }) => {
             <path
               d="M0.833374 0.833253L5.83337 5.83325L10.8334 0.833252"
               stroke="#2E7D32"
-              stroke-width="1.66667"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1.66667"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
         </span>
@@ -40,17 +45,22 @@ const CustomSelect = ({ label, placeholder, options, value, onChange }) => {
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute z-10 mt-1 w-full bg-white rounded shadow-lg">
-          {options.map((option) => (
+        <div
+          className="
+            absolute z-10 mt-1 w-full bg-white rounded shadow-lg
+            max-h-64 overflow-y-auto
+          "
+        >
+          {options.map((option, index) => (
             <div
-              key={option}
+              key={option.value ?? index}
               onClick={() => {
                 onChange(option);
                 setOpen(false);
               }}
               className="px-4 py-2 cursor-pointer text-black hover:bg-green-100"
             >
-              {option}
+              {option.name}
             </div>
           ))}
         </div>
