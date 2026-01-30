@@ -7,7 +7,7 @@ const SearchPanel = () => {
     const [activeTab,setActiveTab] = useState("tyres");
     const [activeSideTab,setActiveSideTab] = useState("vehicle")
   return(
-  <div className="max-w-[1040px] sp">
+  <div className="max-w-[1040px] sp mt-5">
     <SearchTabs activeTab={activeTab} onTabChange={setActiveTab}/>
     <div className="flex gap-[30px] p-10">
         <SearchSideTabs activeSideTab={activeSideTab} onSideTabChange={setActiveSideTab}/>
