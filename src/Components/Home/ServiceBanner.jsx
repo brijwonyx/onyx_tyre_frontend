@@ -1,12 +1,13 @@
 import banner1 from "../../assets/banner1.png";
 import banner2 from "../../assets/banner2.png";
-import banner3 from "../../assets/banner3.png";    
+import banner3 from "../../assets/banner3.png";   
+import bgBanner from "../../assets/banner-1.jpg"; 
 
 const ServicBanner = () => {
   return (
     <>
-      <div className="bg-banner-green">
-        <div className="">
+      <div className="bg-no-repeat bg-center bg-cover" style={{ backgroundImage: `url(${bgBanner})` }}>
+        <div className="bg-banner-green">
           <div className="py-20 px-[120px] text-white">
             <div className="flex gap-8">
               <div className="flex gap-[30px]">

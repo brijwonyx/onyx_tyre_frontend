@@ -1,18 +1,20 @@
 import { useState } from "react";
 import BrandCard from "../Common/BrandCard";
-import CustomSelect from "../Common/CustomSelect";
-import Button from "../../Common/Forms/Button";
+import CustomSelect from "../../common/forms/CustomSelect";
+import Button from "../../common/forms/Button";
+import { useNavigate } from "react-router-dom";
 
 const Brands = Array.from({ length: 16 }, (_, index) => ({
   id: `{brand-${index}}`,
   name: "Michelin",
   img: "/",
 }));
-// const MAX_VISIBLE = 16
+
 
 const WheelByBrand = () => {
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [zipCode, setZipCode] = useState("");
+  const navigate = useNavigate()
 
 
   const toggleBrand = (id) => {
@@ -20,7 +22,7 @@ const WheelByBrand = () => {
       prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id],
     );
   };
-  // const visibleBrands = BRANDS.slice(0, MAX_VISIBLE);
+ 
 
   return (
     <div className="flex flex-col gap-4 text-white w-full ">
@@ -52,7 +54,7 @@ const WheelByBrand = () => {
           onChange={setZipCode}
         />
       </div>
-      <Button solid className="w-fit mx-auto mt-3">
+      <Button solid className="w-fit mx-auto mt-3" onClick={()=>navigate("/search?type=brand")}>
         View Tyres
       </Button>
     </div>

@@ -1,29 +1,50 @@
-const Button = ({ children, solid = false ,onClick,className  }) => {
+import { ArrowUpRight } from "lucide-react";
+import arrow from "../../../assets/arrow.svg";
+
+const Button = ({
+  children,
+  solid = false,
+  className = "",
+  onClick,
+}) => {
   return (
-    <button className={`btn-primary relative px-4 py-[10px] text-sm font-semibold font-montserrat uppercase 
-      ${solid ? " text-white" : " text-primary"} ${className}
-    `} onClick={onClick}>
+    <button
+      onClick={onClick}
+      className={`relative inline-flex items-center justify-center
+        h-[48px] px-10
+        font-montserrat text-sm font-semibold uppercase
+        ${solid ? "text-white" : "text-green-700"}
+        ${className}
+      `}
+    >
+      {/* SVG Background */}
       <svg
         className="absolute inset-0 w-full h-full"
-        viewBox="0 0 100 38"
+        viewBox="0 0 100 100"
         preserveAspectRatio="none"
+        aria-hidden
       >
         <polygon
           points="
-            0.75,0.75
-            99.25,0.75
-            99.25,29
-            88,37.25
-            0.75,37.25
+            0,0
+            100,0
+            100,78
+            88,100
+            0,100
           "
-          fill={solid ? "#2E7D32" : "white"}
+          fill={solid ? "#2E7D32" : "transparent"}
           stroke="#2E7D32"
-          strokeWidth="1.5"
+          strokeWidth="2"
           vectorEffect="non-scaling-stroke"
         />
       </svg>
 
-      <span className="relative z-10">{children}</span>
+      <span className="relative z-10 flex items-center gap-4 ">
+        
+        {children}
+        <img src={arrow} alt="arrow" className="w-2 h-2" color={solid ? "#2E7D32" : "white"}/>
+      </span>
+
     </button>
   );
 };

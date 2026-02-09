@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import CustomSelect from "../Common/CustomSelect";
-import Button from "../../Common/Forms/Button";
+import CustomSelect from "../../common/forms/CustomSelect";
+import Button from "../../common/forms/Button";
 
 const BASE_URL = "http://tyresaddict.ru/api/tyres";
 

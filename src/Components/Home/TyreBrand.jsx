@@ -1,4 +1,4 @@
-import Button from "../Common/Forms/Button"
+import Button from "../common/forms/Button"
 import brands from "../../assets/brands.png"
 import brandsTyre from "../../assets/brands-tyre.svg"
 const TyreBrand = () => {

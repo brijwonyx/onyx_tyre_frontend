@@ -1,7 +1,7 @@
 import { useState } from "react";
 import BrandCard from "../Common/BrandCard";
-import CustomSelect from "../Common/CustomSelect";
-import Button from "../../Common/Forms/Button";
+import CustomSelect from "../../common/forms/CustomSelect";
+import Button from "../../common/forms/Button";
 
 const Brands = Array.from({ length: 16 }, (_, index) => ({
   id: `{brand-${index}}`,

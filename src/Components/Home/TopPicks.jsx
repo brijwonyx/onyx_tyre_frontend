@@ -1,4 +1,4 @@
-import Button from "../Common/Forms/Button";
+import Button from "../common/forms/Button";
 import tyreIitem from "../../assets/tyre-item.png";
 import rattings from "../../assets/rattings.png";
 const TopPicks = () => {

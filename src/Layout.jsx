@@ -1,16 +1,25 @@
 import { Outlet } from "react-router-dom";
-import TopBar from "./Components/Common/TopBar/topbar";
-import Header from "./Components/Common/Header/Header";
-import Footer from "./Components/Common/Footer/Footer";
+import TopBar from "./components/common/layout/TopBar";
+import Header from "./components/common/layout/Header";
+import Footer from "./components/common/layout/Footer";
+import AddToCartDrawer from "./components/cart/drawer/AddToCartDrawer";
+import { useState } from "react";
 
 const Layout = () => {
-    return (
-        <>
-            <TopBar />
-            <Header />
-            <Outlet/>
-            <Footer />
-        </>
-    );
-}
+  const [openCart, setOpenCart] = useState(false);
+  return (
+    <>
+      <TopBar />
+      <Header />
+      <Outlet
+        context={{
+          openCart: () => setOpenCart(true),
+        }}
+      />
+      <Footer />
+
+      <AddToCartDrawer open={openCart} onClose={() => setOpenCart(false)} closeCart={() => setOpenCart(false)}/>
+    </>
+  );
+};
 export default Layout;

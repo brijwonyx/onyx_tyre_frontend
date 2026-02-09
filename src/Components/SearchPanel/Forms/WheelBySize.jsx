@@ -1,12 +1,13 @@
 import { useState } from "react";
-import Input from "../../Common/Forms/Input";
-import CustomSelect from "../Common/CustomSelect";
+import Input from "../../common/forms/Input";
+import CustomSelect from "../../common/forms/CustomSelect";
 import NumberField from "../Common/NumberField";
-import Button from "../../Common/Forms/Button";
+import Button from "../../common/forms/Button";
+import { useNavigate } from "react-router-dom";
 
 const WheelBySize = () => {
   const [zipCode, setZipCode] = useState("");
-
+  const navigate = useNavigate();
   return (
     <>
       <div className="flex flex-col gap-4 text-white w-full ">
@@ -44,7 +45,7 @@ const WheelBySize = () => {
           value={zipCode}
           onChange={setZipCode}
         />
-        <Button solid className="w-fit mx-auto mt-3">
+        <Button solid className="w-fit mx-auto mt-3" onClick={()=>navigate("/search?type=size")}>
           View Tyres
         </Button>
       </div>

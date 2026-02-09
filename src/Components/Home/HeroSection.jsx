@@ -1,4 +1,4 @@
-import SearchPanel from "../SearchPanel/SearchPanel";
+import SearchPanel from "../searchPanel/SearchPanel";
 import carImage from "../../assets/hero.png";
 
 const HeroSection = () => {

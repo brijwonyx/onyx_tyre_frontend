@@ -1,6 +1,7 @@
 import { useState } from "react";
-import CustomSelect from "../Common/CustomSelect";
-import Button from "../../Common/Forms/Button";
+import CustomSelect from "../../common/forms/CustomSelect";
+import Button from "../../common/forms/Button";
+import { useNavigate } from "react-router-dom";
 
 const WheelByVehicle = () => {
   const [year, setYear] = useState("");
@@ -8,6 +9,7 @@ const WheelByVehicle = () => {
   const [model, setModel] = useState("");
   const [style, setStyle] = useState("");
   const [zipCode, setZipCode] = useState("");
+  const navigate = useNavigate();
 
   return (
     <div className="flex flex-col gap-4 text-white w-full ">
@@ -58,7 +60,7 @@ const WheelByVehicle = () => {
           onChange={setZipCode}
         />
       </div>
-      <Button solid className="w-fit mx-auto mt-3">
+      <Button solid className="w-fit mx-auto mt-3" onClick={()=>navigate("/search?type=vehicle")}>
         View Tyres
       </Button>
     </div>

@@ -41,3 +41,21 @@
     backdrop-filter: blur(121.0999984741211px);
     background: #00000075;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+
+/* HARD OVERRIDE FOR STACKING */
+.swiper {
+  overflow: visible !important;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+}
