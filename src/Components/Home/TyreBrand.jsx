@@ -15,4 +15,4 @@ const TyreBrand = () => {
         </section>
     )
 }
-export default TyreBrand
+export default TyreBrand 
