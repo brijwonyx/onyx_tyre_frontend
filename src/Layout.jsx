@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
 import TopBar from "./Components/Common/layout/TopBar";
-import Header from "./components/common/layout/Header";
-import Footer from "./components/common/layout/Footer";
-import AddToCartDrawer from "./components/cart/drawer/AddToCartDrawer";
+import Header from "./Components/Common/layout/Header";
+import Footer from "./Components/Common/layout/Footer";
+import AddToCartDrawer from "./Components/cart/drawer/AddToCartDrawer";
 import { useState } from "react";
 
 const Layout = () => {
