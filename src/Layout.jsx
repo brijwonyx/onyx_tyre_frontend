@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import TopBar from "./components/common/layout/TopBar";
+import TopBar from "./Components/Common/layout/TopBar";
 import Header from "./components/common/layout/Header";
 import Footer from "./components/common/layout/Footer";
 import AddToCartDrawer from "./components/cart/drawer/AddToCartDrawer";
