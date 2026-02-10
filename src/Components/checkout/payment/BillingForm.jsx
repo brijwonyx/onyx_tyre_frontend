@@ -1,4 +1,4 @@
-import Input from "../../common/forms/Input";
+import Input from "../../Common/Forms/Input";
 
 const BillingForm = () => {
   return (

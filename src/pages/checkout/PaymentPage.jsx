@@ -1,6 +1,6 @@
 import { useState } from "react";
-import PaymentMethods from "../../components/checkout/payment/PaymentMethods";
-import BillingForm from "../../components/checkout/payment/BillingForm";
+import PaymentMethods from "../../Components/checkout/payment/PaymentMethods";
+import BillingForm from "../../Components/checkout/payment/BillingForm";
 import affirm from "../../assets/affirm.png";
 
 
