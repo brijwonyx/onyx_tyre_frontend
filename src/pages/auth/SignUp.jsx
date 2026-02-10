@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Input from "../../components/common/forms/Input";
-import Button from "../../Components/Common/Forms/Button";
+import Button from "../../components/common/forms/Button";
 import PasswordInput from "../../components/common/forms/PasswordInput";
 
 const SignUp = () => {
