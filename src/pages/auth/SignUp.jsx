@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import Input from "../../components/common/forms/Input";
-import Button from "../../components/common/forms/Button";
-import PasswordInput from "../../components/common/forms/PasswordInput";
+import Input from "../../Components/Common/Forms/Input";
+import Button from "../../Components/Common/Forms/Button";
+import PasswordInput from "../../Components/Common/Forms/PasswordInput";
 
 const SignUp = () => {
   const navigate = useNavigate();
