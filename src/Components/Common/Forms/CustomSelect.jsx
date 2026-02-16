@@ -1,13 +1,18 @@
 import { useState } from "react";
 
 
-const CustomSelect = ({ label, placeholder, options, value, onChange,className }) => {
+const CustomSelect = ({ label, placeholder, options, value, onChange,className,variant = 'default' }) => {
   const [open, setOpen] = useState(false);
+  const variants = {
+    default: "bg-white px-3 py-[13.5px]",
+    dark: "box-shadow-[0_0_0_1px_#00000014,0_1px_2px_0px_#0000001F] bg-[#FAFAFA] px-2 py-[6px] rounded-md mt-2 border border-gray-300",
+  };
+
 
   return (
     <div className="relative w-full">
       {/* Label */}
-      <label className={`font-montserrat font-normal text-base leading-[24px] `}>
+      <label className={`font-montserrat  leading-[24px] ${variant === "dark"? "font-medium text-[13px]" : "font-normal text-base"}`}>
         {label}
       </label>
 
@@ -15,12 +20,12 @@ const CustomSelect = ({ label, placeholder, options, value, onChange,className }
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className={`w-full bg-white px-3 py-[13.5px] flex justify-between items-center ${className}`}
+        className={`w-full flex justify-between items-center  ${className} ${variants[variant]}`}
       >
         <span
-          className={`font-openSans font-normal text-base leading-5 ${
-            value ? "text-black" : "text-black"
-          }`}
+          className={`font-openSans font-normal  leading-5 
+            ${value ? "text-black" : "text-[#A1A1AA]"} 
+            ${variant === "dark"? "text-[13px] " : "text-base"} `}
         >
           {value || `${placeholder}`}
         </span>

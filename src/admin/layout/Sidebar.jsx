@@ -4,7 +4,7 @@ import Icon from "../components/common/Icons";
 const Sidebar = () => {
   const navItems = [
     { label: "Orders", to: "/admin/orders", icon: "orders" },
-    { label: "Products", to: "/admin", icon: "products", disabled: true },
+    { label: "Products", to: "/admin/products", icon: "products", },
     { label: "Inventory", to: "/admin", icon: "inventory", disabled: true },
     { label: "Customers", to: "/admin/customers", icon: "customers" },
     { label: "Promotions", to: "/admin", icon: "promotion", disabled: true },
