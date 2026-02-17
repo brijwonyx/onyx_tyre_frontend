@@ -1,4 +1,6 @@
-export default function DataTable({ columns, data }) {
+import ActionDropdown from "./ActionDropdown";
+
+export default function DataTable({ columns, data,actions }) {
   const renderCell = (row, column) => {
     const value = row[column.key];
 
@@ -20,17 +22,16 @@ export default function DataTable({ columns, data }) {
   };
 
   return (
-    <div className="border rounded-xl overflow-hidden bg-white">
-
+    <div className="border overflow-visible bg-white">
       <table className="w-full text-sm">
-
-        <thead className="bg-gray-50">
+        <thead className="bg-[#FAFAFA]">
           <tr>
             {columns.map((col) => (
-              <th key={col.key} className="px-4 py-3 text-left">
+              <th key={col.key} className="px-4 py-3 text-left text-[#848588] font-medium">
                 {col.label}
               </th>
             ))}
+            <th className="px-4 py-3 w-10"></th>
           </tr>
         </thead>
 
@@ -38,16 +39,17 @@ export default function DataTable({ columns, data }) {
           {data.map((row, index) => (
             <tr key={index} className="border-t">
               {columns.map((col) => (
-                <td key={col.key} className="px-4 py-3">
+                <td key={col.key} className="px-4 py-3 text-[13px]">
                   {renderCell(row, col)}
                 </td>
               ))}
+              <td className="px-4 py-3 text-right">
+                <ActionDropdown actions={actions} row={row} />
+              </td>
             </tr>
           ))}
         </tbody>
-
       </table>
-
     </div>
   );
 }

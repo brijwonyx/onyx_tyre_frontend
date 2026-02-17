@@ -6,6 +6,7 @@ const Input = ({
   textWhite,
   variant = "default",
   slug,
+  subLabel,
   ...props
 }) => {
   const variants = {
@@ -20,6 +21,7 @@ const Input = ({
           className={`font-openSans text-sm font-normal ${textWhite ? "text-white" : "text-black"}`}
         >
           {label}
+          <span className="text-[#A1A1AA]">{subLabel}</span>
         </label>
       )}
       <div className="flex items-center relative">
