@@ -20,4 +20,4 @@ const CheckoutLayout = () => {
   );
 };
 
-export default CheckoutLayout;
+export default CheckoutLayout; 
