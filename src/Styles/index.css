@@ -59,3 +59,11 @@
   display: flex;
   justify-content: center;
 }
+
+
+/* CK editor */
+@layer components {
+  .ck-editor__editable {
+    @apply min-h-[200px];
+  }
+}

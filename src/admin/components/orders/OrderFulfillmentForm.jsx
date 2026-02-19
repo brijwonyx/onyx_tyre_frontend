@@ -4,7 +4,7 @@ import Toggle from "../common/Toggle";
 const OrderFulfillmentForm = () => {
     const [notification,setNotification] = useState(true);
   return (
-    <div className="space-y-6 text-sm">
+    <div className="px-6 py-4 text-sm">
       {/* Location */}
       <div>
         <label className="block font-medium mb-1">Location</label>

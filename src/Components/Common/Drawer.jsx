@@ -35,7 +35,7 @@ const Drawer = ({ open, onClose, title, children,footer }) => {
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-xl bg-white shadow-xl flex flex-col">
                   {/* Header */}
                   <div className="flex items-center justify-between py-6 px-4 border-b border-[#8E8E8E]">
-                    <Dialog.Title className="font-montserrat font-bold text-2xl text-black">
+                    <Dialog.Title className="font-montserrat font-medium text-2xl text-black">
                       {title}
                     </Dialog.Title>
                     <button

@@ -9,38 +9,49 @@ import PageHeader from "../../components/common/PageHeader";
 
 import OrderFulfillmentForm from "../../components/orders/OrderFulfillmentForm";
 import MarkFulfillmentShipped from "../../components/orders/MarkFulfillmentShipped";
+import InfoRow from "../../components/common/InfoRow";
+import Drawer from "../../../components/common/Drawer";
 
 const OrderView = () => {
   const [activeModal, setActiveModal] = useState(false);
   return (
     <>
       <PageHeader title="Orders" />
-      <div className="flex">
-        <div className="w-7/12">
+      <div className="grid grid-cols-3 gap-[10px] px-[10px]">
+        <div className="col-span-2">
           <OrderSummary />
           <PaymentsCard />
           <UnfulfilledItemsCard onAction={setActiveModal} />
         </div>
-        <div className="w-5/12">
-          <CustomerCard />
+        <div className="">
+          <ContentCard>
+            <div className="p-3 border-b border-[#E4E4E7]">
+              <h2 className="text-base font-medium">Customer</h2>
+            </div>
+            <InfoRow label="ID" value="abc xyz" />
+            <InfoRow label="Contact" value="abc@gmail.com" copy/>
+            <InfoRow label="Shipping address" value="-" />
+            <InfoRow label="Billing address" value="-" />
+          </ContentCard>
+          {/* <CustomerCard /> */}
           <ActivityCard />
         </div>
       </div>
 
-      <DrawerModal
+      <Drawer
         open={activeModal === "fullfill"}
          onClose={() => setActiveModal(null)}
         title="Order Fulfillment"
       >
         <OrderFulfillmentForm />
-      </DrawerModal>
-            <DrawerModal
+      </Drawer>
+            <Drawer
         open={activeModal === "shipped"}
          onClose={() => setActiveModal(null)}
         title="Mark fulfillment shipped"
       >
         <MarkFulfillmentShipped />
-      </DrawerModal>
+      </Drawer>
     </>
   );
 };
