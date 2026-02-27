@@ -7,10 +7,12 @@ import Products from "../pages/products/Products";
 import ProductDetails from "../pages/products/ProductDetails";
 import VariantDetails from "../pages/products/VariantDetails";
 import CustomerDetails from "../pages/customers/CustomerDetails";
+import DashBoard from "../pages/Dashboard";
 
 const AdminRoutes = (
     <Route path="/admin" element={<AdminLayout />}>
-        <Route index path="/admin/orders" element={<Orders />} />
+        <Route index element={<DashBoard />} />
+        <Route path="/admin/orders" element={<Orders />} />
         <Route path="/admin/orders/view" element={<OrderView />} />
         <Route path="/admin/customers" element={<Customers />} />
         <Route path="/admin/customers/view" element={<CustomerDetails />} />

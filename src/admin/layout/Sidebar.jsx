@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Icon from "../components/common/Icons";
 
 const Sidebar = () => {
@@ -14,12 +14,14 @@ const Sidebar = () => {
   return (
     <aside className="w-60 h-screen border-r flex flex-col flex-shrink-0">
       <div className="p-3 border-b border-[var(--Border-primary, #E4E4E7)]">
+        <Link to="/admin">
         <div className="flex items-center gap-2  p-[4px]">
           <div className="w-6 h-6 rounded bg-gray-100 flex items-center justify-center">
             O
           </div>
           <h2 className="text-[13px] leading-5 font-medium">Onyx Store</h2>
         </div>
+        </Link>
       </div>
       <nav className="flex-1 px-2 py-3 space-y-1">
         {navItems.map((item) => (
