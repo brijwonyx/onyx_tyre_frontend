@@ -1,6 +1,6 @@
 import ActionDropdown from "./ActionDropdown";
 
-export default function DataTable({ columns, data,actions }) {
+export default function DataTable({ columns, data, actions, }) {
   const renderCell = (row, column) => {
     const value = row[column.key];
 
@@ -27,7 +27,10 @@ export default function DataTable({ columns, data,actions }) {
         <thead className="bg-[#FAFAFA]">
           <tr>
             {columns.map((col) => (
-              <th key={col.key} className="px-4 py-3 text-left text-[#848588] font-medium">
+              <th
+                key={col.key}
+                className="px-4 py-3 text-left text-[#848588] font-medium"
+              >
                 {col.label}
               </th>
             ))}
@@ -43,9 +46,11 @@ export default function DataTable({ columns, data,actions }) {
                   {renderCell(row, col)}
                 </td>
               ))}
-              <td className="px-4 py-3 text-right">
-                <ActionDropdown actions={actions} row={row} />
-              </td>
+              {actions && (
+                <td className="px-4 py-3 text-right">
+                  <ActionDropdown actions={actions} row={row} />
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
