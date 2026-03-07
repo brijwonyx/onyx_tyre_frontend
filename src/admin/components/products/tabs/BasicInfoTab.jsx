@@ -19,7 +19,7 @@ const BasicInfoTab = () => {
           <CustomSelect
             label="Brand"
             placeholder="Select Brand"
-            options={["Option 1", "Option 2", "Option 3"]}
+            options={brand || []}
             value={""}
             onChange={""}
             variant="dark"

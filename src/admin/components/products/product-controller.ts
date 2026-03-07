@@ -13,8 +13,8 @@ const useProductController = () => {
         if (data) {
             setBrand(
                 data.map((item) => ({
-                    value: item.id,
-                    name: item.name,
+                    value: item.vendor_id,
+                    name: item.vendor_name,
                 }))
             );
         }
