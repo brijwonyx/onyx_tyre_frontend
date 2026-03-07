@@ -1,10 +1,12 @@
-import CustomSelect from "../../../../components/common/forms/CustomSelect";
-import Input from "../../../../components/common/forms/Input";
+import CustomSelect from "../../../../Components/common/forms/CustomSelect";
+import Input from "../../../../Components/Common/Forms/Input";
 import TextEditor from "../../common/forms/TextEditor";
 import MediaUpload from "../../common/MediaUpload";
+import useProductController from "../product-controller";
 import FAQList from "./FAQList";
 
 const BasicInfoTab = () => {
+  const {brand} = useProductController()
   return (
     <div className="max-w-[800px] py-6 mx-auto">
       <div>
