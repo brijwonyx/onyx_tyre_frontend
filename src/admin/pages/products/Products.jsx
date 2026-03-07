@@ -8,6 +8,7 @@ import CreateProductModal from "../../components/products/CreateProductModal";
 import DataTable from "../../components/common/DataTable";
 import TableFilters from "../../components/common/TableFilter";
 import { useNavigate } from "react-router-dom";
+import Toggle from "../../components/common/Toggle";
 
 const Products = () => {
   const [open, setOpen] = useState(false);
@@ -15,50 +16,62 @@ const Products = () => {
 
   const productsTableData = {
     columns: [
-      {
-        key: "product",
-        label: "Product",
-        type: "text",
-      },
+      // {
+      //   key: "product",
+      //   label: "Product",
+      //   type: "text",
+      // },
       {
         key: "brand",
         label: "Brand",
         type: "text",
       },
       {
-        key: "collection",
-        label: "Collection",
+        key: "brandLogo",
+        label: "Brand Logo",
         type: "text",
       },
       {
-        key: "variants",
-        label: "Variants",
+        key: "stock",
+        label: "Stock",
+        type: "text",
+      },
+      {
+        key: "warehouse",
+        label: "WareHouse",
         type: "badgeNumber",
         suffix: "variants",
       },
       {
+        key: "coo",
+        label: "COO",
+        type: "text",
+      },
+      {
         key: "status",
         label: "Status",
-        type: "statusBadge",
+        type: "text",
       },
     ],
 
     rows: [
       {
         id: 1,
-        product: "Michelin Pilot Sport 4",
         brand: "Michelin",
-        collection: "-",
-        variants: 3,
-        status: "Inactive",
+        brandLogo: "",
+        stock: "5",
+        warehouse: "",
+        coo: "",
+        status: <Toggle enabled={false} onChange={() => {}} />,
       },
       {
         id: 2,
-        product: "Bridgestone Turanza T005",
         brand: "Bridgestone",
-        collection: "-",
-        variants: 2,
-        status: "Active",
+        brandLogo: "",
+        stock: "9",
+        warehouse: "",
+        coo: "",
+        status: <Toggle enabled={true} onChange={() => {}} />,
       },
     ],
 
@@ -70,49 +83,46 @@ const Products = () => {
     },
   };
   const productActions = [
-  {
-    key: "view",
-    label: "View",
-    onClick: (row) => {
-
-      navigate(`view`)
+    {
+      key: "view",
+      label: "View",
+      onClick: (row) => {
+        navigate(`view`);
+      },
     },
-  },
-  {
-    key: "delete",
-    label: "Delete",
-    variant: "danger",
-    onClick: (row) => {
-      console.log("Delete product:", row.id);
+    {
+      key: "delete",
+      label: "Delete",
+      variant: "danger",
+      onClick: (row) => {
+        console.log("Delete product:", row.id);
+      },
     },
-  },
-];
-
+  ];
 
   return (
     <>
       <PageHeader title="Products" />
-      <ContentCard>
-        <PageHeader2
-          title="Products"
-          buttonLabel="Create Product"
-          onClick={() => setOpen(true)}
-        />
-        {/* <OrdersFilters /> */}
-        <TableFilters
-          filters={[
-            {  label: "Updated" },
-            { label: "Created" },
-          ]}
-        />
-        <DataTable
-          columns={productsTableData.columns}
-          data={productsTableData.rows}
-          actions={productActions}
-          pagination={productsTableData.pagination}
-        />
-        {/* <OrdersTable /> */}
-      </ContentCard>
+      <div className="px-[10px]">
+        <ContentCard>
+          <PageHeader2
+            title="Products"
+            buttonLabel="Create Product"
+            onClick={() => setOpen(true)}
+          />
+          {/* <OrdersFilters /> */}
+          <TableFilters
+            filters={[{ label: "Updated" }, { label: "Created" }]}
+          />
+          <DataTable
+            columns={productsTableData.columns}
+            data={productsTableData.rows}
+            actions={productActions}
+            pagination={productsTableData.pagination}
+          />
+          {/* <OrdersTable /> */}
+        </ContentCard>
+      </div>
       <CreateProductModal open={open} setOpen={setOpen} />
     </>
   );

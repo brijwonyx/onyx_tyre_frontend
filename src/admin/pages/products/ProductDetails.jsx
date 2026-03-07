@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { CircleCheck, CirclePlus, Cross, Pencil, Plus } from "lucide-react";
 import ActionDropdown from "../../components/common/ActionDropdown";
 import Badge from "../../components/common/Badge";
 import ContentCard from "../../components/common/ContentCard";
@@ -6,8 +6,13 @@ import DataTable from "../../components/common/DataTable";
 import InfoRow from "../../components/common/InfoRow";
 import PageHeader from "../../components/common/PageHeader";
 import TableFilters from "../../components/common/TableFilter";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function ProductDetails() {
+  const navigate = useNavigate();
+  const [editingOrganize, setEditingOrganize] = useState(false);
+  const [editingAttributes, setEditingAttributes] = useState(false);
   const product = {
     name: "Michelin Pilot Sport 4",
     status: "Published",
@@ -33,6 +38,30 @@ export default function ProductDetails() {
       size: "225/45R17",
       sku: "MB-502",
       inventory: "482 available at 5 location",
+    },
+  ];
+  const VariantActions = [
+    {
+      key: "view",
+      label: "View",
+      onClick: (row) => {
+        navigate(`variant`);
+      },
+    },
+    {
+      key: "delete",
+      label: "Delete",
+      variant: "danger",
+      onClick: (row) => {
+        console.log("Delete product:", row.id);
+      },
+    },
+  ];
+  const editActions = [
+    {
+      key: "edit",
+      label: "Edit",
+      onClick: () => setEditingOrganize(true),
     },
   ];
 
@@ -78,14 +107,14 @@ export default function ProductDetails() {
               </div>
 
               <div className="flex items-center gap-3">
-                <button className="flex items-center gap-2 px-3 py-1.5 text-xs border rounded-md text-[#09090B]">
+                {/* <button className="flex items-center gap-2 px-3 py-1.5 text-xs border rounded-md text-[#09090B]">
                   <Plus size={16} />
                   Edit Stock Levels
                 </button>
                 <button className="flex items-center gap-2 px-3 py-1.5 text-xs border rounded-md text-[#09090B]">
                   <Plus size={16} />
                   Edit Prices
-                </button>
+                </button> */}
 
                 <button className="bg-black text-white text-sm px-2 py-1 rounded-md flex items-center gap-2 shadow-[0_0_0_1px_#18181B,0_1px_2px_0px_#00000066,0_0.75px_0px_0px_#FFFFFF33_inset]">
                   Create variant
@@ -95,7 +124,11 @@ export default function ProductDetails() {
             <TableFilters
               filters={[{ label: "Created" }, { label: "Inventory" }]}
             />
-            <DataTable columns={variantsColumns} data={variantsData} />
+            <DataTable
+              columns={variantsColumns}
+              data={variantsData}
+              actions={VariantActions}
+            />
           </ContentCard>
         </div>
 
@@ -103,24 +136,56 @@ export default function ProductDetails() {
         <div className="space-y-6">
           {/* Organize */}
           <ContentCard title="">
-            <div className="p-3 border-b border-[#E4E4E7]">
+            <div className="p-3 border-b border-[#E4E4E7] flex justify-between items-center">
               <h2 className="text-base font-medium">Organize</h2>
+              <div>
+                {!editingOrganize ? (
+                  <Pencil
+                    size={16}
+                    className="cursor-pointer"
+                    onClick={() => setEditingOrganize(true)}
+                  />
+                ) : (
+                  <div className="flex gap-2 text-xs">
+                    <button onClick={() => setEditingOrganize(false)}>
+                      <CirclePlus color="#971717" size={16} className="rotate-45"/>
+                    </button>
+                    <button className="primary "><CircleCheck size={16} /></button>
+                  </div>
+                )}
+              </div>
             </div>
-            <InfoRow label="Tags" value="-" />
-            <InfoRow label="Type" value="-" />
-            <InfoRow label="Collection" value="-" />
-            <InfoRow label="Categories" value="-" />
+            <InfoRow label="Tags" value="-" editing={editingOrganize} />
+            <InfoRow label="Type" value="-" editing={editingOrganize} />
+            <InfoRow label="Collection" value="-" editing={editingOrganize} />
+            <InfoRow label="Categories" value="-" editing={editingOrganize} />
           </ContentCard>
 
           {/* Attributes */}
           <ContentCard title="">
-            <div className="p-3 border-b border-[#E4E4E7]">
+            <div className="p-3 border-b border-[#E4E4E7] flex justify-between items-center">
               <h2 className="text-base font-medium">Attributes</h2>
+                            <div>
+                {!editingAttributes ? (
+                  <Pencil
+                    size={16}
+                    className="cursor-pointer"
+                    onClick={() => setEditingAttributes(true)}
+                  />
+                ) : (
+                  <div className="flex gap-2 text-xs">
+                    <button onClick={() => setEditingAttributes(false)}>
+                      <CirclePlus color="#971717" size={16} className="rotate-45"/>
+                    </button>
+                    <button className="primary "><CircleCheck size={16} /></button>
+                  </div>
+                )}
+              </div>
             </div>
-            <InfoRow label="Length" value="-" />
-            <InfoRow label="MID code" value="-" />
-            <InfoRow label="HS code" value="-" />
-            <InfoRow label="Country of origin" value="-" />
+            <InfoRow label="Length" value="-" editing={editingAttributes} />
+            <InfoRow label="MID code" value="-" editing={editingAttributes} />
+            <InfoRow label="HS code" value="-" editing={editingAttributes} />
+            <InfoRow label="Country of origin" value="-" editing={editingAttributes} />
           </ContentCard>
         </div>
       </div>

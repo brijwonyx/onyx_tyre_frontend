@@ -27,7 +27,8 @@ export default function CreateProductModal({ open, setOpen }) {
                   <img src={esc} salt="esc" />
                 </button>
                 <TabList className="flex">
-                  {["Basic Info", "Categories", "Variants", "Pricing"].map(
+                  {/* {["Basic Info", "Categories", "Variants", "Pricing"].map( */}
+                  {["Basic Info"].map(
                     (tab) => (
                       <Tab
                         key={tab}
@@ -48,7 +49,6 @@ export default function CreateProductModal({ open, setOpen }) {
 
               <TabPanels className="flex-1 overflow-y-auto">
                 <TabPanel>
-                  {/* <BasicInfoTab formData={formData} setFormData={setFormData} /> */}
                   <BasicInfoTab />
                 </TabPanel>
 

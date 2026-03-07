@@ -15,15 +15,46 @@ const BasicInfoTab = () => {
       <div className="flex flex-col gap-6 mt-6">
         <div className="grid grid-cols-3 gap-3">
           <CustomSelect
-            label="Category"
-            placeholder="Select Category"
+            label="Brand"
+            placeholder="Select Brand"
             options={["Option 1", "Option 2", "Option 3"]}
             value={""}
             onChange={""}
             variant="dark"
           />
-          <Input label="Title" placeholder="Title Name" variant="dark" />
-          <Input label="Slug" placeholder="Slug" variant="dark" slug={"/"} />
+          <CustomSelect
+            label="Model"
+            placeholder="Select Model"
+            options={["Option 1", "Option 2", "Option 3"]}
+            value={""}
+            onChange={""}
+            variant="dark"
+          />
+          <CustomSelect
+            label="Fitment"
+            placeholder="Select Fitment"
+            options={["Option 1", "Option 2", "Option 3"]}
+            value={""}
+            onChange={""}
+            variant="dark"
+          />
+        </div>
+        <div className="grid grid-cols-4 gap-3">
+          <Input label="Price" placeholder="Price" variant="dark" />
+          <Input
+            label="Compare Price"
+            placeholder="Compare Price"
+            variant="dark"
+          />
+          <Input label="Stock" placeholder="Stock" variant="dark" />
+          <CustomSelect
+            label="Warehouse"
+            placeholder="Select Warehouse"
+            options={["Option 1", "Option 2", "Option 3"]}
+            value={""}
+            onChange={""}
+            variant="dark"
+          />
         </div>
         <div className="w-full">
           <label className="block font-medium text-[13px] text-[#18181B] font-montserrat mb-2">
@@ -42,10 +73,10 @@ const BasicInfoTab = () => {
             Product Details
           </h2>
         </div>
-        <TextEditor label={"Tyre Overview"}/>
-        <TextEditor label={"Features"}/>
-        <TextEditor label={"Warranty Information"}/>
-        <TextEditor label={"Tyre Spec Sheet"}/>
+        {/* <TextEditor label={"Tyre Overview"} /> */}
+        {/* <TextEditor label={"Features"} /> */}
+        <TextEditor label={"Warranty Information"} />
+        {/* <TextEditor label={"Tyre Spec Sheet"} /> */}
         <FAQList />
       </div>
     </div>
