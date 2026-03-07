@@ -59,7 +59,7 @@ const CustomSelect = ({ label, placeholder, options, value, onChange,className,v
         >
           {options.map((option, index) => (
             <div
-              key={option.value ?? index}
+              key={index}
               onClick={() => {
                 onChange(option);
                 setOpen(false);

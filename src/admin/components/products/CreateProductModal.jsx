@@ -6,10 +6,12 @@ import VariantsTab from "./tabs/VariantsTab";
 import PricingTab from "./tabs/PrincingTab";
 import { X } from "lucide-react";
 import esc from "../../assets/esc.svg";
+import useProductController from "./product-controller";
 
 export default function CreateProductModal({ open, setOpen }) {
   const [formData, setFormData] = useState({});
-
+  const { brands, addProduct, onChangeHandler } = useProductController()
+  console.log(brands, "vhhvvhvhvh")
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={() => setOpen(false)}>
@@ -23,7 +25,7 @@ export default function CreateProductModal({ open, setOpen }) {
                   onClick={() => setOpen(false)}
                   className="bg-[#FAFAFA] text-[#A1A1AA] p-4 max-h-max text-sm font-medium border-r-2 w-24 flex items-center gap-4"
                 >
-                  <X size={15}/>
+                  <X size={15} />
                   <img src={esc} salt="esc" />
                 </button>
                 <TabList className="flex">
@@ -33,10 +35,9 @@ export default function CreateProductModal({ open, setOpen }) {
                       <Tab
                         key={tab}
                         className={({ selected }) =>
-                          `p-4 text-[13px] font-medium font-openSans border-r w-52 ${
-                            selected
-                              ? "bg-white text-[#18181B]"
-                              : "bg-[#FAFAFA] text-[#A1A1AA] "
+                          `p-4 text-[13px] font-medium font-openSans border-r w-52 ${selected
+                            ? "bg-white text-[#18181B]"
+                            : "bg-[#FAFAFA] text-[#A1A1AA] "
                           }`
                         }
                       >
@@ -74,7 +75,7 @@ export default function CreateProductModal({ open, setOpen }) {
                 Cancel
               </button>
 
-              <button className="px-4 py-2 bg-black text-white rounded-md">
+              <button onClick={()=>addProduct()} className="px-4 py-2 bg-black text-white rounded-md">
                 Save
               </button>
             </div>

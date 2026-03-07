@@ -1,12 +1,13 @@
 const Input = ({
   label,
-  type = "text",
+  type,
   placeholder,
   error,
   textWhite,
   variant = "default",
   slug,
   subLabel,
+  onChange,
   ...props
 }) => {
   const variants = {
@@ -29,6 +30,7 @@ const Input = ({
         <input
           type={type}
           placeholder={placeholder}
+          onChange={(e)=>onChange(e.target.value)}
           className={`w-full rounded-md border-solid border-[1px] border-[#F5F5F5] p-3 mt-1
             ${slug ? "pl-[40px]" : ""} 
            ${variants[variant]}
