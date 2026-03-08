@@ -7,7 +7,7 @@ import FAQList from "./FAQList";
 
 const BasicInfoTab = () => {
   const { brands, models, fitments, warehouse, allData, onChangeHandler, onChangeMaster, faqs, setFaqs } = useProductController()
-  console.log(warehouse, "warehouse")
+  // console.log(warehouse, "warehouse")
   return (
     <div className="max-w-[800px] py-6 mx-auto">
       <div>

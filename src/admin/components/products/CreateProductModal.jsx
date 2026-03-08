@@ -11,7 +11,7 @@ import useProductController from "./product-controller";
 export default function CreateProductModal({ open, setOpen }) {
   const [formData, setFormData] = useState({});
   const { brands, addProduct, onChangeHandler } = useProductController()
-  console.log(brands, "vhhvvhvhvh")
+  // console.log(brands, "vhhvvhvhvh")
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={() => setOpen(false)}>

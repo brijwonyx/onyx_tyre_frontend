@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import useApi from "../../../Common-Controller/api-controller";
 
 const useProductController = () => {
-    const apiKey = import.meta.env.VITE_API_KEY;
-    // const apiKey = '026a371d435c0a458898282bb3b0ef39332d8e63'
+    // const apiKey = import.meta.env.VITE_API_KEY;
+    const apiKey = '026a371d435c0a458898282bb3b0ef39332d8e63'
     const [warehouse, setWarehouse] = useState([])
     const [brands, setBrands] = useState([
         {
@@ -64,6 +64,7 @@ const useProductController = () => {
         if (data) {
             fetchModels()
             fetchBendorById()
+            console.log(data)
             setBrands(
                 data.map((item) => ({
                     ...item,
@@ -151,7 +152,7 @@ const useProductController = () => {
         fetchWarehouse()
     }, []);
 
-    console.log(allData, storeData, faqs, "datatatata")
+    // console.log(allData, storeData, faqs, "datatatata")
 
     return { brands, models, fitments, warehouse, loading, error, onChangeHandler, onChangeMaster, allData, storeData, faqs, setFaqs, addProduct };
 };
