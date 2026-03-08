@@ -1,10 +1,7 @@
 import { GripHorizontal, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
-export default function FAQList() {
-  const [faqs, setFaqs] = useState([
-    { question: "", answer: "" },
-  ]);
+export default function FAQList({faqs, setFaqs}) {
 
   const addFaq = () => {
     setFaqs([...faqs, { question: "", answer: "" }]);

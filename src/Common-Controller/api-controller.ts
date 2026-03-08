@@ -2,38 +2,39 @@ import { useState } from "react";
 import axios from "axios";
 
 const useApi = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
- const apiUrl = import.meta.env.VITE_API_URL;
-  const apiKey = import.meta.env.VITE_API_KEY;
+    const mainApiUrl = import.meta.env.VITE_API_URL_MAIN;
+    const apiUrl = import.meta.env.VITE_API_URL_SECONDARY;
+    const apiKey = import.meta.env.VITE_API_KEY;
 
-  const request = async (endpoint, method = "GET", body: any) => {
-    setLoading(true);
-    setError(null);
+    const request = async (endpoint, method = "GET", body: any, key) => {
+        setLoading(true);
+        setError(null);
 
-    try {
-      const response = await axios({
-        url: `${apiUrl}${endpoint}`,
-        method,
-        data: body,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": localStorage.getItem('token'),
-          "x-api-key": apiKey
-        },
-      });
+        try {
+            const response = await axios({
+                url: key ? `${mainApiUrl}${endpoint}` : `${apiUrl}${endpoint}`,
+                method,
+                data: body,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`,
+                    "x-api-key": apiKey
+                },
+            });
 
-      return response.data;
-    } catch (err) {
-      setError(err);
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+            return response.data;
+        } catch (err) {
+            setError(err);
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  return { loading, error, request };
+    return { loading, error, request };
 };
 
 export default useApi;
