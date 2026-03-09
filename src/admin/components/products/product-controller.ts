@@ -60,7 +60,7 @@ const useProductController = () => {
     const { loading, error, request } = useApi();
 
     const fetchBrands = async () => {
-        const data = await request(`/tyres/vendors?api_key=${apiKey}&api_version=1`, "GET", null, false);
+        const data = await request(`api/v1/tyre-addict/vendors`, "GET", null, true);
         if (data) {
             fetchModels()
             fetchBendorById()

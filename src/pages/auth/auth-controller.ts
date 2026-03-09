@@ -10,11 +10,13 @@ const useAuthController = () => {
         identifier: '', password: ''
     })
 
-    const handleLogin = async () => {
+    const handleLogin = async (e) => {
+        e.preventDefault();
         const data = await request(`/api/v1/auth/login`, "POST", loginData, true);
+        console.log("data", data)
         if (data.success) {
             localStorage.setItem('token', data.data)
-            navigate('/admin/products/view')
+            navigate('/admin/products')
         }
     };
 
