@@ -7,12 +7,15 @@ import InfoRow from "../../components/common/InfoRow";
 import PageHeader from "../../components/common/PageHeader";
 import TableFilters from "../../components/common/TableFilter";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useMainProductController from "./main-product-controller";
 
 export default function ProductDetails() {
   const navigate = useNavigate();
   const [editingOrganize, setEditingOrganize] = useState(false);
   const [editingAttributes, setEditingAttributes] = useState(false);
+
+  const { fetchVarients, varientData } = useMainProductController()
   const product = {
     name: "Michelin Pilot Sport 4",
     status: "Published",
@@ -23,7 +26,7 @@ export default function ProductDetails() {
   };
 
   const variantsColumns = [
-    { key: "size", label: "Tire Size" },
+    { key: "size_label", label: "Tire Size" },
     { key: "sku", label: "SKU" },
     { key: "inventory", label: "Inventory" },
   ];
@@ -64,6 +67,10 @@ export default function ProductDetails() {
       onClick: () => setEditingOrganize(true),
     },
   ];
+
+  useEffect(() => {
+    fetchVarients()
+  }, [])
 
   return (
     <>
@@ -126,7 +133,7 @@ export default function ProductDetails() {
             />
             <DataTable
               columns={variantsColumns}
-              data={variantsData}
+              data={varientData}
               actions={VariantActions}
             />
           </ContentCard>
@@ -148,7 +155,7 @@ export default function ProductDetails() {
                 ) : (
                   <div className="flex gap-2 text-xs">
                     <button onClick={() => setEditingOrganize(false)}>
-                      <CirclePlus color="#971717" size={16} className="rotate-45"/>
+                      <CirclePlus color="#971717" size={16} className="rotate-45" />
                     </button>
                     <button className="primary "><CircleCheck size={16} /></button>
                   </div>
@@ -165,7 +172,7 @@ export default function ProductDetails() {
           <ContentCard title="">
             <div className="p-3 border-b border-[#E4E4E7] flex justify-between items-center">
               <h2 className="text-base font-medium">Attributes</h2>
-                            <div>
+              <div>
                 {!editingAttributes ? (
                   <Pencil
                     size={16}
@@ -175,7 +182,7 @@ export default function ProductDetails() {
                 ) : (
                   <div className="flex gap-2 text-xs">
                     <button onClick={() => setEditingAttributes(false)}>
-                      <CirclePlus color="#971717" size={16} className="rotate-45"/>
+                      <CirclePlus color="#971717" size={16} className="rotate-45" />
                     </button>
                     <button className="primary "><CircleCheck size={16} /></button>
                   </div>

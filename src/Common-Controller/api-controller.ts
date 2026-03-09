@@ -9,7 +9,7 @@ const useApi = () => {
     // const apiUrl = import.meta.env.VITE_API_URL_SECONDARY;
     // const apiKey = import.meta.env.VITE_API_KEY;
 
-    const mainApiUrl = 'http://16.176.148.252/api'
+    const mainApiUrl = 'https://tyreevo.com.au/api/'
     const apiUrl = 'https://tyresaddict.ru/api'
     const apiKey = '026a371d435c0a458898282bb3b0ef39332d8e63'
 

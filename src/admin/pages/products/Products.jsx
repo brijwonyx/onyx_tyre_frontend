@@ -9,12 +9,16 @@ import DataTable from "../../components/common/DataTable";
 import TableFilters from "../../components/common/TableFilter";
 import { useNavigate } from "react-router-dom";
 import Toggle from "../../components/common/Toggle";
+import useMainProductController from "./main-product-controller";
 
 const Products = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
+  const { brandData } = useMainProductController()
+
   const productsTableData = {
+
     columns: [
       // {
       //   key: "product",
@@ -22,56 +26,38 @@ const Products = () => {
       //   type: "text",
       // },
       {
-        key: "brand",
+        key: "vendor_name",
         label: "Brand",
         type: "text",
       },
       {
-        key: "brandLogo",
+        key: "logo",
         label: "Brand Logo",
-        type: "text",
+        render: (row) => (
+          <img src={row.logo} alt="logo"
+            style={{ width: 40, height: 40, objectFit: "contain" }} />
+        )
       },
       {
-        key: "stock",
+        key: "total_variants",
         label: "Stock",
         type: "text",
       },
-      {
-        key: "warehouse",
-        label: "WareHouse",
-        type: "badgeNumber",
-        suffix: "variants",
-      },
+      // {
+      //   key: "id",
+      //   label: "WareHouse",
+      //   type: "badgeNumber",
+      //   suffix: "variants",
+      // },
       {
         key: "coo",
         label: "COO",
         type: "text",
       },
       {
-        key: "status",
+        key: "production_flag",
         label: "Status",
         type: "text",
-      },
-    ],
-
-    rows: [
-      {
-        id: 1,
-        brand: "Michelin",
-        brandLogo: "",
-        stock: "5",
-        warehouse: "",
-        coo: "",
-        status: <Toggle enabled={false} onChange={() => {}} />,
-      },
-      {
-        id: 2,
-        brand: "Bridgestone",
-        brandLogo: "",
-        stock: "9",
-        warehouse: "",
-        coo: "",
-        status: <Toggle enabled={true} onChange={() => {}} />,
       },
     ],
 
@@ -87,7 +73,8 @@ const Products = () => {
       key: "view",
       label: "View",
       onClick: (row) => {
-        navigate(`view`);
+        console.log(row)
+        navigate(`view`, {state: row.id});
       },
     },
     {
@@ -116,7 +103,7 @@ const Products = () => {
           />
           <DataTable
             columns={productsTableData.columns}
-            data={productsTableData.rows}
+            data={brandData}
             actions={productActions}
             pagination={productsTableData.pagination}
           />
