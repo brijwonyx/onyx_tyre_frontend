@@ -1,59 +1,14 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
-
-import Button from "../../Components/Common/Forms/Button";
 import Input from "../../Components/Common/Forms/Input";
 import PasswordInput from "../../Components/Common/Forms/PasswordInput";
+import { Button } from "@headlessui/react";
+import useAuthController from "./auth-controller";
 
 const Login = () => {
-  const navigate = useNavigate(); // ✅ REQUIRED
 
-  const [identifier, setIdentifier] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
-    // 🔒 STRICT GUARD
-    if (loading) return;
-
-    setLoading(true);
-    setError("");
-
-    try {
-      const res = await axios.post(
-        "http://3.26.11.176/api/v1/auth/login",
-        {
-          identifier,
-          password,
-        },
-        {
-          headers: {
-            accept: "*/*",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log("Login success:", res.data);
-
-      // ✅ Redirect ONLY after successful API response
-      navigate("/");
-      
-      // optional
-      // localStorage.setItem("token", res.data.data.token);
-
-    } catch (err) {
-      setError(
-        err.response?.data?.message || "Invalid email or password"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+const {loginData, handleLogin, onChangeHandler} = useAuthController()
+console.log(loginData)
 
   return (
     <div className="bg-white text-black px-16 py-10">
@@ -72,43 +27,41 @@ const Login = () => {
             label="Email Address *"
             type="text"
             placeholder="Email Address"
-            value={identifier}
-            disabled={loading}
-            onChange={(e) => setIdentifier(e.target.value)}
+            onChange={(val) => onChangeHandler('identifier', val)}
           />
 
           <PasswordInput
             label="Password *"
-            value={password}
-            disabled={loading}
-            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            onChange={(val) => onChangeHandler('password', val)}
           />
 
-          {error && (
+          {/* {error && (
             <p className="text-red-500 text-sm text-center mb-3">
               {error}
             </p>
-          )}
+          )} */}
 
           <div className="text-primary text-sm text-center">
             <Link
               to="/otp-login"
-              className={loading ? "pointer-events-none opacity-50" : ""}
+              className={"pointer-events-none opacity-50"}
             >
               Login with OTP
             </Link>
           </div>
 
           <div className="flex gap-6 pt-6">
-            <Button type="submit" disabled={loading}>
-              {loading ? "Signing in..." : "Sign in"}
+            <Button type="submit">
+              {"Sign in"}
             </Button>
 
             <Link
               to="/reset-password"
-              className={`font-montserrat text-primary font-semibold text-sm uppercase py-[10px] ${
-                loading ? "pointer-events-none opacity-50" : ""
+              className={`font-montserrat text-primary font-semibold text-sm uppercase py-[10px] 
+                
               }`}
+              // ${loading ? "pointer-events-none opacity-50" : ""}
             >
               Forgot Password?
             </Link>
