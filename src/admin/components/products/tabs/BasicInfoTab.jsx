@@ -5,8 +5,24 @@ import MediaUpload from "../../common/MediaUpload";
 import useProductController from "../product-controller";
 import FAQList from "./FAQList";
 
-const BasicInfoTab = () => {
-  const { brands, models, fitments, warehouse, allData, onChangeHandler, onChangeMaster, faqs, setFaqs } = useProductController()
+const BasicInfoTab = ({setOpen}) => {
+  const { brands,
+     models,
+      fitments, 
+      warehouse,
+      onChangeBrandValue,
+      onChangeModelValue,
+      onChangeFitmentValue,
+      onChangeMaster,
+      onChangeWhearehouse,
+      faqs, 
+      setFaqs,
+      brandValue,
+      modelValue,
+      fitmentValue,
+      wharehouseValue,
+      addProduct
+    } = useProductController()
   // console.log(warehouse, "warehouse")
   return (
     <div className="max-w-[800px] py-6 mx-auto">
@@ -21,24 +37,24 @@ const BasicInfoTab = () => {
             label="Brand"
             placeholder="Select Brand"
             options={brands || []}
-            value={allData.vendor_name}
-            onChange={(val) => onChangeHandler(val)}
+            value={brandValue.vendor_name}
+            onChange={(val) => onChangeBrandValue(val)}
             variant="dark"
           />
           <CustomSelect
             label="Model"
             placeholder="Select Model"
             options={models || []}
-            value={allData.model_name}
-            onChange={(val) => onChangeHandler(val)}
+            value={modelValue.model_name}
+            onChange={(val) => onChangeModelValue(val)}
             variant="dark"
           />
           <CustomSelect
             label="Fitment"
             placeholder="Select Fitment"
             options={fitments || []}
-            value={""}
-            onChange={(val) => onChangeHandler(val)}
+            value={fitmentValue.name}
+            onChange={(val) => onChangeFitmentValue(val)}
             variant="dark"
           />
         </div>
@@ -56,8 +72,8 @@ const BasicInfoTab = () => {
             label="Warehouse"
             placeholder="Select Warehouse"
             options={warehouse || []}
-            value={""}
-            onChange={(val) => onChangeHandler(val)}
+            value={wharehouseValue.name}
+            onChange={(val) => onChangeWhearehouse(val)}
             variant="dark"
           />
         </div>
@@ -85,6 +101,18 @@ const BasicInfoTab = () => {
         {/* <TextEditor label={"Tyre Spec Sheet"} /> */}
         <FAQList faqs={faqs} setFaqs={setFaqs} />
       </div>
+      <div className="flex flex-shrink-0 justify-end gap-3 mt-6 py-4 px-6 border-t ">
+              <button
+                onClick={() => setOpen(false)}
+                className="px-4 py-2 border rounded-md"
+              >
+                Cancel
+              </button>
+
+              <button onClick={()=>addProduct(setOpen)} className="px-4 py-2 bg-black text-white rounded-md">
+                Save
+              </button>
+            </div>
     </div>
   );
 };

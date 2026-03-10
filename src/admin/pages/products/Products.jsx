@@ -12,10 +12,9 @@ import Toggle from "../../components/common/Toggle";
 import useMainProductController from "./main-product-controller";
 
 const Products = () => {
-  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const { brandData } = useMainProductController()
+  const { brandData, open, setOpen } = useMainProductController()
 
   const productsTableData = {
 

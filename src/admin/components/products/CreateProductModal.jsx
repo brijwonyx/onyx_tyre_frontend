@@ -9,9 +9,7 @@ import esc from "../../assets/esc.svg";
 import useProductController from "./product-controller";
 
 export default function CreateProductModal({ open, setOpen }) {
-  const [formData, setFormData] = useState({});
-  const { brands, addProduct, onChangeHandler } = useProductController()
-  // console.log(brands, "vhhvvhvhvh")
+  // const { addProduct, brandValue } = useProductController()
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={() => setOpen(false)}>
@@ -50,7 +48,7 @@ export default function CreateProductModal({ open, setOpen }) {
 
               <TabPanels className="flex-1 overflow-y-auto">
                 <TabPanel>
-                  <BasicInfoTab />
+                  <BasicInfoTab setOpen={setOpen} />
                 </TabPanel>
 
                 <TabPanel>
@@ -67,7 +65,7 @@ export default function CreateProductModal({ open, setOpen }) {
               </TabPanels>
             </TabGroup>
 
-            <div className="flex flex-shrink-0 justify-end gap-3 mt-6 py-4 px-6 border-t ">
+            {/* <div className="flex flex-shrink-0 justify-end gap-3 mt-6 py-4 px-6 border-t ">
               <button
                 onClick={() => setOpen(false)}
                 className="px-4 py-2 border rounded-md"
@@ -78,7 +76,7 @@ export default function CreateProductModal({ open, setOpen }) {
               <button onClick={()=>addProduct()} className="px-4 py-2 bg-black text-white rounded-md">
                 Save
               </button>
-            </div>
+            </div> */}
           </DialogPanel>
         </div>
       </Dialog>
