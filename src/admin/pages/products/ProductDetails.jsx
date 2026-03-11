@@ -15,7 +15,7 @@ export default function ProductDetails() {
   const [editingOrganize, setEditingOrganize] = useState(false);
   const [editingAttributes, setEditingAttributes] = useState(false);
 
-  const { fetchVarients, varientData } = useMainProductController()
+  const { fetchVarients, varientData, brandValueData, fetchBrandById } = useMainProductController()
   const product = {
     name: "Michelin Pilot Sport 4",
     status: "Published",
@@ -28,7 +28,7 @@ export default function ProductDetails() {
   const variantsColumns = [
     { key: "size_label", label: "Tire Size" },
     { key: "sku", label: "SKU" },
-    { key: "inventory", label: "Inventory" },
+    { key: "total_tyres", label: "Inventory" },
   ];
 
   const variantsData = [
@@ -48,7 +48,7 @@ export default function ProductDetails() {
       key: "view",
       label: "View",
       onClick: (row) => {
-        navigate(`variant`);
+        navigate(`variant`, {state: row.id});
       },
     },
     {
@@ -70,6 +70,7 @@ export default function ProductDetails() {
 
   useEffect(() => {
     fetchVarients()
+    fetchBrandById()
   }, [])
 
   return (
@@ -81,7 +82,7 @@ export default function ProductDetails() {
           {/* Product Info */}
           <ContentCard>
             <div className="flex justify-between items-center py-4 px-6">
-              <h2 className="text-base font-medium">{product.name}</h2>
+              <h2 className="text-base font-medium">{brandValueData.vendor_name}</h2>
               <div className="flex gap-2 items-center">
                 <Badge variant="success">Published</Badge>
                 <ActionDropdown />
