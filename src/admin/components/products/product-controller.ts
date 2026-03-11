@@ -131,7 +131,7 @@ const useProductController = () => {
             moto_type: data.moto_type,
 
             photo_orig: [
-                `https://cdn.tyresaddict.com${data.photo_orig}`
+                `https://cdn.tyresaddict.com/tyres/${data.photo_orig}`
             ],
 
             production_flag2: data.production_flag,
