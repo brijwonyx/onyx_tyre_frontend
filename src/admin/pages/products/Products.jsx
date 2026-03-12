@@ -1,4 +1,3 @@
-import { useState } from "react";
 import ContentCard from "../../components/common/ContentCard";
 import PageHeader from "../../components/common/PageHeader";
 import PageHeader2 from "../../components/common/PageHeader2";
@@ -8,13 +7,40 @@ import CreateProductModal from "../../components/products/CreateProductModal";
 import DataTable from "../../components/common/DataTable";
 import TableFilters from "../../components/common/TableFilter";
 import { useNavigate } from "react-router-dom";
-import Toggle from "../../components/common/Toggle";
+
 import useMainProductController from "./main-product-controller";
+import { useMemo, useState } from "react";
 
 const Products = () => {
   const navigate = useNavigate();
 
-  const { brandData, open, setOpen } = useMainProductController()
+  const [value , setValue] = useState('')
+
+  const { brandData, open, setOpen } = useMainProductController({searchParams:value});
+
+  console.log(value,'value')
+
+  const getBrandData = () => {
+     if(brandData && brandData?.length){
+    const data = brandData?.map((item)=>({
+      ...item,
+      warehouses:item.warehouses.join(", ")
+    }))
+
+    return data;
+     }
+
+     return [] ;
+  }
+
+  const data = useMemo(()=>getBrandData(),[brandData])
+
+  
+  const handleSearch = (event) => {
+    const {value} = event.target;
+    
+    setValue(value)
+  }
 
   const productsTableData = {
 
@@ -32,22 +58,24 @@ const Products = () => {
       {
         key: "logo",
         label: "Brand Logo",
+        type:'img',
         render: (row) => (
           <img src={row.logo} alt="logo"
             style={{ width: 40, height: 40, objectFit: "contain" }} />
         )
+        
       },
       {
         key: "total_variants",
         label: "Stock",
         type: "text",
       },
-      // {
-      //   key: "id",
-      //   label: "WareHouse",
-      //   type: "badgeNumber",
-      //   suffix: "variants",
-      // },
+      {
+        key: "warehouses",
+        label: "WareHouse",
+        type: "badgeNumber",
+        suffix: "variants",
+      },
       {
         key: "coo",
         label: "COO",
@@ -56,7 +84,7 @@ const Products = () => {
       {
         key: "production_flag",
         label: "Status",
-        type: "text",
+        type: "toggle",
       },
     ],
 
@@ -67,6 +95,7 @@ const Products = () => {
       totalPages: 1,
     },
   };
+
   const productActions = [
     {
       key: "view",
@@ -99,10 +128,11 @@ const Products = () => {
           {/* <OrdersFilters /> */}
           <TableFilters
             filters={[{ label: "Updated" }, { label: "Created" }]}
+            handleSearch={handleSearch}
           />
           <DataTable
             columns={productsTableData.columns}
-            data={brandData}
+            data={data}
             actions={productActions}
             pagination={productsTableData.pagination}
           />

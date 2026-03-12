@@ -21,8 +21,12 @@ const BasicInfoTab = ({setOpen}) => {
       modelValue,
       fitmentValue,
       wharehouseValue,
+      storeData,
       addProduct
     } = useProductController()
+
+  const isButtonDisabled = brandValue.vendor_name && fitmentValue.name && modelValue.model_name && storeData.compare_price && storeData.price && storeData.stock && wharehouseValue.name 
+  
   // console.log(warehouse, "warehouse")
   return (
     <div className="max-w-[800px] py-6 mx-auto">
@@ -109,7 +113,7 @@ const BasicInfoTab = ({setOpen}) => {
                 Cancel
               </button>
 
-              <button onClick={()=>addProduct(setOpen)} className="px-4 py-2 bg-black text-white rounded-md">
+              <button disabled ={!isButtonDisabled} onClick={()=>addProduct(setOpen)} className="px-4 py-2 bg-black text-white rounded-md">
                 Save
               </button>
             </div>

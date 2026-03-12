@@ -4,6 +4,7 @@ export default function TableFilters({
   filters = [],
   activeFilter,
   onFilterChange,
+  handleSearch
 }) {
 
   const FiltersButton = ({ label, onClick }) => (
@@ -39,6 +40,7 @@ export default function TableFilters({
           <input
             placeholder="Search"
             className="pl-8 pr-3 py-1 border rounded-md text-sm shadow-[0_0_0_1px_#00000014,0_1px_2px_0px_#0000001F] text-[#71717A] bg-[#FAFAFA]"
+            onChange={handleSearch}
           />
         </div>
 

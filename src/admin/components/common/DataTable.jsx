@@ -1,4 +1,5 @@
 import ActionDropdown from "./ActionDropdown";
+import Toggle from "./Toggle";
 
 export default function DataTable({ columns, data, actions, }) {
   const renderCell = (row, column) => {
@@ -15,6 +16,17 @@ export default function DataTable({ columns, data, actions, }) {
         >
           {value}
         </span>
+      );
+    }
+    if (column.type === "img") {
+      return (
+        <img src={value} alt="logo"
+            style={{ width: 60, height: 60, objectFit: "contain" }} />
+      );
+    }
+    if (column.type === "toggle") {
+      return (
+        <Toggle enabled={value === 'on' ? true : false} />
       );
     }
 
