@@ -1,4 +1,3 @@
-import { ArrowUpRight } from "lucide-react";
 import arrow from "../../../assets/arrow.svg";
 
 const Button = ({
@@ -6,13 +5,20 @@ const Button = ({
   solid = false,
   className = "",
   onClick,
+  disabled,
+  loading = false,
 }) => {
+  const isDisabled = disabled || loading;
+
   return (
     <button
       onClick={onClick}
+      disabled={isDisabled}
       className={`relative inline-flex items-center justify-center
         h-[48px] px-10
         font-montserrat text-sm font-semibold uppercase
+        transition-opacity duration-300
+        disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none
         ${solid ? "text-white" : "text-green-700"}
         ${className}
       `}
@@ -39,12 +45,25 @@ const Button = ({
         />
       </svg>
 
-      <span className="relative z-10 flex items-center gap-4 ">
-        
+      <span className="relative z-10 flex items-center gap-4">
         {children}
-        <img src={arrow} alt="arrow" className="w-2 h-2" color={solid ? "#2E7D32" : "white"}/>
-      </span>
 
+        {loading ? (
+          <span
+            className={`w-4 h-4 border-2 rounded-full animate-spin ${
+              solid
+                ? "border-white border-t-transparent"
+                : "border-green-700 border-t-transparent"
+            }`}
+          />
+        ) : (
+          <img
+            src={arrow}
+            alt="arrow"
+            className="w-2 h-2"
+          />
+        )}
+      </span>
     </button>
   );
 };
