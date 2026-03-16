@@ -7,10 +7,12 @@ import PricingTab from "./tabs/PrincingTab";
 import { X } from "lucide-react";
 import esc from "../../assets/esc.svg";
 import useProductController from "./product-controller";
+import Toaster from "../../../shared/Toaster";
 
 export default function CreateProductModal({ open, setOpen }) {
   // const { addProduct, brandValue } = useProductController()
   return (
+    <>
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={() => setOpen(false)}>
         <div className="fixed inset-0 bg-black/40" />
@@ -81,5 +83,7 @@ export default function CreateProductModal({ open, setOpen }) {
         </div>
       </Dialog>
     </Transition>
+    <Toaster/>
+    </>
   );
 }

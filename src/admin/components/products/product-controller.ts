@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import useApi from "../../../Common-Controller/api-controller";
+import { showToast } from "../../../shared/Toaster/constant";
 
 const useProductController = () => {
     // const apiKey = import.meta.env.VITE_API_KEY;
@@ -11,7 +12,7 @@ const useProductController = () => {
     const [brandByValue, setBrandByValue] = useState({})
     const [modelByValue, setModelByValue] = useState({})
     const [warehouse, setWarehouse] = useState([])
-    const [wharehouseValue, setWharehouseValue] = useState({ name: '', state: '', city: '' })
+    const [wharehouseValue, setWharehouseValue] = useState([])
     const [brands, setBrands] = useState([]);
     const [models, setModels] = useState([])
     const [fitments, setFitments] = useState([])
@@ -86,6 +87,7 @@ const useProductController = () => {
     };
 
     const onChangeBrandValue = ((val) => {
+        console.log(val,'vallaueuue')
         setBrandValue(val)
         fetchModels(val)
         fetchBendorById(val)
@@ -102,7 +104,20 @@ const useProductController = () => {
     })
 
     const onChangeWhearehouse = ((val) => {
-        setWharehouseValue(val)
+        console.log(val,'valuee')
+        // setWharehouseValue(val)
+        // // const selectedSpecialization = formValues[AdminStaffFormKeys.SELECTED_SPECIALIZATION];
+
+        const foundIndex = wharehouseValue.findIndex((item) => item.id === val.id);
+
+        if (foundIndex !== -1) {
+            const data = warehouse.filter((item) => item.id !== val.id);
+            console.log(data,'datattatata')
+            
+            setWharehouseValue(data)
+        } else {
+            setWharehouseValue([...wharehouseValue,val])
+        }
     })
 
     const onChangeFitmentValue = ((val) => {
@@ -115,6 +130,7 @@ const useProductController = () => {
     }
 
     const formatTyreData = (data) => {
+        
         return {
             vendor_id: data.vendor_id,
             vendor_name: data.vendor_name_en || data.vendor_name,
@@ -145,7 +161,7 @@ const useProductController = () => {
             price: Number(data.price),
             stock: Number(data.stock),
 
-            warehouse_id: data.id,
+            warehouse_id: data.warehouse.map(item=>item.id),
 
             logo: `https://cdn.tyresaddict.com/vendor/${data.vendor_logo}`,
 
@@ -159,13 +175,32 @@ const useProductController = () => {
         };
     };
 
+    console.log(wharehouseValue,'wharehouseValue')
+
     const addProduct = async (setOpen) => {
-        const payload = formatTyreData({ ...brandValue, ...modelValue, ...fitmentValue, ...storeData, faqs: faqs, ...brandByValue, ...modelByValue, ...wharehouseValue })
+        const payload = formatTyreData({ ...brandValue, ...modelValue, ...fitmentValue, ...storeData, faqs: faqs, ...brandByValue, ...modelByValue, warehouse:wharehouseValue });
+
+       try {
         const data = await request('/api/v1/tyre/add-tyre', "POST", payload, true);
         if (data) {
+            const {success , message} = data || {};
             console.log(data)
-            setOpen(false)
+            
+
+            if(!success){
+                throw new Error(message)
+            }
+
+            showToast({type:'success',message})
+
+            setTimeout(() => {
+                setOpen(false)
+            }, 1000);
         }
+       } catch (error) {
+        showToast({type:'success',message:error.message})
+       }
+        
     }
 
     useEffect(() => {

@@ -7,14 +7,16 @@ import InfoRow from "../../components/common/InfoRow";
 import PageHeader from "../../components/common/PageHeader";
 // import TableFilters from "../../components/common/TableFilter";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useMainProductController from "./main-product-controller";
+import Modal from "../../../Components/Common/Modal";
 
 export default function ProductDetails() {
   const navigate = useNavigate();
   // const [editingOrganize, setEditingOrganize] = useState(false);
   // const [editingAttributes, setEditingAttributes] = useState(false);
   const location = useLocation();
+  const [image,setImage] = useState('')
 
   const { fetchVarients, varientData, brandValueData, fetchBrandById } = useMainProductController({brandId:location.state})
   const product = {
@@ -44,26 +46,13 @@ export default function ProductDetails() {
   // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const variantData = useMemo(()=>getVariantData(),[varientData])
 
-  console.log(variantData,'varientData')
-
   const variantsColumns = [
     { key: "size_label", label: "Tire Size" },
     { key: "sku", label: "SKU" },
     { key: "inventory", label: "Inventory" },
+    { key: "CreateAt", label: "CreateAt" },
   ];
 
-  // const variantsData = [
-  //   {
-  //     size: "205/55R16",
-  //     sku: "MB-501",
-  //     inventory: "256 available at 7 location",
-  //   },
-  //   {
-  //     size: "225/45R17",
-  //     sku: "MB-502",
-  //     inventory: "482 available at 5 location",
-  //   },
-  // ];
   const VariantActions = [
     {
       key: "view",
@@ -82,13 +71,11 @@ export default function ProductDetails() {
     },
   ];
 
-  // const editActions = [
-  //   {
-  //     key: "edit",
-  //     label: "Edit",
-  //     onClick: () => setEditingOrganize(true),
-  //   },
-  // ];
+  const handlePopUp = (item) => {
+
+    setImage(item?.image_url)
+
+  }
 
   useEffect(() => {
     fetchVarients()
@@ -130,7 +117,7 @@ export default function ProductDetails() {
             </div>
             <div className="flex gap-3 p-3">
               {brandValueData?.images?.map((item) => (
-            <img src={item?.image_url} alt="logo" style={{ width: 60, height: 60, objectFit: "contain" }} />
+            <img src={item?.image_url} onClick={()=>handlePopUp(item)} alt="logo" style={{ width: 60, height: 60, objectFit: "contain" }} />
               ))}
             </div>
           </ContentCard>
@@ -225,6 +212,9 @@ export default function ProductDetails() {
           </ContentCard> */}
         </div>
       </div>
+     {image && <Modal onClose={()=>setImage('')} open={!!image}>
+        <img src={image} alt="logo" style={{ width: 200, height: 200, objectFit: "contain" , placeSelf:'center' }} />
+      </Modal>}
     </>
   );
 }
