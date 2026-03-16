@@ -1,0 +1,9 @@
+.fancy-progress-bar-error {
+    background: #f97066;
+    opacity: 1;
+}
+
+.fancy-progress-bar-success {
+    background-color: #32d583 !important;
+    opacity: 1;
+}

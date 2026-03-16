@@ -1,5 +1,7 @@
+import React, { useMemo, useState } from "react";
 import CustomSelect from "../../../../Components/common/forms/CustomSelect";
 import Input from "../../../../Components/Common/Forms/Input";
+import Dropdown from "../../../../shared/Dropdown";
 import TextEditor from "../../common/forms/TextEditor";
 import MediaUpload from "../../common/MediaUpload";
 import useProductController from "../product-controller";
@@ -25,11 +27,69 @@ const BasicInfoTab = ({setOpen}) => {
       addProduct
     } = useProductController()
 
-  const isButtonDisabled = brandValue.vendor_name && fitmentValue.name && modelValue.model_name && storeData.compare_price && storeData.price && storeData.stock && wharehouseValue.name 
+    const [searchByBrandName , setSearchByBrandName] = useState('');
+    const [searchByModelName , setSearchByModelName] = useState('');
+    const [searchByFitmentName , setSearchByFitmentName] = useState('');
+    const [searchByWarehouseName , setSearchByWarehouseName] = useState('');
+
+  const isButtonDisabled = brandValue.vendor_name && fitmentValue.name && modelValue.model_name && storeData.compare_price && storeData.price && storeData.stock && wharehouseValue.length 
   
+   const handleBrandFilter = (event) => {
+        const { value } = event.target;
+        setSearchByBrandName(value);
+    };
+    
+   const handleModelFilter = (event) => {
+        const { value } = event.target;
+        setSearchByModelName(value);
+    };
+
+   const handleFitmentFilter = (event) => {
+        const { value } = event.target;
+        setSearchByFitmentName(value);
+    };
+   const handleSearchByWareHouseName = (event) => {
+        const { value } = event.target;
+        setSearchByWarehouseName(value);
+    };
+
+    const filteredBrandName = useMemo(
+        () =>
+            brands?.filter((admin) =>
+                admin?.name.toLowerCase().includes(searchByBrandName.toLowerCase()),
+            ),
+        [searchByBrandName, brands],
+    );
+
+    const filteredModelName = useMemo(
+        () =>
+            models?.filter((admin) =>
+                admin?.model_name.toLowerCase().includes(searchByModelName.toLowerCase()),
+            ),
+        [searchByModelName, models],
+    );
+    const filteredFitmentName = useMemo(
+        () =>
+            fitments?.filter((admin) =>
+                admin?.name.toLowerCase().includes(searchByFitmentName.toLowerCase()),
+            ),
+        [searchByFitmentName, fitments],
+    );
+
+    const filteredByWareHouseName = useMemo(
+        () =>
+            warehouse?.filter((admin) =>
+                admin?.name.toLowerCase().includes(searchByWarehouseName.toLowerCase()),
+            ),
+        [searchByWarehouseName, warehouse],
+    );
+
+    console.log(wharehouseValue,'wharehouseValue')
+
+
   // console.log(warehouse, "warehouse")
   return (
-    <div className="max-w-[800px] py-6 mx-auto">
+    <div className="max-w-[1000px] py-6 mx-auto">
       <div>
         <h2 className="font-openSans text-base font-medium border-b border-[#E4E4E7] pb-4">
           General
@@ -37,29 +97,58 @@ const BasicInfoTab = ({setOpen}) => {
       </div>
       <div className="flex flex-col gap-6 mt-6">
         <div className="grid grid-cols-3 gap-3">
-          <CustomSelect
+          {/* <CustomSelect
             label="Brand"
             placeholder="Select Brand"
             options={brands || []}
             value={brandValue.vendor_name}
             onChange={(val) => onChangeBrandValue(val)}
             variant="dark"
+          /> */}
+          <Dropdown 
+          dropDownTitle="Brand"  
+          searchFilter={searchByBrandName} 
+          label="Select Brand" 
+          handleSearch={handleBrandFilter} 
+          options={searchByBrandName.length ? filteredBrandName :  brands} 
+          selectValue='vendor_name' 
+          value={brandValue} 
+          onChange={(val) => onChangeBrandValue(val)} 
           />
-          <CustomSelect
+          {/* <CustomSelect
             label="Model"
             placeholder="Select Model"
             options={models || []}
             value={modelValue.model_name}
             onChange={(val) => onChangeModelValue(val)}
             variant="dark"
+          /> */}
+          <Dropdown 
+          dropDownTitle="Model" 
+          label="Select Model" 
+          handleSearch={handleModelFilter} 
+          searchFilter={searchByModelName}  
+          options={searchByModelName?.length ? filteredModelName :models } 
+          selectValue='model_name' 
+          value={modelValue} 
+          onChange={(val) => onChangeModelValue(val)} 
           />
-          <CustomSelect
+          {/* <CustomSelect
             label="Fitment"
             placeholder="Select Fitment"
             options={fitments || []}
             value={fitmentValue.name}
             onChange={(val) => onChangeFitmentValue(val)}
             variant="dark"
+          /> */}
+          <Dropdown 
+          dropDownTitle="Fitment" 
+          searchFilter={searchByFitmentName}  
+          label="Select Fitment" 
+          handleSearch={handleFitmentFilter} 
+          options={searchByFitmentName?.length ? filteredFitmentName :fitments || []} 
+          selectValue='name' value={fitmentValue} 
+          onChange={(val) => onChangeFitmentValue(val)} 
           />
         </div>
         <div className="grid grid-cols-4 gap-3">
@@ -72,13 +161,25 @@ const BasicInfoTab = ({setOpen}) => {
             onChange={(val) => onChangeMaster('compare_price', val)}
           />
           <Input label="Stock" placeholder="Stock" variant="dark" type={'number'} onChange={(val) => onChangeMaster('stock', val)} />
-          <CustomSelect
+          {/* <CustomSelect
             label="Warehouse"
             placeholder="Select Warehouse"
             options={warehouse || []}
+            
             value={wharehouseValue.name}
             onChange={(val) => onChangeWhearehouse(val)}
             variant="dark"
+          /> */}
+          <Dropdown 
+          dropDownTitle="Warehouse" 
+          label="Select Warehouse" 
+          options={searchByWarehouseName?.length ? filteredByWareHouseName :warehouse} 
+          multipleSelection={true}
+          selectValue='name' 
+          value={wharehouseValue} 
+          searchFilter={searchByWarehouseName}
+          handleSearch={handleSearchByWareHouseName}
+          onChange={(val) => onChangeWhearehouse(val)} 
           />
         </div>
         <div className="w-full">
