@@ -13,7 +13,7 @@ const VariantDetails = () => {
   const [editingPrices,] = useState(false);
   const { fetchGetByTyre, tyreData } = useMainProductController({});
 
-  console.log(tyreData?.inventories , 'tyreData')
+  (tyreData?.inventories , 'tyreData')
 
   // const product = {
   //   name: "Michelin Pilot Sport 4",
@@ -43,7 +43,7 @@ const VariantDetails = () => {
 
   const variantsData = useMemo(()=>getVariantsData(tyreData),[tyreData])
 
-  console.log(variantsData,'variantsData')
+  (variantsData,'variantsData')
 
   // const variantsData = [
   //   {

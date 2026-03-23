@@ -1,14 +1,15 @@
 import { useState } from "react";
 import Input from "./Input";
 
-const PasswordInput = ({ label, ...props }) => {
+const PasswordInput = ({ label, inputRef, ...props }) => {
   const [show, setShow] = useState(false);
 
   return (
     <div className="relative">
       <Input
-      label={label}
-      placeholder="Enter Password"
+        label={label}
+        placeholder="Enter Password"
+        ref={inputRef}
         type={show ? "text" : "password"}
         {...props}
       />

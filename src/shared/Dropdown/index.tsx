@@ -93,13 +93,13 @@ const Dropdown = <T extends { selectValue: keyof T }>({
 
         if (value && Array.isArray(value) && value.length > 0) {
             const arrayOfLabel = value.map((item) => getOptionLabel(item, selectValue));
-            console.log(arrayOfLabel,'arratyOfLabel');
-            console.log(value,'valuevalue');
+            (arrayOfLabel,'arratyOfLabel');
+            (value,'valuevalue');
             selectedLabels.push(...arrayOfLabel);
         }
 
-        // console.log(selectedLabels.includes(label),'bbababab')
-        console.log(selectedLabels,'selectedLabels')
+        // (selectedLabels.includes(label),'bbababab')
+        (selectedLabels,'selectedLabels')
 
         return (
             <label key={label} className={styles.checkbox}>

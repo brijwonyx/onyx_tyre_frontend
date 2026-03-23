@@ -22,12 +22,12 @@ export default function MediaUpload() {
     setIsDragging(false);
 
     const files = e.dataTransfer.files;
-    console.log(files); // frontend dev will handle upload
+    (files); // frontend dev will handle upload
   };
 
   const handleChange = (e) => {
     const files = e.target.files;
-    console.log(files);
+    (files);
   };
 
   return (

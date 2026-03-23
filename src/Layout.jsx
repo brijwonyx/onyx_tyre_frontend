@@ -7,18 +7,26 @@ import { useState } from "react";
 
 const Layout = () => {
   const [openCart, setOpenCart] = useState(false);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return !!localStorage.getItem("token");
+  });
   return (
     <>
       <TopBar />
-      <Header />
+      <Header setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
       <Outlet
         context={{
-          openCart: () => setOpenCart(true),
+          openCart: () => setOpenCart(true),setIsLoggedIn
         }}
       />
       <Footer />
 
-      <AddToCartDrawer open={openCart} onClose={() => setOpenCart(false)} closeCart={() => setOpenCart(false)}/>
+      <AddToCartDrawer
+        open={openCart}
+        onClose={() => setOpenCart(false)}
+        closeCart={() => setOpenCart(false)}
+      />
     </>
   );
 };

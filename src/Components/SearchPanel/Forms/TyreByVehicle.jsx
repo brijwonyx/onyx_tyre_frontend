@@ -178,8 +178,6 @@ const TyreByVehicle = () => {
     fetchFitments();
   };
 
-  console.log(fitmentDetail, "Fitmentsdetails");
-
   const isButtonValid =
     !vehicle?.make || !vehicle?.model || !vehicle?.style || !vehicle?.year;
 

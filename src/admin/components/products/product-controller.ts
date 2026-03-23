@@ -87,7 +87,7 @@ const useProductController = () => {
     };
 
     const onChangeBrandValue = ((val) => {
-        console.log(val,'vallaueuue')
+        (val,'vallaueuue')
         setBrandValue(val)
         fetchModels(val)
         fetchBendorById(val)
@@ -104,7 +104,7 @@ const useProductController = () => {
     })
 
     const onChangeWhearehouse = ((val) => {
-        console.log(val,'valuee')
+        (val,'valuee')
         // setWharehouseValue(val)
         // // const selectedSpecialization = formValues[AdminStaffFormKeys.SELECTED_SPECIALIZATION];
 
@@ -112,7 +112,7 @@ const useProductController = () => {
 
         if (foundIndex !== -1) {
             const data = warehouse.filter((item) => item.id !== val.id);
-            console.log(data,'datattatata')
+            (data,'datattatata')
             
             setWharehouseValue(data)
         } else {
@@ -175,7 +175,7 @@ const useProductController = () => {
         };
     };
 
-    console.log(wharehouseValue,'wharehouseValue')
+    (wharehouseValue,'wharehouseValue')
 
     const addProduct = async (setOpen) => {
         const payload = formatTyreData({ ...brandValue, ...modelValue, ...fitmentValue, ...storeData, faqs: faqs, ...brandByValue, ...modelByValue, warehouse:wharehouseValue });
@@ -184,7 +184,7 @@ const useProductController = () => {
         const data = await request('/api/v1/tyre/add-tyre', "POST", payload, true);
         if (data) {
             const {success , message} = data || {};
-            console.log(data)
+            (data)
             
 
             if(!success){
@@ -208,7 +208,7 @@ const useProductController = () => {
         fetchWarehouse()
     }, []);
 
-    // console.log(fitmentValue,brandValue, brandByValue, modelByValue, "datatatata")
+    // (fitmentValue,brandValue, brandByValue, modelByValue, "datatatata")
 
     return {
         brands,
