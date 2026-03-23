@@ -84,10 +84,10 @@ const BasicInfoTab = ({setOpen}) => {
         [searchByWarehouseName, warehouse],
     );
 
-    console.log(wharehouseValue,'wharehouseValue')
+    (wharehouseValue,'wharehouseValue')
 
 
-  // console.log(warehouse, "warehouse")
+  // (warehouse, "warehouse")
   return (
     <div className="max-w-[1000px] py-6 mx-auto">
       <div>

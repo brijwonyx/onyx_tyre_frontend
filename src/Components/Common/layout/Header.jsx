@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../../assets/logo.svg";
 
 import { BRANDS_MENU, NAV_LINKS, TYRES_MENU } from "../../../data/navigation";
@@ -11,15 +11,21 @@ const MENUS = {
   BRANDS_MENU,
 };
 
-const Header = () => {
+const Header = (props) => {
+  const { setIsLoggedIn, isLoggedIn } = props;
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    navigate("/");
+  };
+
   return (
     <div className="py-1 px-16 relative border-b bg-white">
-
       <div className="flex items-center justify-between">
-
         {/* LEFT */}
         <div className="flex gap-10 items-center">
-
           {/* LOGO */}
           <Link to="/">
             <img src={logo} className="h-[54px]" />
@@ -27,13 +33,11 @@ const Header = () => {
 
           {/* NAV */}
           <nav className="flex items-center gap-6 text-sm">
-
             {NAV_LINKS.map((item) => {
               const menu = item.menu ? MENUS[item.menu] : null;
 
               return (
                 <div key={item.id} className="relative group">
-
                   {/* LINK */}
                   {item.path ? (
                     <Link to={item.path} className="py-4 block">
@@ -68,20 +72,25 @@ const Header = () => {
                       <MegaMenu menu={menu} />
                     </div>
                   )}
-
                 </div>
               );
             })}
-
           </nav>
         </div>
 
         {/* RIGHT */}
         <div className="flex gap-3 text-sm">
-          <Link to="/login">Login</Link>
-          <Link to="/register">Register</Link>
+          {isLoggedIn ? (
+            <button onClick={handleLogout} className="text-red-500">
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
+            </>
+          )}
         </div>
-
       </div>
     </div>
   );

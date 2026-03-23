@@ -14,7 +14,7 @@ export default function TextEditor({label}) {
           data=""
           onChange={(event, editor) => {
             const data = editor.getData();
-            console.log(data);
+            (data);
           }}
         />
       </div>

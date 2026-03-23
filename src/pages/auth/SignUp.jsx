@@ -1,81 +1,130 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 import Input from "../../Components/Common/Forms/Input";
 import Button from "../../Components/Common/Forms/Button";
 import PasswordInput from "../../Components/Common/Forms/PasswordInput";
 
+import CallApi from "../../Common-Controller/controller";
+import { SIGNUP_URL } from "../../api/apiRoutes";
+
 const SignUp = () => {
   const navigate = useNavigate();
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    mobile: "",
+    email: "",
+    password: "",
+  });
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
 
-  // Regex pattern: exactly 10 digits
+  const { loading, error: apiError, request } = CallApi();
+
+  const refs = {
+    lastName: useRef(null),
+    mobile: useRef(null),
+    email: useRef(null),
+    password: useRef(null),
+  };
+
   const phoneRegex = /^\d{10}$/;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handlePhoneChange = (e) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 10) value = value.slice(0, 10);
+
+    setFormData((prev) => ({ ...prev, mobile: value }));
+
+    if (errors.mobile) {
+      setErrors((prev) => ({ ...prev, mobile: "" }));
+    }
+  };
+
+  const validate = () => {
+    let newErrors = {};
+
+    if (!formData.mobile) newErrors.mobile = "Phone is required";
+    else if (!phoneRegex.test(formData.mobile))
+      newErrors.mobile = "Must be 10 digits";
+
+    if (!formData.email) newErrors.email = "Email is required";
+
+    if (!formData.password) newErrors.password = "Password is required";
+
+    return newErrors;
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    if (loading) return;
+    const validationErrors = validate();
 
-    // Validate mobile number length
-    if (!phoneRegex.test(mobile)) {
-      setError("Phone number must be exactly 10 digits");
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
-    setLoading(true);
-    setError("");
-
     try {
-      await axios.post(
-        "http://3.26.11.176/api/v1/auth/register",
-        {
-          // firstName,
-          // lastName,
-          mobile,
-          email,
-          password,
+      const response = await request({
+        url: SIGNUP_URL,
+        method: "POST",
+        data: {
+          mobile: formData.mobile,
+          email: formData.email,
+          password: formData.password,
         },
-        {
-          headers: {
-            accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      });
 
-      navigate("/login");
+      const { success, data } = response || {};
+
+      if (success && data?.message === "Verification email sent") {
+        navigate("/login");
+      }
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
-    } finally {
-      setLoading(false);
+      setErrors({
+        general: err?.response?.data?.message || "Registration failed",
+      });
     }
   };
 
-  // Only allow digits and max length 10
-  const handlePhoneChange = (e) => {
-    let value = e.target.value.replace(/\D/g, ""); // remove non-digits
-    if (value.length > 10) value = value.slice(0, 10); // limit to 10 digits
-    setMobile(value);
+  const handleKeyDown = (e, field) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      const order = ["firstName", "lastName", "mobile", "email", "password"];
+      const currentIndex = order.indexOf(field);
+
+      if (currentIndex < order.length - 1) {
+        const nextField = order[currentIndex + 1];
+        refs[nextField]?.current?.focus();
+      } else {
+        handleRegister(e);
+      }
+    }
   };
 
   return (
     <div className="bg-white text-black px-16 py-10">
       <div className="bg-[#F4F4F4] w-6/12 mx-auto py-6 rounded-lg">
-        <div className="text-center tracking-normal">
-          <h2 className="font-montserrat text-2xl font-medium leading-[32px] mb-2">
-            Register
-          </h2>
-          <p className="text-[#8D8D8D] text-sm font-openSans font-normal leading-[120%]">
+        <div className="text-center">
+          <h2 className="text-2xl font-medium mb-2">Register</h2>
+          <p className="text-[#8D8D8D] text-sm">
             Please register below to create an account
           </p>
         </div>
@@ -83,53 +132,68 @@ const SignUp = () => {
         <form className="px-6 pt-6" onSubmit={handleRegister}>
           <Input
             label="First Name"
-            type="text"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            onKeyDown={(e) => handleKeyDown(e, "firstName")}
             placeholder="First Name"
-            value={firstName}
             disabled={loading}
-            onChange={(e) => setFirstName(e.target.value)}
           />
 
           <Input
             label="Last Name"
-            type="text"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            onKeyDown={(e) => handleKeyDown(e, "lastName")}
+            inputRef={refs.lastName}
             placeholder="Last Name"
-            value={lastName}
             disabled={loading}
-            onChange={(e) => setLastName(e.target.value)}
           />
 
           <Input
             label="Phone Number *"
-            type="text"
-            placeholder="Phone Number"
-            value={mobile}
-            disabled={loading}
+            name="mobile"
+            value={formData.mobile}
             onChange={handlePhoneChange}
+            onKeyDown={(e) => handleKeyDown(e, "mobile")}
+            inputRef={refs.mobile}
+            placeholder="Phone Number"
+            error={errors.mobile}
+            disabled={loading}
           />
 
           <Input
             label="Email Address *"
-            type="text"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            onKeyDown={(e) => handleKeyDown(e, "email")}
+            inputRef={refs.email}
             placeholder="Email Address"
-            value={email}
+            error={errors.email}
             disabled={loading}
-            onChange={(e) => setEmail(e.target.value)}
           />
 
           <PasswordInput
             label="Password *"
-            value={password}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            onKeyDown={(e) => handleKeyDown(e, "password")}
+            inputRef={refs.password}
+            error={errors.password}
             disabled={loading}
-            onChange={(e) => setPassword(e.target.value)}
           />
 
-          {error && (
-            <p className="text-red-500 text-sm text-center mt-3">{error}</p>
+          {(errors.general || apiError) && (
+            <p className="text-red-500 text-sm text-center">
+              {errors.general || apiError}
+            </p>
           )}
 
           <div className="flex gap-6 pt-6">
-            <Button type="submit" solid disabled={loading}>
+            <Button type="submit" disabled={loading}>
               {loading ? "Registering..." : "Register now"}
             </Button>
           </div>

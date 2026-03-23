@@ -23,10 +23,8 @@ const CallApi = () => {
       controllerRef.current = new AbortController();
 
       try {
-        // const token = localStorage.getItem("token");
 
-        const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdiNzMxYTc5LWFkYmItNDM5Yy1iYzllLWM4NTk1NzQ2YTZhZiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MzY2MDQ4NSwiZXhwIjoxNzczNjg5Mjg1fQ.dCm_iREY-s0VuavT5XSlQQlV89yjxreqFZT6tBmvwxU";
+        const token = localStorage.getItem("token");
 
         const response = await axiosInstance({
           url,

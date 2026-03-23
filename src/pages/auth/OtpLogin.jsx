@@ -161,7 +161,7 @@ const OtpVerification = ({ phone }) => {
         }
       );
 
-      console.log("OTP Verified:", res.data);
+      ("OTP Verified:", res.data);
 
       // ✅ SUCCESS ACTION (choose one)
       // navigate("/dashboard");

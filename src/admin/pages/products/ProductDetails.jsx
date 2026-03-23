@@ -30,7 +30,7 @@ export default function ProductDetails() {
 
   const getVariantData = () => {
     if(varientData){
-      console.log(varientData,'varientDatavarientData')
+      (varientData,'varientDatavarientData')
       const data = varientData?.map((item)=>({
         ...item,
         sku:item?.size_label.replace('/','') + item?.load_index + item?.speed_rating?.toUpperCase(),
@@ -66,7 +66,7 @@ export default function ProductDetails() {
       label: "Delete",
       variant: "danger",
       onClick: (row) => {
-        console.log("Delete product:", row.id);
+        ("Delete product:", row.id);
       },
     },
   ];

@@ -54,7 +54,7 @@ const Orders = () => {
     label: "Delete",
     variant: "danger",
     onClick: (row) => {
-      console.log("Delete product:", row.id);
+      ("Delete product:", row.id);
     },
   },
 ];

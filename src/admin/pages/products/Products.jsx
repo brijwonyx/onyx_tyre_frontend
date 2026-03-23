@@ -18,7 +18,7 @@ const Products = () => {
 
   const { brandData, open, setOpen } = useMainProductController({searchParams:value});
 
-  console.log(value,'value')
+  (value,'value')
 
   const getBrandData = () => {
      if(brandData && brandData?.length){
@@ -101,7 +101,7 @@ const Products = () => {
       key: "view",
       label: "View",
       onClick: (row) => {
-        console.log(row)
+        (row)
         navigate(`view`, {state: row.id});
       },
     },
@@ -110,7 +110,7 @@ const Products = () => {
       label: "Delete",
       variant: "danger",
       onClick: (row) => {
-        console.log("Delete product:", row.id);
+        ("Delete product:", row.id);
       },
     },
   ];
