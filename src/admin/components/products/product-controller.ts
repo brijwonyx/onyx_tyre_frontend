@@ -87,7 +87,6 @@ const useProductController = () => {
     };
 
     const onChangeBrandValue = ((val) => {
-        (val,'vallaueuue')
         setBrandValue(val)
         fetchModels(val)
         fetchBendorById(val)
@@ -104,15 +103,10 @@ const useProductController = () => {
     })
 
     const onChangeWhearehouse = ((val) => {
-        (val,'valuee')
-        // setWharehouseValue(val)
-        // // const selectedSpecialization = formValues[AdminStaffFormKeys.SELECTED_SPECIALIZATION];
-
         const foundIndex = wharehouseValue.findIndex((item) => item.id === val.id);
 
         if (foundIndex !== -1) {
             const data = warehouse.filter((item) => item.id !== val.id);
-            (data,'datattatata')
             
             setWharehouseValue(data)
         } else {
@@ -175,8 +169,6 @@ const useProductController = () => {
         };
     };
 
-    (wharehouseValue,'wharehouseValue')
-
     const addProduct = async (setOpen) => {
         const payload = formatTyreData({ ...brandValue, ...modelValue, ...fitmentValue, ...storeData, faqs: faqs, ...brandByValue, ...modelByValue, warehouse:wharehouseValue });
 
@@ -207,8 +199,6 @@ const useProductController = () => {
         fetchBrands();
         fetchWarehouse()
     }, []);
-
-    // (fitmentValue,brandValue, brandByValue, modelByValue, "datatatata")
 
     return {
         brands,

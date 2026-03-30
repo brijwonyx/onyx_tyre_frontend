@@ -1,28 +1,16 @@
+import { useEffect, useMemo, useState } from "react";
+
 import ContentCard from "../../components/common/ContentCard";
 import DataTable from "../../components/common/DataTable";
 import InfoRow from "../../components/common/InfoRow";
 import PageHeader from "../../components/common/PageHeader";
-import TableFilters from "../../components/common/TableFilter";
-import ActionDropdown from "../../components/common/ActionDropdown";
 import Badge from "../../components/common/Badge";
-import { CircleCheck, CirclePlus, Pencil } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+
 import useMainProductController from "./main-product-controller";
 
 const VariantDetails = () => {
   const [editingPrices,] = useState(false);
   const { fetchGetByTyre, tyreData } = useMainProductController({});
-
-  (tyreData?.inventories , 'tyreData')
-
-  // const product = {
-  //   name: "Michelin Pilot Sport 4",
-  //   status: "Published",
-  //   brand: "Bridge Stone",
-  //   description: "abc xyz",
-  //   slug: "/pirelli-pzero",
-  //   onSale: "Yes",
-  // };
 
   const variantsColumns = [
     { key: "location", label: "Location" },
@@ -42,19 +30,6 @@ const VariantDetails = () => {
   }
 
   const variantsData = useMemo(()=>getVariantsData(tyreData),[tyreData])
-
-  (variantsData,'variantsData')
-
-  // const variantsData = [
-  //   {
-  //     location: "Main Warehouse",
-  //     availability: "123",
-  //   },
-  //   {
-  //     location: "East Fitment Center",
-  //     availability: "153",
-  //   },
-  // ];
 
   useEffect(() => {
     fetchGetByTyre()

@@ -84,10 +84,6 @@ const BasicInfoTab = ({setOpen}) => {
         [searchByWarehouseName, warehouse],
     );
 
-    (wharehouseValue,'wharehouseValue')
-
-
-  // (warehouse, "warehouse")
   return (
     <div className="max-w-[1000px] py-6 mx-auto">
       <div>
@@ -97,14 +93,7 @@ const BasicInfoTab = ({setOpen}) => {
       </div>
       <div className="flex flex-col gap-6 mt-6">
         <div className="grid grid-cols-3 gap-3">
-          {/* <CustomSelect
-            label="Brand"
-            placeholder="Select Brand"
-            options={brands || []}
-            value={brandValue.vendor_name}
-            onChange={(val) => onChangeBrandValue(val)}
-            variant="dark"
-          /> */}
+          
           <Dropdown 
           dropDownTitle="Brand"  
           searchFilter={searchByBrandName} 
@@ -115,14 +104,7 @@ const BasicInfoTab = ({setOpen}) => {
           value={brandValue} 
           onChange={(val) => onChangeBrandValue(val)} 
           />
-          {/* <CustomSelect
-            label="Model"
-            placeholder="Select Model"
-            options={models || []}
-            value={modelValue.model_name}
-            onChange={(val) => onChangeModelValue(val)}
-            variant="dark"
-          /> */}
+         
           <Dropdown 
           dropDownTitle="Model" 
           label="Select Model" 
@@ -133,14 +115,7 @@ const BasicInfoTab = ({setOpen}) => {
           value={modelValue} 
           onChange={(val) => onChangeModelValue(val)} 
           />
-          {/* <CustomSelect
-            label="Fitment"
-            placeholder="Select Fitment"
-            options={fitments || []}
-            value={fitmentValue.name}
-            onChange={(val) => onChangeFitmentValue(val)}
-            variant="dark"
-          /> */}
+         
           <Dropdown 
           dropDownTitle="Fitment" 
           searchFilter={searchByFitmentName}  
@@ -152,24 +127,27 @@ const BasicInfoTab = ({setOpen}) => {
           />
         </div>
         <div className="grid grid-cols-4 gap-3">
-          <Input label="Price" placeholder="Price" variant="dark" type={'number'} onChange={(val) => onChangeMaster('price', val)} />
+          <Input 
+          label="Price" 
+          placeholder="Price" 
+          variant="dark" 
+          type={'number'} 
+          onChange={(event) => onChangeMaster('price', event.target.value)} 
+          />
           <Input
             label="Compare Price"
             placeholder="Compare Price"
             variant="dark"
             type={'number'}
-            onChange={(val) => onChangeMaster('compare_price', val)}
+            onChange={(event) => onChangeMaster('compare_price', event.target.value)}
           />
-          <Input label="Stock" placeholder="Stock" variant="dark" type={'number'} onChange={(val) => onChangeMaster('stock', val)} />
-          {/* <CustomSelect
-            label="Warehouse"
-            placeholder="Select Warehouse"
-            options={warehouse || []}
-            
-            value={wharehouseValue.name}
-            onChange={(val) => onChangeWhearehouse(val)}
-            variant="dark"
-          /> */}
+          <Input 
+          label="Stock" 
+          placeholder="Stock" 
+          variant="dark" 
+          type={'number'} 
+          onChange={(event) => onChangeMaster('stock', event.target.value)} />
+          
           <Dropdown 
           dropDownTitle="Warehouse" 
           label="Select Warehouse" 

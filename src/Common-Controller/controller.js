@@ -16,7 +16,7 @@ const CallApi = () => {
   const controllerRef = useRef(null);
 
   const request = useCallback(
-    async ({ url, method = "GET", data = null, params = {}, headers = {} }) => {
+    async ({ url, method = "GET", data, params = {}, headers = {} }) => {
       setLoading(true);
       setError(null);
 

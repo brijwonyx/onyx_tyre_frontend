@@ -1,15 +1,15 @@
+import { useMemo, useState } from "react";
+
 import ContentCard from "../../components/common/ContentCard";
 import PageHeader from "../../components/common/PageHeader";
 import PageHeader2 from "../../components/common/PageHeader2";
-import OrdersFilters from "../../components/orders/OrdersFilters";
-import OrdersTable from "../../components/orders/OrdersTable";
 import CreateProductModal from "../../components/products/CreateProductModal";
 import DataTable from "../../components/common/DataTable";
 import TableFilters from "../../components/common/TableFilter";
 import { useNavigate } from "react-router-dom";
 
 import useMainProductController from "./main-product-controller";
-import { useMemo, useState } from "react";
+
 
 const Products = () => {
   const navigate = useNavigate();
@@ -17,8 +17,6 @@ const Products = () => {
   const [value , setValue] = useState('')
 
   const { brandData, open, setOpen } = useMainProductController({searchParams:value});
-
-  (value,'value')
 
   const getBrandData = () => {
      if(brandData && brandData?.length){
@@ -33,6 +31,7 @@ const Products = () => {
      return [] ;
   }
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const data = useMemo(()=>getBrandData(),[brandData])
 
   

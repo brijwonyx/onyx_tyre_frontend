@@ -14,7 +14,7 @@ const useMainProductController = (args:{searchParams:string,brandId:string}) => 
     const [tyreData, setTyreData] = useState({})
 
     const fetchBrands = async () => {
-        const data = await request(`/api/v1/tyre/brands?page=1&limit=10&sortBy=vendor_name&sortOrder=DESC&search=${searchParams}`, "GET", null, true);
+        const data = await request(`/api/v1/tyre/brands?page=1&limit=1000&sortBy=vendor_name&sortOrder=DESC&search=${searchParams}`, "GET", null, true);
         if (data.success) {
             setBrandData(data.data);
         }
