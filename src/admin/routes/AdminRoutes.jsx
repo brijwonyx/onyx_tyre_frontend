@@ -8,8 +8,12 @@ import ProductDetails from "../pages/products/ProductDetails";
 import VariantDetails from "../pages/products/VariantDetails";
 import CustomerDetails from "../pages/customers/CustomerDetails";
 import DashBoard from "../pages/Dashboard";
+import Login from "../pages/Login";
 
 const AdminRoutes = (
+    <>
+     <Route path="/admin/login" element={<Login />} />
+    
     <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<DashBoard />} />
         <Route path="/admin/orders" element={<Orders />} />
@@ -20,5 +24,6 @@ const AdminRoutes = (
         <Route path="/admin/products/view" element={<ProductDetails />} />
         <Route path="/admin/products/view/variant" element={<VariantDetails />} />
     </Route>
+    </>
 )
 export default AdminRoutes  

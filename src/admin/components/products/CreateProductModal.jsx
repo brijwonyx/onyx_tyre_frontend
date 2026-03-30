@@ -1,12 +1,13 @@
 import { Dialog, Transition, Tab, DialogPanel, TabGroup, TabList, TabPanels, TabPanel } from "@headlessui/react";
-import { Fragment, useState } from "react";
+
+import { Fragment } from "react";
 import BasicInfoTab from "./tabs/BasicInfoTab";
 import CategoriesTab from "./tabs/CategoriesTab";
 import VariantsTab from "./tabs/VariantsTab";
 import PricingTab from "./tabs/PrincingTab";
 import { X } from "lucide-react";
 import esc from "../../assets/esc.svg";
-import useProductController from "./product-controller";
+
 import Toaster from "../../../shared/Toaster";
 
 export default function CreateProductModal({ open, setOpen }) {
