@@ -6,6 +6,12 @@ import CallApi from "../../../Common-Controller/controller";
 
 import { LOGIN_URL } from "../../../api/apiRoutes";
 
+import EyeOffIcon from '../../assets/eye-off-icon.svg'
+import EyeOnIcon from '../../assets/eye-on-icon.svg'
+
+import { showToast } from "../../../shared/Toaster/constant";
+import Toaster from "../../../shared/Toaster";
+
 import { ErrorState, FormState } from "./type";
 
 import "./styles.css";
@@ -16,9 +22,10 @@ const Login: React.FC = () => {
     password: "",
   });
   
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState<ErrorState>({});
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   // Email regex
   const validateEmail = (email: string): boolean => {
@@ -95,14 +102,22 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               password: form.password,
             },
           });
+
+          const { success , message , data } = response || {};
+
+           if (!success) {
+             throw new Error(message || "Login failed");
+            }
+
+            localStorage.setItem("token", data);
+
+          showToast({type:'success',message:"Login successful!"})
     
-          if (response?.success) {
-            localStorage.setItem("token", response?.data);
-            // setIsLoggedIn(true);
-            navigate("/admin/products");
-          }
+         setTimeout(() => {
+            navigate("/admin/products");  
+         }, 1000);
         } catch (err) {
-          console.error("Login Failed:", err);
+          showToast({type:'error',message:"Invalid credentials"});
         }
   };
 
@@ -133,16 +148,21 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             )}
           </div>
 
-          <div className="form-group">
+          <div className="form-group password-group">
             <label>Password</label>
+            <div className="password-wrapper">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               placeholder="********"
               value={form.password}
               onChange={handleChange}
             />
-            {errors.password && (
+            <img src={showPassword ? EyeOnIcon : EyeOffIcon }
+             className="toggle-icon"
+              onClick={() => setShowPassword((prev) => !prev)} />
+            </div>
+             {errors.password && (
               <span className="error">{errors.password}</span>
             )}
           </div>
@@ -157,6 +177,7 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           </button>
         </form>
       </div>
+      <Toaster/>
     </div>
   );
 };
