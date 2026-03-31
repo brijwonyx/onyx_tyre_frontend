@@ -8,9 +8,11 @@ const ProductItem = ({
   BrandImage,
   name,
   desc,
-  price,
-  liked = false,
   children,
+  season,
+  review,
+  rating,
+  loadIndex
 }) => {
   return (
     <>
@@ -19,6 +21,10 @@ const ProductItem = ({
         image={image}
         desc={desc}
         BrandImage={BrandImage}
+        season={season}
+        review={review}
+        rating={rating}
+        loadIndex={loadIndex}
       >
         {children && <div className="">{children}</div>}
       </ProductIdentity>

@@ -4,9 +4,9 @@ import CustomSelect from "../../components/common/forms/CustomSelect";
 import ContentCard from "../components/common/ContentCard";
 import PageHeader from "../components/common/PageHeader";
 import PageHeader2 from "../components/common/PageHeader2";
-import { useNavigate } from "react-router-dom";
-import tyreImg from "../../assets/tyre-item.png";
-import tyreBrand from "../../assets/tyre-brand.png";
+// import { useNavigate } from "react-router-dom";
+// import tyreImg from "../../assets/tyre-item.png";
+// import tyreBrand from "../../assets/tyre-brand.png";
 import FiltersBar from "../../components/searchResults/FilterBar";
 import ProductItem from "../../components/searchResults/ProductItem";
 import LineItem from "../../components/common/LineItem";
@@ -89,7 +89,7 @@ const DashBoard = () => {
                 />
                 <div className="flex flex-col justify-end items-end mt-6">
                   <p className="font-openSans font-normal text-sm">
-                    Tire Set Subtotal 
+                    // Tire Set Subtotal
                     <span className="font-montserrat font-bold text-2xl pl-1">
                       $469.72
                     </span>

@@ -5,7 +5,7 @@ import Input from "../../Components/Common/Forms/Input";
 
 import PasswordInput from "../../Components/Common/Forms/PasswordInput";
 
-import { Button } from "@headlessui/react";
+import Button from "../../Components/Common/Forms/Button";
 
 import CallApi from "../../Common-Controller/controller";
 
