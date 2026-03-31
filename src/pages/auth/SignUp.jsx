@@ -2,11 +2,16 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Input from "../../Components/Common/Forms/Input";
+
 import Button from "../../Components/Common/Forms/Button";
+
 import PasswordInput from "../../Components/Common/Forms/PasswordInput";
 
 import CallApi from "../../Common-Controller/controller";
+
 import { SIGNUP_URL } from "../../api/apiRoutes";
+
+import toast from "react-hot-toast";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -21,7 +26,7 @@ const SignUp = () => {
 
   const [errors, setErrors] = useState({});
 
-  const { loading, error: apiError, request } = CallApi();
+  const { loading, request } = CallApi();
 
   const refs = {
     lastName: useRef(null),
@@ -94,12 +99,13 @@ const SignUp = () => {
       const { success, data } = response || {};
 
       if (success && data?.message === "Verification email sent") {
-        navigate("/login");
+        toast.success(data?.message || "Verification email sent");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
       }
     } catch (err) {
-      setErrors({
-        general: err?.response?.data?.message || "Registration failed",
-      });
+      toast.error(err?.response?.data?.message || "Registration failed");
     }
   };
 
@@ -186,11 +192,11 @@ const SignUp = () => {
             disabled={loading}
           />
 
-          {(errors.general || apiError) && (
+          {/* {(errors.general || apiError) && (
             <p className="text-red-500 text-sm text-center">
               {errors.general || apiError}
             </p>
-          )}
+          )} */}
 
           <div className="flex gap-6 pt-6">
             <Button type="submit" disabled={loading}>

@@ -1,46 +1,66 @@
-import { useState } from "react";
-import BrandCard from "../Common/BrandCard";
-import CustomSelect from "../../common/forms/CustomSelect";
-import Button from "../../common/forms/Button";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import BrandCard from "../Common/BrandCard";
 
-const Brands = Array.from({ length: 16 }, (_, index) => ({
-  id: `{brand-${index}}`,
-  name: "Michelin",
-  img: "/",
-}));
+// Commented if not in use removed after release
+import CustomSelect from "../../common/forms/CustomSelect";
 
+import Button from "../../common/forms/Button";
+
+import CallApi from "../../../Common-Controller/controller";
+
+import { getBrand } from "../../../api/api.services";
 
 const WheelByBrand = () => {
-  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [optionBrands, setOptionBrands] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState(null);
+
   const [zipCode, setZipCode] = useState("");
-  const navigate = useNavigate()
 
+  const navigate = useNavigate();
 
-  const toggleBrand = (id) => {
-    setSelectedBrands((prev) =>
-      prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id],
-    );
+  const brandApi = CallApi();
+
+  const toggleBrand = (brand) => {
+    setSelectedBrand((prev) => (prev?.value === brand ? null : brand));
   };
- 
+
+  const fetchBrand = async () => {
+    const makeRes = await getBrand(brandApi.request);
+    const { data: finalBandsData } = makeRes || {};
+    setOptionBrands(finalBandsData);
+  };
+
+  useEffect(() => {
+    fetchBrand();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const isButtonDisable = !selectedBrand || !zipCode;
 
   return (
     <div className="flex flex-col gap-4 text-white w-full ">
       <h5 className="font-montserrat font-semibold text-xl leading-[20px] text-left ">
         Search by Vehicle
       </h5>
-      <div className="grid grid-cols-4">
-        {Brands.map((brand) => (
-          <BrandCard
-            key={brand.id}
-            id={brand.id}
-            logo={brand.logo}
-            checked={selectedBrands.includes(brand.id)}
-            onChange={toggleBrand}
-          />
-        ))}
+      <div>
+        {optionBrands?.length > 0 ? (
+          <div className="grid grid-cols-4">
+            {optionBrands.map((brand) => (
+              <BrandCard
+                key={brand.id}
+                id={brand.id}
+                logo={brand.logo}
+                checked={selectedBrand?.id === brand.id}
+                onChange={() => toggleBrand(brand)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex justify-center">Loading...</div>
+        )}
       </div>
-            <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <div className="flex-1 h-px bg-white" />
         <span className="text-white text-base font-openSans">&amp;</span>
         <div className="flex-1 h-px bg-white" />
@@ -54,7 +74,12 @@ const WheelByBrand = () => {
           onChange={setZipCode}
         />
       </div>
-      <Button solid className="w-fit mx-auto mt-3" onClick={()=>navigate("/search?type=brand")}>
+      <Button
+        solid
+        className="w-fit mx-auto mt-3"
+        onClick={() => navigate("/search?type=brand")}
+        disabled={isButtonDisable}
+      >
         View Tyres
       </Button>
     </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const CustomSelect = ({
   label,
@@ -11,13 +11,28 @@ const CustomSelect = ({
   labelKey = "name",
 }) => {
   const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const variants = {
     default: "bg-white px-3 py-[13.5px]",
     dark: "box-shadow-[0_0_0_1px_#00000014,0_1px_2px_0px_#0000001F] bg-[#FAFAFA] px-2 py-[6px] rounded-md mt-2 border border-gray-300",
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative w-full">
+    <div ref={dropdownRef} className="relative w-full">
       {/* Label */}
       <label
         className={`font-montserrat  leading-[24px] ${variant === "dark" ? "font-medium text-[13px]" : "font-normal text-base"}`}

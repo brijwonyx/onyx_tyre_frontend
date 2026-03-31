@@ -11,7 +11,6 @@ const RatingStars = ({
 
   return (
     <div className="inline-flex flex-none items-center gap-2">
-
       {/* Stars */}
       <div className="flex">
         {[...Array(totalStars)].map((_, i) => (
@@ -31,10 +30,9 @@ const RatingStars = ({
       {showText && (
         <span className="text-sm text-gray-600">
           {rattingText ? rating : ""}
-           {reviews && `(${reviews} Reviews)`}
+          {`(${reviews || 0} Reviews)`}
         </span>
       )}
-      
     </div>
   );
 };

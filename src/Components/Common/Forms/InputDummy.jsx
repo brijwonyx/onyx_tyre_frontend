@@ -1,4 +1,4 @@
-const Input = ({
+const InputDummy = ({
   label,
   type,
   placeholder,
@@ -19,7 +19,7 @@ const Input = ({
   };
 
   return (
-    <div className="mb-6">
+    <div className="">
       {label && (
         <label
           className={`font-openSans text-sm font-normal ${
@@ -33,7 +33,7 @@ const Input = ({
 
       <div className="flex items-center relative">
         {slug && (
-          <p className="text-sm text-gray-400 absolute top-2 px-3 py-[6px] border-r">
+          <p className="text-sm text-gray-400 absolute top-2 px-3 py-[6px]">
             {slug}
           </p>
         )}
@@ -44,7 +44,7 @@ const Input = ({
           onChange={onChange}
           ref={inputRef}
           maxLength={maxLength}
-          className={`w-full rounded-md border-solid border-[1px] border-[#F5F5F5] p-3 mt-1
+          className={`w-full border-solid border-[#F5F5F5] p-3 mt-1
             ${slug ? "pl-[40px]" : ""}
             ${variants[variant]}
             ${error ? "border-red-500" : "border-gray-300"}`}
@@ -56,4 +56,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default InputDummy;

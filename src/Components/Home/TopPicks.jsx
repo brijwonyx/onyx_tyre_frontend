@@ -17,7 +17,7 @@ const TopPicks = () => {
         <div className="grid grid-cols-2 gap-6 pt-20 px-[120px] ">
           {Array.from({ length: 4 }).map((_, index) => (
             <div className="flex" key={index}>
-              <img src={tyreIitem} alt="Tyre" className="w-[220px] h-full" />
+              <img src={tyreIitem} alt="Tyre" className="max-w-[220px] h-full" />
               <div className="flex flex-col pl-4 gap-6">
                 <div>
                   <h6 className="font-montserrat font-bold text-xl leading-[30px] tracking-normal mb-[10px]">
