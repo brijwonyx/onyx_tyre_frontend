@@ -3,13 +3,14 @@ import winter from "../../assets/winter.svg";
 import fuel from "../../assets/fuel.svg";
 import rain from "../../assets/rain.svg";
 import sound from "../../assets/sound.svg";
-const ProductBadges = ({ season , loadIndex }) => {
+
+const ProductBadges = ({season ,loadIndex , car_type }) => {
   return (
     <>
       <div className="flex gap-1 font-openSans font-normal text-xs text-white">
         <span className="bg-[#1E90FF] rounded-[4px] py-2 px-1 flex gap-1">
           <img src={touring} alt="touring" />
-          Touring
+          {car_type}
         </span>
         <span className="bg-[#4CAF50] rounded-[4px] py-2 px-1 flex gap-1">
           <img src={winter} alt="winter" />

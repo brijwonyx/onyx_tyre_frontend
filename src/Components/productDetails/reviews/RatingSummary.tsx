@@ -1,23 +1,27 @@
+import { useMemo } from "react";
+import { Review } from "../../../types/ProductDetailsType";
 import RatingStars from "../../common/RatingStars";
+import { getOverAllRating } from "../../../utils/getOverAllRating";
+import { getRatingDistribution } from "../../../utils/getRatingDistribution";
 
-const ratings = [
-  { star: 5, count: 41 },
-  { star: 4, count: 4 },
-  { star: 3, count: 2 },
-  { star: 2, count: 0 },
-  { star: 1, count: 0 },
-];
+interface RatingSummaryPropsType{
+  reviews:Review[] | [];
+}
 
-const RatingSummary = () => {
-  const total = 48;
+const RatingSummary = (props:RatingSummaryPropsType) => {
+  const {reviews} = props;
+
+  const overAllRating = useMemo(() => getOverAllRating(reviews),[reviews])
+
+  const ratings = useMemo(()=>getRatingDistribution(reviews),[reviews])
 
   return (
     <div className="flex flex-col gap-4 font-openSans">
       <h3 className="font-bold text-base">Overall rating</h3>
 
       <div className="flex items-center gap-2">
-        <span className="text-3xl font-bold">4.7</span>
-        <RatingStars rating="4.7" rattingText={false} />
+        <span className="text-3xl font-bold">{overAllRating}</span>
+        <RatingStars reviews={reviews?.length || 0} rating={overAllRating ? Number(overAllRating) : 0} rattingText={false} />
       </div>
 
       {/* Bars */}
@@ -29,7 +33,7 @@ const RatingSummary = () => {
             <div className="flex-1 h-2 bg-gray-200 rounded">
               <div
                 style={{
-                  width: `${(r.count / total) * 100}%`,
+                  width: `${(r.count / ratings?.length) * 100}%`,
                 }}
                 className="h-2 bg-green-600 rounded"
               />

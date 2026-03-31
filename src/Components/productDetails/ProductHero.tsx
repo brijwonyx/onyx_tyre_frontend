@@ -1,51 +1,89 @@
-import CustomSelect from "../common/forms/CustomSelect";
-import RatingStars from "../common/RatingStars";
 import ProductGallery from "./ProductGallery";
 import img1 from "../../assets/tyre-brand.png";
-import img2 from "../../assets/tyre-item.png";
+
 import QuantitySelector from "../common/forms/QuantitySelector";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Button from "../common/forms/Button";
 import { useOutletContext } from "react-router-dom";
-import ProductIdentity from "../common/ProductIdentity";
+// import ProductIdentity from "../common/ProductIdentity";
+
 import InlineEditableField from "../common/InlineEditableField";
 
-const ProductHero = () => {
+import { Review, TyreModelType } from "../../types/ProductDetailsType";
+import ProductIdentity from "../common/ProductIdentity";
+import { getOverAllRating } from "../../utils/getOverAllRating";
+
+interface ProductHeroPropsType{
+  tyreDetails:TyreModelType;
+  price : number;
+  reviews:Review[] | [];
+}
+
+const ProductHero = (props:ProductHeroPropsType) => {
+  const {tyreDetails ,price , reviews } = props;
+
+  console.log("Product Details in Hero:", tyreDetails);
+
+  // const {} = productDetails || {};
+
   const [qty, setQty] = useState(2);
+
   const { openCart } = useOutletContext();
+
+  const getProductImages = () => {
+    if(tyreDetails  && tyreDetails?.images && tyreDetails?.images?.length){
+      const images = tyreDetails?.images?.map((img) => img?.image_url);
+
+      return images;
+    }
+
+    return [];
+  }
+
+  const productImages = useMemo(()=> getProductImages(),[tyreDetails]);
+  
+
+  const overAllRating = useMemo(() => getOverAllRating(reviews),[reviews])
+
+  console.log(tyreDetails , 'reviews ')
+
   return (
     <>
       <div className="grid grid-cols-2 gap-6">
         {/* Image */}
         <div className="">
           <ProductGallery
-            images={[img1, img2, img1, img2, img1, img2, img1, img2]}
+            images={productImages}
           />
         </div>
         <div className="p-4">
           <div className="flex flex-col w-full gap-6">
             <ProductIdentity
-              name="Michelin Latitude Sport 3"
-              desc="Ideal for high-end SUVs, the Michelin Latitude Sport 3 delivers remarkable handling and stability on both dry and wet roads, providing"
+              name={tyreDetails?.model_name}
+              desc={tyreDetails?.description || ''}
               BrandImage={img1}
               className="!py-0"
+              review={reviews?.length}
+              rating={Number(overAllRating)}
+              season={tyreDetails?.season_type}
+              car_type={tyreDetails?.car_type}
             />
-            <CustomSelect
+            {/* <CustomSelect
               label="Pick a tire size for exact price"
               placeholder="255/40R/19"
               options={["255/40R/19", "255/40R/19", "255/40R/19"]}
               value=""
               onChange=""
               className="border border-[#E6E6E6] mt-1"
-            />
+            /> */}
             {/* Price */}
             <div>
               <h4 className="font-montserrat font-bold text-4xl mb-3">
-                $295.00 <span className="font-openSans font-normal text-base">/tire</span>
+                ${price} <span className="font-openSans font-normal text-base">/tire</span>
               </h4>
-              <p className="font-openSans font-normal text-base">
-                Total for 2 <span className="font-medium">$590.00</span>
-              </p>
+              {/* <p className="font-openSans font-normal text-base">
+                Total for {qty} is <span className="font-medium">${qty * price}</span>
+              </p> */}
             </div>
             <div className="flex gap-3">
               <QuantitySelector value={qty} onChange={setQty} />
