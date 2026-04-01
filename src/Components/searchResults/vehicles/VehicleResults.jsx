@@ -121,6 +121,7 @@ const VehicleResults = () => {
   // };
 
   const handleProductDetail = (item) => {
+    console.log(item , 'itemmcmmcmcmc')
     const redirectState = {
       productId: `${item?.id}`,
     };
@@ -182,7 +183,7 @@ const VehicleResults = () => {
             />
             <div
               className="flex flex-col gap-[24px]"
-              onClick={handleProductDetail}
+              // onClick={()=>handleProductDetail(item)}
             >
               {tyreList?.map((item) => (
                 <div

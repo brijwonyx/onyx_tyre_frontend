@@ -30,7 +30,7 @@ const RatingStars = ({
       {showText && (
         <span className="text-sm text-gray-600">
           {rattingText ? rating : ""}
-          {`(${reviews || 0} Reviews)`}
+          {/* {`(${reviews || 0} Reviews)`} */}
         </span>
       )}
     </div>

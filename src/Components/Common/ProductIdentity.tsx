@@ -2,18 +2,23 @@ import { Children } from "react";
 import ProductBadges from "./Productbadges";
 import RatingStars from "./RatingStars";
 
-const ProductIdentity = ({
-  name,
-  image,
-  desc,
-  BrandImage,
-  children,
-  className,
-  season,
-  review,
-  rating,
-  loadIndex,
-}) => {
+interface ProductIdentityPropsType{
+  name:string;
+  image?:string;
+  desc?:string;
+  BrandImage?:string;
+  season?:string;
+  review?:number;
+  rating?:number;
+  loadIndex?:number;
+  className?:string;
+  children?:React.ReactNode;
+  car_type?:string;
+}
+
+const ProductIdentity = (props:ProductIdentityPropsType) => {
+  const {name , image , desc , BrandImage , season , review , rating , loadIndex , className , children , car_type} = props;
+
   return (
     <div className={`flex gap-6 py-6 ${className} `}>
       {image ? (
@@ -23,9 +28,7 @@ const ProductIdentity = ({
           className="bg-[#ececec] object-contain mb-2 w-[204px] max-w-[204px]"
         />
       ) : (
-        <span className="w-[260px] bg-[#ececec] object-contain mb-2 text-center flex items-center justify-center">
-          No Image available
-        </span>
+        null
       )}
 
       <div className="flex flex-col w-full">
@@ -41,7 +44,7 @@ const ProductIdentity = ({
           <RatingStars rating={rating} reviews={review} />
         </div>
 
-        <ProductBadges season={season} loadIndex={loadIndex} />
+        <ProductBadges car_type={car_type} season={season} loadIndex={loadIndex} />
         {children}
       </div>
     </div>
