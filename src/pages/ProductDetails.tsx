@@ -22,15 +22,13 @@ const ProductDetails = () => {
     id: productId,
   });
 
-  console.log(loading, "Product Details");
-
   return (
     <>
       {/* <ContextBar
         breadCrumbs="Home / by brand / Michelin / Michelin Pilot Sport 4"
         children=""
       /> */}
-      {!loading ? (
+      {loading ? (
         <div className="space-y-6 p-8">
           {[...Array(1)].map((_, i) => (
             <ShimmerCard key={i} />
