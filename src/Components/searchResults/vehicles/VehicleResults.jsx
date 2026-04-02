@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import ContextBar from "../../common/layout/ContextBar";
+
 import FiltersBar from "../FilterBar";
 import ProductItem from "../ProductItem";
 import LineItem from "../../common/LineItem";
@@ -121,7 +122,7 @@ const VehicleResults = () => {
   // };
 
   const handleProductDetail = (item) => {
-    console.log(item , 'itemmcmmcmcmc')
+    console.log(item, "itemmcmmcmcmc");
     const redirectState = {
       productId: `${item?.id}`,
     };

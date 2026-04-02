@@ -12,7 +12,8 @@ const ProductItem = ({
   season,
   review,
   rating,
-  loadIndex
+  loadIndex,
+  className,
 }) => {
   return (
     <>
@@ -25,6 +26,7 @@ const ProductItem = ({
         review={review}
         rating={rating}
         loadIndex={loadIndex}
+        className={className}
       >
         {children && <div className="">{children}</div>}
       </ProductIdentity>

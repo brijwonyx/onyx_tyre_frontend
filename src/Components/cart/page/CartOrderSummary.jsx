@@ -56,7 +56,7 @@ h-fit"
       </div>
 
       {/* YELLOW LOYALTY CARD */}
-      <div className="bg-[#FFC857] py-6 px-4">
+      {/* <div className="bg-[#FFC857] py-6 px-4">
         <h3 className="font-semibold text-xl font-montserrat ">Unlock Loyalty Rewards</h3>
 
         <ul className="py-3 text-base font-sans font-normal">
@@ -70,7 +70,7 @@ h-fit"
         <p className="text-xs text-center mt-2 font-openSans italic">
           Takes 30 seconds. Points apply after login!
         </p>
-      </div>
+      </div> */}
     </div>
   );
 };
