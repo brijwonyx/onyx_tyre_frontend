@@ -4,7 +4,7 @@ import CartSummary from "./CartSummary";
 import {cartItems} from "../../../mock/CartData"
 import { useOutletContext } from "react-router-dom";
 
-const AddToCartDrawer = ({ open, onClose, closeCart }) => {
+const AddToCartDrawer = ({ open, onClose, closeCart , setOpenCart }) => {
   // const {closeCart} = useOutletContext();
   return (
     <>
@@ -13,7 +13,7 @@ const AddToCartDrawer = ({ open, onClose, closeCart }) => {
           <CartList items={cartItems} variant="drawer" />
 
           <div className="">
-            <CartSummary total="255" closeCart={closeCart} />
+            <CartSummary total="255" closeCart={closeCart} setOpenCart={setOpenCart} />
           </div>
         </div>
       </Drawer>

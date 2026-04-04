@@ -27,8 +27,8 @@ const ProductCard = () => {
            <ProductBadges />
           </div>
           <div className="flex flex-col gap-6 mt-6">
-          <p className="font-montserrat font-bold text-2xl">Start at $295.00 <span className="text-[#8E8E8E] font-openSans text-sm font-normal">/tire</span></p>
-          <Button solid className="w-full">find your size</Button>
+          <p className="font-montserrat font-bold text-2xl">$295.00 <span className="text-[#8E8E8E] font-openSans text-sm font-normal">/tire</span></p>
+          <Button solid className="w-full">Show Details</Button>
           </div>
       </div>
     </div>

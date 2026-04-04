@@ -8,6 +8,8 @@ export default function LineItem({
   // actions = {},
   className,
 }) {
+
+  console.log(price)
   return (
     <div
       className={`relative bg-white border shadow-md shadow-[5px_7px_11.9px_0px_#00000014] rounded-md p-3 ${className} `}
@@ -34,7 +36,6 @@ export default function LineItem({
           <p className="font-montserrat font-bold text-2xl text-black">
             ${price}
             <span className="text-[#8E8E8E] text-sm font-normal font-openSans">
-              {" "}
               /tire
             </span>
           </p>

@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { X } from "lucide-react";
 import { Fragment } from "react";
 
-const Drawer = ({ open, onClose, title, children,footer }) => {
+const Drawer = ({ open, onClose, title, children, footer }) => {
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -47,11 +47,11 @@ const Drawer = ({ open, onClose, title, children,footer }) => {
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 overflow-y-auto py-4">
+                  <div className="flex-1 overflow-y-auto py-4 px-2">
                     {children}
                   </div>
 
-                  {footer && (
+                  {footer &&
                     // <div className="flex justify-end gap-2 px-6 py-4 border-t">
                     //   <button
                     //     onClick={onClose}
@@ -63,8 +63,7 @@ const Drawer = ({ open, onClose, title, children,footer }) => {
                     //     Save
                     //   </button>
                     // </div>
-                    {footer}
-                  )}
+                    { footer }}
                 </Dialog.Panel>
               </Transition.Child>
             </div>
