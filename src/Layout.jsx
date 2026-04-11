@@ -12,6 +12,7 @@ const Layout = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return !!localStorage.getItem("token");
   });
+  
   return (
     <>
       <TopBar />

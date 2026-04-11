@@ -10,6 +10,9 @@ const Input = ({
   onChange,
   inputRef,
   maxLength,
+  inputClassName,
+  endAdornment,
+  name,
   ...props
 }) => {
   const variants = {
@@ -33,23 +36,28 @@ const Input = ({
 
       <div className="flex items-center relative">
         {slug && (
-          <p className="text-sm text-gray-400 absolute top-2 px-3 py-[6px] border-r">
+          <p className="absolute">
             {slug}
           </p>
         )}
 
         <input
           type={type}
+          name={name}
           placeholder={placeholder}
           onChange={onChange}
           ref={inputRef}
           maxLength={maxLength}
           className={`w-full rounded-md border-solid border-[1px] border-[#F5F5F5] p-3 mt-1
-            ${slug ? "pl-[40px]" : ""}
             ${variants[variant]}
-            ${error ? "border-red-500" : "border-gray-300"}`}
+            ${error ? "border-red-500" : "border-gray-300"} ${inputClassName}`}
           {...props}
         />
+         {endAdornment && (
+          <p className="absolute right-[4px]">
+            {endAdornment}
+          </p>
+        )}
       </div>
       {error && <p className="text-sm text-red-600">{error}</p>}
     </div>

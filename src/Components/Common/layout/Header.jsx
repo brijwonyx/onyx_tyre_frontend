@@ -5,6 +5,7 @@ import { BRANDS_MENU, NAV_LINKS, TYRES_MENU } from "../../../data/navigation";
 
 import { ChevronDown } from "lucide-react";
 import MegaMenu from "../../navigation/MegaMenu";
+import { useEffect } from "react";
 
 const MENUS = {
   TYRES_MENU,
@@ -13,13 +14,20 @@ const MENUS = {
 
 const Header = (props) => {
   const { setIsLoggedIn, isLoggedIn } = props;
+
   const navigate = useNavigate();
+
+  const token = localStorage.getItem('token');
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     navigate("/");
   };
+
+   useEffect(()=>{
+    setIsLoggedIn(!!token);
+  },[token])
 
   return (
     <div className="py-1 px-16 relative border-b bg-white">

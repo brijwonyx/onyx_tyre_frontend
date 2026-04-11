@@ -4,10 +4,10 @@ import Layout from "./Layout";
 
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
-import ResetPassword from "./pages/auth/ResetPassword";
+import ForgotPassword from "./pages/auth/ForgotPassword";
 import AdminRoutes from "./admin/routes/AdminRoutes";
 import Home from "./pages/Home";
-import OtpLogin from "./pages/auth/OtpLogin";
+// import OtpLogin from "./pages/auth/OtpLogin";
 import SearchResults from "./pages/SearchResults";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
@@ -23,6 +23,8 @@ import OrderHistory from "./pages/account/OrderHistory";
 import OrderDetails from "./pages/account/OrderDetails";
 import Vehicles from "./pages/account/Vehicles";
 import Addresses from "./pages/account/Addresses";
+import ForgotPasswordScreen from "./pages/auth/ForgotPassword/ForgotPasswordScreen";
+import LoginWithOTP from "./pages/auth/LoginWithOTP";
 
 function App() {
   return (
@@ -32,8 +34,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<SignUp />} />
-          <Route path="/otp-login" element={<OtpLogin />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+          <Route path="/otp-login" element={<LoginWithOTP />} />
+          <Route path="/reset-password" element={<ForgotPassword />} />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/product-detail" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
