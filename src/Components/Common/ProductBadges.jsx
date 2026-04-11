@@ -4,7 +4,7 @@ import fuel from "../../assets/fuel.svg";
 import rain from "../../assets/rain.svg";
 import sound from "../../assets/sound.svg";
 
-const ProductBadges = ({season ,loadIndex , car_type }) => {
+const ProductBadges = ({ season, loadIndex, car_type }) => {
   return (
     <>
       <div className="flex gap-1 font-openSans font-normal text-xs text-white">
@@ -28,7 +28,7 @@ const ProductBadges = ({season ,loadIndex , car_type }) => {
             <img src={rain} alt="rain" />V
           </span>
         </span>
-        <span className="bg-[#CFA600] rounded-[4px] py-2 px-1 flex gap-1">
+        <span className="bg-[#CFA600] rounded-[4px] py-2 px-1 flex gap-1 whitespace-nowrap">
           <img src={sound} alt="touring" />B 69db
         </span>
       </div>

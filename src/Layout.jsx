@@ -27,6 +27,7 @@ const Layout = () => {
 
       <AddToCartDrawer
         open={openCart}
+        setOpenCart={setOpenCart}
         onClose={() => setOpenCart(false)}
         closeCart={() => setOpenCart(false)}
       />

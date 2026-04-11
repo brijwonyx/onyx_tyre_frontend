@@ -2,6 +2,7 @@
 // import filter from "../../assets/filter.svg";
 
 const FiltersBar = ({ filterOption, selectedFilter, setSelectedFilter }) => {
+  
   const handleFilterChange = (item) => {
     setSelectedFilter(item);
   };

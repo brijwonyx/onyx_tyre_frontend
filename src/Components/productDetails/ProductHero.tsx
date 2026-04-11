@@ -45,8 +45,6 @@ const ProductHero = (props:ProductHeroPropsType) => {
 
   const overAllRating = useMemo(() => getOverAllRating(reviews),[reviews])
 
-  console.log(tyreDetails , 'reviews ')
-
   return (
     <>
       <div className="grid grid-cols-2 gap-6">

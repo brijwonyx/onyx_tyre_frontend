@@ -31,16 +31,20 @@ const TyreBySize = () => {
   const router = useNavigate();
 
   const handleRedirection = () => {
-    const redirectValue = {
-      size: `${selectedValue?.width?.value}/${selectedValue?.diameter?.value}R${selectedValue?.ratio?.value}`,
-      userPincode: inputZipvalue,
-      historyPage: "tyrebySize",
-    };
-
-    router("/search?type=vehicle", {
-      state: redirectValue,
-    });
+    router("/search?type=tyre");
   };
+
+  // const handleRedirection = () => {
+  //   const redirectValue = {
+  //     size: `${selectedValue?.width?.value}/${selectedValue?.diameter?.value}R${selectedValue?.ratio?.value}`,
+  //     userPincode: inputZipvalue,
+  //     historyPage: "tyrebySize",
+  //   };
+
+  //   router("/search?type=vehicle", {
+  //     state: redirectValue,
+  //   });
+  // };
 
   const AlltyreSpecApi = CallApi();
 
@@ -84,11 +88,11 @@ const TyreBySize = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const isButtonValid =
-    !selectedValue?.width ||
-    !selectedValue?.ratio ||
-    !selectedValue?.diameter ||
-    !verifiedZipValue;
+  // const isButtonValid =
+  //   !selectedValue?.width ||
+  //   !selectedValue?.ratio ||
+  //   !selectedValue?.diameter ||
+  //   !verifiedZipValue;
 
   return (
     <>
@@ -164,11 +168,19 @@ const TyreBySize = () => {
           verifiedZipValue={verifiedZipValue}
           setVerifiedZipValue={setVerifiedZipValue}
         />
-        <Button
+        {/* <Button
           solid
           className="w-fit mx-auto mt-3"
           onClick={handleRedirection}
           disabled={isButtonValid}
+        >
+          View Tyres
+        </Button> */}
+
+        <Button
+          solid
+          className="w-fit mx-auto mt-3"
+          onClick={handleRedirection}
         >
           View Tyres
         </Button>

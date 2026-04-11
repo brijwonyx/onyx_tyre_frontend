@@ -12,16 +12,16 @@ const slides = [...products, ...products]; // buffer for loop
 
 const TopPicksCarousel = () => {
   return (
-    <section className="py-16 bg-white">
+    <section className="py-10 bg-white">
       <h2 className="text-center text-2xl font-semibold font-montserrat">
         Top picks from our side
       </h2>
-      <p className="text-center text-sm text-black mb-12 font-montserrat">
+      <p className="text-center text-sm text-black mb-20 font-montserrat">
         Hurry and grab these limited-time offers before the countdown runs out.
       </p>
 
       {/* Width controlled container */}
-      <div className="relative max-w-[1200px] overflow-hidden mx-auto">
+      <div className="relative overflow-hidden mx-auto">
         <Swiper
           modules={[Navigation, EffectCoverflow]}
           navigation
