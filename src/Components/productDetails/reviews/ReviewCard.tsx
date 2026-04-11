@@ -8,8 +8,6 @@ interface ReviewCardPropsType{
 const ReviewCard = (props:ReviewCardPropsType) => {
   const {reviewerDetails} = props;
 
-  console.log(reviewerDetails,'revieieieie')
-
   return (
     <div className="flex gap-8 border-b pb-6">
       <div>

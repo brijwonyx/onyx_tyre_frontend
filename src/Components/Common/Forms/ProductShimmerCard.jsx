@@ -1,4 +1,4 @@
-const ShimmerCard = ({ className = "" }) => {
+const ProductShimmerCard = ({ className = "" }) => {
   return (
     <div className={`animate-pulse ${className}`}>
       <div className="flex gap-6">
@@ -19,4 +19,4 @@ const ShimmerCard = ({ className = "" }) => {
   );
 };
 
-export default ShimmerCard;
+export default ProductShimmerCard;

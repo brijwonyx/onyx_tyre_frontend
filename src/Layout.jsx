@@ -16,7 +16,11 @@ const Layout = () => {
   return (
     <>
       <TopBar />
-      <Header setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
+      <Header
+        setIsLoggedIn={setIsLoggedIn}
+        isLoggedIn={isLoggedIn}
+        setOpenCart={setOpenCart}
+      />
       <Outlet
         context={{
           openCart: () => setOpenCart(true),

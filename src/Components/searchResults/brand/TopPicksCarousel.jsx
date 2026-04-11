@@ -7,10 +7,9 @@ import "swiper/css/effect-coverflow";
 
 import ProductCard from "./ProductCard";
 
-const products = Array.from({ length: 10 });
-const slides = [...products, ...products]; // buffer for loop
-
-const TopPicksCarousel = () => {
+const TopPicksCarousel = ({ tyreList , handleProductDetail }) => {
+  const products = tyreList;
+const slides = [...products, ...products];
   return (
     <section className="py-10 bg-white">
       <h2 className="text-center text-2xl font-semibold font-montserrat">
@@ -51,9 +50,9 @@ const TopPicksCarousel = () => {
             },
           }}
         >
-          {slides.map((_, i) => (
+          {slides.map((item, i) => (
             <SwiperSlide key={i}>
-              <ProductCard />
+              <ProductCard tyreList={item} handleProductDetail={handleProductDetail} />
             </SwiperSlide>
           ))}
         </Swiper>

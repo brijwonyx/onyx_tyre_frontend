@@ -49,7 +49,7 @@ const TyreByBrand = () => {
       userPincode: inputZipvalue,
       historyPage: "tyrebyBrand",
     };
-    router("/search?type=vehicle", {
+    router("/search?type=tyre", {
       state: redirectValue,
     });
   };

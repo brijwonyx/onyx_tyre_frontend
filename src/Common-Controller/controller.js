@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from "react";
 import axios from "axios";
+import { getAccessToken } from "../utils/cookiesManager";
 
 const API_KEY = "026a371d435c0a458898282bb3b0ef39332d8e63";
 
@@ -23,8 +24,7 @@ const CallApi = () => {
       controllerRef.current = new AbortController();
 
       try {
-
-        const token = localStorage.getItem("token");
+        const token = getAccessToken();
 
         const response = await axiosInstance({
           url,

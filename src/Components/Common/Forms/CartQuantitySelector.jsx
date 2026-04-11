@@ -1,16 +1,18 @@
-const QuantitySelector = ({
-  value = 1,
+import { useCart } from "../../../context/cardContext";
+
+const CartQuantitySelector = ({
+  item,
   min = 1,
-  stock,
-  onChange,
   variant = "border",
 }) => {
+  const { updateQty } = useCart();
+
   const handleDecrease = () => {
-    if (value > min) onChange(value - 1);
+    if (item?.qty > min) updateQty(item?.id, Number(item?.qty) - 1);
   };
 
   const handleIncrease = () => {
-    if (value < stock) onChange(value + 1);
+    if (item?.qty < item?.stock) updateQty(item?.id, Number(item?.qty) + 1);
   };
 
   return (
@@ -24,7 +26,7 @@ const QuantitySelector = ({
         −
       </button>
 
-      <div className="px-3 py-3  text-center">{value}</div>
+      <div className="px-3 py-3  text-center">{item?.qty}</div>
 
       <button
         onClick={handleIncrease}
@@ -36,4 +38,4 @@ const QuantitySelector = ({
   );
 };
 
-export default QuantitySelector;
+export default CartQuantitySelector;

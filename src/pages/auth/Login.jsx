@@ -1,4 +1,9 @@
-import { Link, useNavigate, useOutletContext } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useOutletContext,
+} from "react-router-dom";
 import { useRef, useState } from "react";
 
 import Input from "../../Components/Common/Forms/Input";
@@ -7,13 +12,27 @@ import PasswordInput from "../../Components/Common/Forms/PasswordInput";
 
 import Button from "../../Components/Common/Forms/Button";
 
+import { syncCartAfterLogin } from "../../utils/syncCartAfterLogin";
+
 import CallApi from "../../Common-Controller/controller";
 
 import { LOGIN_URL } from "../../api/apiRoutes";
 
+import { setAccessToken } from "../../utils/cookiesManager";
+import { getCart } from "../../utils/cardUtils";
+import { useCart } from "../../context/cardContext";
+
 const Login = () => {
   const { setIsLoggedIn } = useOutletContext();
   const navigate = useNavigate();
+
+  const mergeToCartAction = CallApi();
+  const getCartAction = CallApi();
+  const { setCart } = useCart();
+
+  const location = useLocation();
+
+  const from = location.state?.from || "/"; // fallback
 
   const [formData, setFormData] = useState({
     email: "",
@@ -46,6 +65,8 @@ const Login = () => {
     }
 
     try {
+      const localCart = getCart();
+
       const response = await request({
         url: LOGIN_URL,
         method: "POST",
@@ -56,9 +77,19 @@ const Login = () => {
       });
 
       if (response?.success) {
-        localStorage.setItem("token", response?.data);
+        setAccessToken(response?.data);
         setIsLoggedIn(true);
-        navigate("/");
+
+        if (localCart.length !== 0) {
+          await syncCartAfterLogin({
+            localCart,
+            mergeCartRequest: mergeToCartAction.request,
+            getCartRequest: getCartAction.request,
+            setCart,
+          });
+        }
+
+        navigate(from, { replace: true });
       }
     } catch (err) {
       console.error("Login Failed:", err);
@@ -116,9 +147,7 @@ const Login = () => {
           )}
 
           <div className="text-primary text-sm text-center">
-            <Link to="/otp-login">
-              Login with OTP
-            </Link>
+            <Link to="/otp-login">Login with OTP</Link>
           </div>
 
           <div className="flex gap-6 pt-6">

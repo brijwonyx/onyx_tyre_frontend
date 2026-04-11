@@ -13,41 +13,36 @@ import PincodeAutocomplete from "../../Common/Forms/PincodeAutocomplete";
 import { getWidthRatioDiam } from "../../../api/api.services";
 
 const TyreBySize = () => {
+  const router = useNavigate();
+
+  // Initial States
   const [inputZipvalue, setInputZipValue] = useState("");
   const [verifiedZipValue, setVerifiedZipValue] = useState("");
-
   const [options, setOptions] = useState({
     width: [],
     Ratio: [],
     Diameter: [],
   });
-
   const [selectedValue, setSelectedValue] = useState({
     width: null,
     diameter: null,
     ratio: null,
   });
 
-  const router = useNavigate();
-
+  // Redirection Function
   const handleRedirection = () => {
-    router("/search?type=tyre");
+    const redirectValue = {
+      size: `${selectedValue?.width?.value}/${selectedValue?.diameter?.value}R${selectedValue?.ratio?.value}`,
+      userPincode: inputZipvalue,
+      historyPage: "tyrebySize",
+    };
+
+    router("/search?type=tyre", {
+      state: redirectValue,
+    });
   };
 
-  // const handleRedirection = () => {
-  //   const redirectValue = {
-  //     size: `${selectedValue?.width?.value}/${selectedValue?.diameter?.value}R${selectedValue?.ratio?.value}`,
-  //     userPincode: inputZipvalue,
-  //     historyPage: "tyrebySize",
-  //   };
-
-  //   router("/search?type=vehicle", {
-  //     state: redirectValue,
-  //   });
-  // };
-
-  const AlltyreSpecApi = CallApi();
-
+  // Update Function
   const updateOptions = (key, value) => {
     setOptions((prev) => ({
       ...prev,
@@ -64,6 +59,9 @@ const TyreBySize = () => {
     }));
   };
 
+  // Api Call
+  const AlltyreSpecApi = CallApi();
+
   const getAllWidRDiam = async () => {
     const makeRes = await getWidthRatioDiam(AlltyreSpecApi.request);
     const { data: finalAllSpecData } = makeRes || {};
@@ -75,6 +73,7 @@ const TyreBySize = () => {
     updateOptions("Diameter", formatOptions(tyre_profile));
   };
 
+  // handle Change
   const handleSelectChange = (field) => (option) => {
     setSelectedValue((prev) => ({
       ...prev,
@@ -88,11 +87,12 @@ const TyreBySize = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // const isButtonValid =
-  //   !selectedValue?.width ||
-  //   !selectedValue?.ratio ||
-  //   !selectedValue?.diameter ||
-  //   !verifiedZipValue;
+  // Disable Button Functionality
+  const isButtonValid =
+    !selectedValue?.width ||
+    !selectedValue?.ratio ||
+    !selectedValue?.diameter ||
+    !verifiedZipValue;
 
   return (
     <>
@@ -113,16 +113,6 @@ const TyreBySize = () => {
               onChange={handleSelectChange("width")}
             />
             <CustomSelect
-              label="Ratio"
-              placeholder={
-                AlltyreSpecApi?.loading ? "Loading..." : "Select Ratio"
-              }
-              options={options?.Ratio}
-              labelKey="label"
-              value={selectedValue?.ratio}
-              onChange={handleSelectChange("ratio")}
-            />
-            <CustomSelect
               label="Diameter"
               placeholder={
                 AlltyreSpecApi?.loading ? "Loading..." : "Select Diameter"
@@ -132,34 +122,23 @@ const TyreBySize = () => {
               value={selectedValue?.diameter}
               onChange={handleSelectChange("diameter")}
             />
+            <CustomSelect
+              label="Ratio"
+              placeholder={
+                AlltyreSpecApi?.loading ? "Loading..." : "Select Ratio"
+              }
+              options={options?.Ratio}
+              labelKey="label"
+              value={selectedValue?.ratio}
+              onChange={handleSelectChange("ratio")}
+            />
           </div>
-
-          {/* comment removed if any clearity u got */}
-          {/* <div className="flex gap-2">
-            <input type="checkbox" className="scale-150" />
-            <p className="font-openSans font-normal text-base leading-6 ">
-              Add a Different Rear Tire Size
-            </p>
-          </div> */}
-          {/* <div className="flex gap-4 w-full">
-            <NumberField label="Width" />
-            <NumberField label="Ratio" />
-            <NumberField label="Diameter" />
-          </div> */}
         </div>
         <div className="flex items-center gap-2">
           <div className="flex-1 h-px bg-white" />
           <span className="text-white text-base font-openSans">&amp;</span>
           <div className="flex-1 h-px bg-white" />
         </div>
-
-        {/* <CustomSelect
-          label="Enter ZIP or Postal Code to See Shipping & Installer Options:"
-          placeholder="Zip Code"
-          options={["000000", "111111", "101010"]}
-          value={zipCode}
-          onChange={setZipCode}
-        /> */}
 
         <PincodeAutocomplete
           label="Enter ZIP or Postal Code to See Shipping & Installer Options:"
@@ -168,19 +147,11 @@ const TyreBySize = () => {
           verifiedZipValue={verifiedZipValue}
           setVerifiedZipValue={setVerifiedZipValue}
         />
-        {/* <Button
-          solid
-          className="w-fit mx-auto mt-3"
-          onClick={handleRedirection}
-          disabled={isButtonValid}
-        >
-          View Tyres
-        </Button> */}
-
         <Button
           solid
           className="w-fit mx-auto mt-3"
           onClick={handleRedirection}
+          disabled={isButtonValid}
         >
           View Tyres
         </Button>

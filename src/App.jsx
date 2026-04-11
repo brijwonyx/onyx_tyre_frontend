@@ -25,10 +25,12 @@ import Vehicles from "./pages/account/Vehicles";
 import Addresses from "./pages/account/Addresses";
 import ForgotPasswordScreen from "./pages/auth/ForgotPassword/ForgotPasswordScreen";
 import LoginWithOTP from "./pages/auth/LoginWithOTP";
+import ScrollToTop from "./utils/ScrollToTop";
 
 function App() {
   return (
     <BrowserRouter>
+     <ScrollToTop />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
