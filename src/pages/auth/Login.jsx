@@ -116,7 +116,7 @@ const Login = () => {
           )}
 
           <div className="text-primary text-sm text-center">
-            <Link to="/otp-login" className="pointer-events-none opacity-50">
+            <Link to="/otp-login">
               Login with OTP
             </Link>
           </div>

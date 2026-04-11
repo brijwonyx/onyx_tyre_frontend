@@ -1,6 +1,5 @@
 import { useLocation } from "react-router-dom";
 import FindTyreBanner from "../components/common/FindTyreBanner";
-import ContextBar from "../components/common/layout/ContextBar";
 import GetYourTyres from "../components/home/GetYoursTyre";
 import FAQs from "../components/productDetails/faqs/FAQs";
 import ProductHero from "../Components/productDetails/ProductHero";

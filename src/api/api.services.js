@@ -4,7 +4,6 @@ import {
   GET_YEAR_URL,
   POSTAL_CODE_VERIFICATION,
   TYRE_ALL_NUMBER_FITS,
-  TYRE_VEHICLE,
 } from "./apiRoutes";
 
 export const getMakes = async (request) => {
