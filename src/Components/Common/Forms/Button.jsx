@@ -5,7 +5,7 @@ const Button = ({
   solid = false,
   className = "",
   onClick,
-  disabled,
+  disabled = false,
   loading = false,
 }) => {
   const isDisabled = disabled || loading;

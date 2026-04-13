@@ -1,11 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../../assets/logo.svg";
 
 import { BRANDS_MENU, NAV_LINKS, TYRES_MENU } from "../../../data/navigation";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ShoppingCart } from "lucide-react";
+
 import MegaMenu from "../../navigation/MegaMenu";
 import { useEffect } from "react";
+import { clearAllCookies, getAccessToken } from "../../../utils/cookiesManager";
+import { useCart } from "../../../context/cardContext";
 
 const MENUS = {
   TYRES_MENU,
@@ -13,21 +17,29 @@ const MENUS = {
 };
 
 const Header = (props) => {
-  const { setIsLoggedIn, isLoggedIn } = props;
+  const { setIsLoggedIn, isLoggedIn, setOpenCart } = props;
+
+  const { cart } = useCart();
 
   const navigate = useNavigate();
 
-  const token = localStorage.getItem('token');
+  // const token = localStorage.getItem("token");
+
+  const token = getAccessToken();
+
+  const location = useLocation();
+
+  const { pathname } = location;
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    clearAllCookies();
     setIsLoggedIn(false);
     navigate("/");
   };
 
-   useEffect(()=>{
+  useEffect(() => {
     setIsLoggedIn(!!token);
-  },[token])
+  }, [token]);
 
   return (
     <div className="py-1 px-16 relative border-b bg-white">
@@ -94,10 +106,24 @@ const Header = (props) => {
             </button>
           ) : (
             <>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
+              {pathname !== "/login" && <Link to="/login">Login</Link>}
+              {pathname !== "/register" && <Link to="/register">Register</Link>}
             </>
           )}
+
+          <div
+            onClick={() => setOpenCart(true)}
+            className="relative cursor-pointer"
+          >
+            <ShoppingCart />
+
+            {/* Badge */}
+            {cart?.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                {cart.reduce((total, item) => total + item.qty, 0)}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </div>

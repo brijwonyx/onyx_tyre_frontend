@@ -9,6 +9,10 @@ export type Review = {
   images: Image[];
 };
 
+export type brand = {
+  logo: string;
+};
+
 export type TyreModelType = {
   model_name: string;
   season_type: string;
@@ -18,6 +22,7 @@ export type TyreModelType = {
   runflat_flag: string;
   images: Image[];
   reviews: Review[];
+  brand: brand;
 };
 
 export type TyreSize = {

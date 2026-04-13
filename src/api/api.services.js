@@ -1,7 +1,10 @@
 import {
+  ADD_TO_CART,
   BRAND_IMAGE_URL,
+  GET_CART_FROM_BACKEND,
   GET_MAKE_URL,
   GET_YEAR_URL,
+  MERGE_CART_TO_BACKEND,
   POSTAL_CODE_VERIFICATION,
   TYRE_ALL_NUMBER_FITS,
 } from "./apiRoutes";
@@ -64,9 +67,31 @@ export const getZipCodeCity = async (request, data) => {
 };
 
 export const getDetailsSearchForTyre = async (request, url) => {
-  // const CREATED_URL = `${TYRE_VEHICLE}?${data}`;
   return await request({
     url: url,
     method: "GET",
+  });
+};
+
+export const addToCartApiService = async (request, data) => {
+  return await request({
+    url: ADD_TO_CART,
+    method: "POST",
+    data: data,
+  });
+};
+
+export const getCartApiService = async (request) => {
+  return await request({
+    url: GET_CART_FROM_BACKEND,
+    method: "GET",
+  });
+};
+
+export const mergeCartApiService = async (request, data) => {
+  return await request({
+    url: MERGE_CART_TO_BACKEND,
+    method: "POST",
+    data: data,
   });
 };

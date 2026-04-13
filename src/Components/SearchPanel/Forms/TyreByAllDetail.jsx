@@ -12,7 +12,7 @@ const TyreByAllDetail = (fitmentDetail) => {
       historyPage: "tyrebyVehicle",
     };
 
-    router("/search?type=vehicle", {
+    router("/search?type=tyre", {
       state: redirectValue,
     });
   };
@@ -28,30 +28,36 @@ const TyreByAllDetail = (fitmentDetail) => {
 
         <div className="flex flex-wrap gap-3 mt-3 cursor-pointer">
           {tyres?.factory?.map((t, i) => (
-            <span
+            <div
+              className="bg-gray-600 text-white px-4 py-2 rounded flex flex-col gap-2"
               key={i}
-              className="bg-gray-600 text-white px-4 py-2 rounded"
               onClick={() => {
                 handleRedirection(t);
               }}
             >
-              {t.width} / {t.profile} R{t.r}
-            </span>
+              <span>
+                {t.width} / {t.profile} R{t.r}
+              </span>
+              <span>Tyre axis - {t?.tyre_axis}</span>
+            </div>
           ))}
         </div>
         <>
           <h3 className="mt-6 font-semibold text-white">Optional Sizes</h3>
           <div className="flex flex-wrap gap-3 mt-3 cursor-pointer">
             {tyres?.replace?.map((t, i) => (
-              <span
+              <div
+                className="bg-gray-600 text-white px-4 py-2 rounded flex flex-col gap-2"
                 key={i}
-                className="bg-gray-600 text-white px-4 py-2 rounded "
                 onClick={() => {
                   handleRedirection(t);
                 }}
               >
-                {t.width} / {t.profile} R{t.r}
-              </span>
+                <span>
+                  {t?.width} / {t?.profile} R{t?.r}
+                </span>
+                <span>Tyre axis - {t?.tyre_axis}</span>
+              </div>
             ))}
           </div>
         </>

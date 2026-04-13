@@ -1,102 +1,135 @@
-import ProductGallery from "./ProductGallery";
-import img1 from "../../assets/tyre-brand.png";
-
-import QuantitySelector from "../common/forms/QuantitySelector";
-import { useMemo, useState } from "react";
-import Button from "../common/forms/Button";
+import { useMemo, useState, useCallback } from "react";
 import { useOutletContext } from "react-router-dom";
-// import ProductIdentity from "../common/ProductIdentity";
 
-import InlineEditableField from "../common/InlineEditableField";
+import ProductGallery from "./ProductGallery";
+import QuantitySelector from "../common/forms/QuantitySelector";
+import Button from "../common/forms/Button";
+import InlineEditableField from "../Common/InlineEditableField";
+import ProductIdentity from "../common/ProductIdentity";
 
 import { Review, TyreModelType } from "../../types/ProductDetailsType";
-import ProductIdentity from "../common/ProductIdentity";
 import { getOverAllRating } from "../../utils/getOverAllRating";
+import { useCart } from "../../context/cardContext";
 
-interface ProductHeroPropsType{
-  tyreDetails:TyreModelType;
-  price : number;
-  reviews:Review[] | [];
+interface ProductHeroPropsType {
+  tyreId: string;
+  tyreDetails: TyreModelType;
+  price: number;
+  reviews: Review[];
+  tyreSize: string;
+  wareHouseId: string;
+  stock: number;
 }
 
-const ProductHero = (props:ProductHeroPropsType) => {
-  const {tyreDetails ,price , reviews } = props;
+type OutletContextType = {
+  openCart: () => void;
+};
 
-  console.log("Product Details in Hero:", tyreDetails);
+const ProductHero = ({
+  tyreId,
+  tyreDetails,
+  price,
+  reviews,
+  tyreSize,
+  wareHouseId,
+  stock,
+}: ProductHeroPropsType) => {
+  const { addToCart } = useCart();
+  const [qty, setQty] = useState(1);
+  const { openCart } = useOutletContext<OutletContextType>();
 
-  // const {} = productDetails || {};
+  const product = useMemo(() => {
+    return {
+      id: tyreId,
+      name: tyreDetails?.model_name || "",
+      description: tyreDetails?.description || "",
+      brandLogo: tyreDetails?.brand?.logo || "",
+      season: tyreDetails?.season_type || "",
+      carType: tyreDetails?.car_type || "",
+      images:
+        tyreDetails?.images?.map((img) => img?.image_url).filter(Boolean) || [],
+      rating: Number(getOverAllRating(reviews)) || 0,
+      reviewCount: reviews?.length || 0,
+      price: price ?? 0,
+      size: tyreSize,
+      wareHouseId: wareHouseId,
+      stock: stock,
+    };
+  }, [tyreId, tyreDetails, reviews, price, wareHouseId, stock, tyreSize]);
 
-  const [qty, setQty] = useState(2);
+  const handleAddCart = useCallback(() => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      qty: qty,
+      image: product.images?.[0] || "",
+      tyreSize: product.size,
+      wareHouseId: product.wareHouseId,
+      stock: product.stock,
+    });
 
-  const { openCart } = useOutletContext();
+    openCart();
 
-  const getProductImages = () => {
-    if(tyreDetails  && tyreDetails?.images && tyreDetails?.images?.length){
-      const images = tyreDetails?.images?.map((img) => img?.image_url);
-
-      return images;
-    }
-
-    return [];
-  }
-
-  const productImages = useMemo(()=> getProductImages(),[tyreDetails]);
-  
-
-  const overAllRating = useMemo(() => getOverAllRating(reviews),[reviews])
+    setQty(1);
+  }, [addToCart, product, qty, openCart]);
 
   return (
-    <>
-      <div className="grid grid-cols-2 gap-6">
-        {/* Image */}
-        <div className="">
-          <ProductGallery
-            images={productImages}
+    <div className="grid grid-cols-2 gap-6">
+      {/* Image */}
+      <div>
+        <ProductGallery images={product.images} />
+      </div>
+
+      {/* Details */}
+      <div className="p-4">
+        <div className="flex flex-col w-full gap-6">
+          <ProductIdentity
+            name={product.name}
+            desc={product.description}
+            BrandImage={product.brandLogo}
+            className="!py-0"
+            review={product.reviewCount}
+            rating={product.rating}
+            season={product.season}
+            car_type={product.carType}
           />
-        </div>
-        <div className="p-4">
-          <div className="flex flex-col w-full gap-6">
-            <ProductIdentity
-              name={tyreDetails?.model_name}
-              desc={tyreDetails?.description || ''}
-              BrandImage={img1}
-              className="!py-0"
-              review={reviews?.length}
-              rating={Number(overAllRating)}
-              season={tyreDetails?.season_type}
-              car_type={tyreDetails?.car_type}
+
+          {/* Price */}
+          <div>
+            <span className="font-openSans font-normal text-base">
+              Tyre Size - {product.size || "_"}
+            </span>
+            <h4 className="font-montserrat font-bold text-4xl mb-3 mt-2">
+              ${product.price || "_"}
+              <span className="font-openSans font-normal text-base">/tire</span>
+            </h4>
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-3">
+            <QuantitySelector
+              value={qty}
+              onChange={setQty}
+              stock={product?.stock}
             />
-            {/* <CustomSelect
-              label="Pick a tire size for exact price"
-              placeholder="255/40R/19"
-              options={["255/40R/19", "255/40R/19", "255/40R/19"]}
-              value=""
-              onChange=""
-              className="border border-[#E6E6E6] mt-1"
-            /> */}
-            {/* Price */}
-            <div>
-              <h4 className="font-montserrat font-bold text-4xl mb-3">
-                ${price} <span className="font-openSans font-normal text-base">/tire</span>
-              </h4>
-              {/* <p className="font-openSans font-normal text-base">
-                Total for {qty} is <span className="font-medium">${qty * price}</span>
-              </p> */}
-            </div>
-            <div className="flex gap-3">
-              <QuantitySelector value={qty} onChange={setQty} />
-              <Button solid className="w-full" onClick={openCart}>
-                Add to Cart
-              </Button>
-            </div>
-            <div>
-              <InlineEditableField label="Delivery Option" value="40004" />
-              <p className="font-openSans font-normal text-base py-1">Estimated delivery time is 2-3 days</p>
-            </div>
+
+            <Button solid className="w-full" onClick={handleAddCart}>
+              Add to Cart
+            </Button>
+          </div>
+
+          {/* Delivery */}
+          <div>
+            <InlineEditableField label="Delivery Option" />
+            <p className="font-openSans font-normal text-base py-1">
+              Estimated delivery time is 2-3 days
+            </p>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
+
 export default ProductHero;

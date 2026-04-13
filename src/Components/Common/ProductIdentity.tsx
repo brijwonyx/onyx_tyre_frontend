@@ -30,13 +30,11 @@ const ProductIdentity = (props: ProductIdentityPropsType) => {
     className,
     children,
     car_type,
-    // size,
+    size,
   } = props;
 
   return (
-    <div
-      className={`flex gap-6 p-6 ${className}`}
-    >
+    <div className={`flex gap-6 px-6 py-4 ${className}`}>
       {image ? (
         <img
           src={image}
@@ -45,14 +43,14 @@ const ProductIdentity = (props: ProductIdentityPropsType) => {
         />
       ) : null}
 
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full justify-center">
         <img src={BrandImage} alt={name} className="h-[55px] w-[171px]" />
         <div className="flex justify-between items-start mb-6">
           <div>
             <h3 className="font-montserrat font-bold text-xl leading-[32px] ">
               {name}
             </h3>
-            <h2 className="mb-2">(22/55R16)</h2>
+            <h2 className="mb-2">{size}</h2>
 
             <p className="font-openSans text-base leading-[24px]">{desc}</p>
           </div>

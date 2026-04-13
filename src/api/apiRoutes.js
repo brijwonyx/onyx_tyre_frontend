@@ -20,6 +20,12 @@ const TYRE_VEHICLE = `${API_BASE_URL}/tyre`;
 
 const BRAND_TYRE_LIST = `${TYRE_VEHICLE}/brand`;
 
+const ADD_TO_CART = `${API_BASE_URL}/cart/add`;
+
+const GET_CART_FROM_BACKEND = `${API_BASE_URL}/cart`;
+
+const MERGE_CART_TO_BACKEND = `${API_BASE_URL}/cart/merge`
+
 /** AUTHENTICATION */
 const AUTH_URL = `${API_BASE_URL}/auth`;
 const USER_VALIDATE_ENDPOINT = `${AUTH_URL}/verify-mobile`;
@@ -27,7 +33,6 @@ const SEND_OTP_ENDPOINT = `${AUTH_URL}/otp/send`;
 const LOGIN_WITH_OTP_ENDPOINT = `${AUTH_URL}/login-with-otp`;
 const VERIFY_OTP_FOR_FORGOT_PASSWORD_ENDPOINT = `${AUTH_URL}/verify-otp-for-reset`;
 const FORGOT_PASSWORD_ENDPOINT = `${AUTH_URL}/reset-password`;
-
 
 export {
   GET_MAKE_URL,
@@ -43,5 +48,8 @@ export {
   SEND_OTP_ENDPOINT,
   LOGIN_WITH_OTP_ENDPOINT,
   VERIFY_OTP_FOR_FORGOT_PASSWORD_ENDPOINT,
-  FORGOT_PASSWORD_ENDPOINT
+  FORGOT_PASSWORD_ENDPOINT,
+  ADD_TO_CART,
+  GET_CART_FROM_BACKEND,
+  MERGE_CART_TO_BACKEND,
 };

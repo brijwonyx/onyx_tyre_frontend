@@ -68,7 +68,7 @@ const DeliveryMethod = () => {
         CONTINUE
       </Button>
 
-      <div className="bg-[#FFC857] py-6 px-4">
+      {/* <div className="bg-[#FFC857] py-6 px-4">
         <h3 className="font-semibold text-xl font-montserrat ">
           Unlock Loyalty Rewards
         </h3>
@@ -94,7 +94,7 @@ const DeliveryMethod = () => {
         <p className="text-xs text-center mt-2 font-openSans italic">
           Takes 30 seconds. Points apply after login!
         </p>
-      </div>
+      </div> */}
     </div>
   );
 };

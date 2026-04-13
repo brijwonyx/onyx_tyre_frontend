@@ -5,6 +5,10 @@ import InputDummy from "./InputDummy";
 import CallApi from "../../../Common-Controller/controller";
 
 import { getZipCodeCity } from "../../../api/api.services";
+import {
+  getWithExpiry,
+  setWithExpiry,
+} from "../../../utils/localStorageWithExpiry";
 
 const PincodeAutocomplete = ({
   label = "Pincode",
@@ -67,10 +71,36 @@ const PincodeAutocomplete = ({
     setInputZipValue(val);
   };
 
+  const handleSelection = (item) => {
+    const label = `${item?.region}, ${item?.notes}, ${item?.pincode}`;
+    setVerifiedZipValue(label);
+    setOpen(false);
+    onSelect && onSelect(item);
+
+    setWithExpiry("shippment_pincode", item, 365 * 24 * 60 * 60 * 1000);
+  };
+
   useEffect(() => {
-    fetchCities();
+    if (!verifiedZipValue) {
+      fetchCities();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputZipvalue]);
+
+  useEffect(() => {
+    setOpen(false);
+    const storedPincode = getWithExpiry("shippment_pincode");
+
+    if (storedPincode) {
+      const label = `${storedPincode?.region}, ${storedPincode?.notes}, ${storedPincode?.pincode}`;
+
+      setVerifiedZipValue(label);
+      setInputZipValue(storedPincode?.pincode);
+
+      onSelect && onSelect(storedPincode);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="relative" ref={wrapperRef}>
@@ -99,10 +129,7 @@ const PincodeAutocomplete = ({
               <div
                 key={index}
                 onClick={() => {
-                  const label = `${item?.region}, ${item?.notes}, ${item?.pincode}`;
-                  setVerifiedZipValue(label);
-                  setOpen(false);
-                  onSelect && onSelect(item);
+                  handleSelection(item);
                 }}
                 className="px-4 py-4 cursor-pointer hover:bg-gray-100 text-black"
               >

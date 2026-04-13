@@ -1,11 +1,18 @@
+import { useCart } from "../../../context/cardContext";
+import CartQuantitySelector from "../../Common/Forms/CartQuantitySelector";
 import QuantitySelector from "../../common/forms/QuantitySelector";
 
 const CartItem = ({ item, variant = "drawer" }) => {
   const isDrawer = variant === "drawer";
 
+  const { removeFromCart } = useCart();
+
+  console.log(item, "item");
+
   return (
-    <div className={`flex ${isDrawer ? "gap-3 py-3" : "gap-6 py-6"} border-b border-[#8E8E8E]`}>
-      {/* IMAGE */}
+    <div
+      className={`flex ${isDrawer ? "gap-3 py-3" : "gap-6 py-6"} border-b border-[#8E8E8E]`}
+    >
       <img
         src={item.image}
         alt=""
@@ -14,7 +21,7 @@ const CartItem = ({ item, variant = "drawer" }) => {
 
       {/* INFO */}
       <div className="flex-1">
-        <h3 className="font-openSans text-sm text-black pb-1">{item.title}</h3>
+        <h3 className="font-openSans text-sm text-black pb-1">{`${item.name} (${item?.tyreSize})`}</h3>
 
         <p className="font-openSans text-sm text-black">{item.spec}</p>
 
@@ -25,14 +32,21 @@ const CartItem = ({ item, variant = "drawer" }) => {
               /tire
             </span>
           </span>
-
-          <QuantitySelector variant="noborder"/>
+          <CartQuantitySelector item={item} variant="noborder"/>
         </div>
         <div className="flex justify-between mt-2 font-openSans text-sm">
-          <p className="text-primary  ">Remove this item</p>
+          <p
+            className="text-primary cursor-pointer"
+            onClick={() => removeFromCart(item?.id)}
+          >
+            Remove this item
+          </p>
 
           <p className="font-normal">
-            Total for 2  <span className="font-medium">${item.price * 2}</span>
+            Total for {item?.qty}{" "}
+            <span className="font-medium">
+              ${item.price * (item?.qty ?? 1)}
+            </span>
           </p>
         </div>
       </div>

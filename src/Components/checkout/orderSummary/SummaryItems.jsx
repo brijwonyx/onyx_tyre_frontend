@@ -1,12 +1,12 @@
 import SummaryRow from "../../common/SummaryRow";
-import { cartItems } from "../../../mock/CartData";
+// import { cartItems } from "../../../mock/CartData";
 import CartList from "../../cart/drawer/CartList";
 import SummaryRewards from "./SummaryRewards";
 
 const SummaryItems = () => {
   return (
     <>
-      <CartList items={cartItems} />
+      <CartList items={[]} />
       <div className="border-dashed border-t border-black pt-6">
         <SummaryRow label="Subtotal" value="$469.72" />
         <SummaryRow label="Shipping" value="Free" free="true" />

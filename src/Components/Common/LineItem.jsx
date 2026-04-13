@@ -1,15 +1,15 @@
 import bars from "../../assets/bars.svg";
+import Button from "./forms/Button";
 import QuantitySelector from "./forms/QuantitySelector";
 export default function LineItem({
-  axle = "Front",
+  axle = "Size",
   size,
   price,
   stock = "In stock",
   // actions = {},
   className,
+  handleRedirection,
 }) {
-
-  console.log(price)
   return (
     <div
       className={`relative bg-white border shadow-md shadow-[5px_7px_11.9px_0px_#00000014] rounded-md p-3 ${className} `}
@@ -43,6 +43,11 @@ export default function LineItem({
         <div className="flex items-center gap-2 text-black font-openSans text-sm">
           <img src={bars} alt="Bars" />
           {stock}
+        </div>
+        <div className="flex items-center gap-2 text-black font-openSans text-sm">
+          <Button solid className="w-full" onClick={handleRedirection}>
+            Show Details
+          </Button>
         </div>
         {/* 
         <div className="text-right space-y-3">
