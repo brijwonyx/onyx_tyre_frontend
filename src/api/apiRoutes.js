@@ -1,5 +1,13 @@
 const API_BASE_URL = "https://tyreevo.com.au/api/api/v1";
 
+/** AUTHENTICATION */
+const AUTH_URL = `${API_BASE_URL}/auth`;
+const USER_VALIDATE_ENDPOINT = `${AUTH_URL}/verify-mobile`;
+const SEND_OTP_ENDPOINT = `${AUTH_URL}/otp/send`;
+const LOGIN_WITH_OTP_ENDPOINT = `${AUTH_URL}/login-with-otp`;
+const VERIFY_OTP_FOR_FORGOT_PASSWORD_ENDPOINT = `${AUTH_URL}/verify-otp-for-reset`;
+const FORGOT_PASSWORD_ENDPOINT = `${AUTH_URL}/reset-password`;
+
 /*  Landing Page Api */
 
 const GET_MAKE_URL = `${API_BASE_URL}/tyre-addict/vehicles/makes`;
@@ -24,15 +32,11 @@ const ADD_TO_CART = `${API_BASE_URL}/cart/add`;
 
 const GET_CART_FROM_BACKEND = `${API_BASE_URL}/cart`;
 
-const MERGE_CART_TO_BACKEND = `${API_BASE_URL}/cart/merge`
+const MERGE_CART_TO_BACKEND = `${API_BASE_URL}/cart/merge`;
 
-/** AUTHENTICATION */
-const AUTH_URL = `${API_BASE_URL}/auth`;
-const USER_VALIDATE_ENDPOINT = `${AUTH_URL}/verify-mobile`;
-const SEND_OTP_ENDPOINT = `${AUTH_URL}/otp/send`;
-const LOGIN_WITH_OTP_ENDPOINT = `${AUTH_URL}/login-with-otp`;
-const VERIFY_OTP_FOR_FORGOT_PASSWORD_ENDPOINT = `${AUTH_URL}/verify-otp-for-reset`;
-const FORGOT_PASSWORD_ENDPOINT = `${AUTH_URL}/reset-password`;
+const GET_PROTECTION_PACKAGES = `${API_BASE_URL}/addons`;
+
+const REMOVE_CART = `${API_BASE_URL}/cart/item/`;
 
 export {
   GET_MAKE_URL,
@@ -52,4 +56,6 @@ export {
   ADD_TO_CART,
   GET_CART_FROM_BACKEND,
   MERGE_CART_TO_BACKEND,
+  GET_PROTECTION_PACKAGES,
+  REMOVE_CART,
 };

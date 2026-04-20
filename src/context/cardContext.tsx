@@ -2,14 +2,22 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 import { getCart, saveCart } from "../utils/cardUtils";
 import { getAccessToken } from "../utils/cookiesManager";
+import { getGuestId } from "../utils/guest";
+
 import CallApi from "../Common-Controller/controller";
-import { addToCartApiService } from "../api/api.services";
+
+import {
+  addToCartApiService,
+  getCartApiService,
+  removeApiService,
+} from "../api/api.services";
+import toast from "react-hot-toast";
 
 type CartItem = {
   id: string;
   name: string;
   price: number;
-  qty: number;
+  quantity: number;
   image?: string;
   tyreSize: string;
   wareHouseId: string;
@@ -18,13 +26,15 @@ type CartItem = {
 
 type CartContextType = {
   cart: CartItem[];
-
   addToCart: (item: CartItem) => void;
+  incrementQty: (id: string) => void;
+  decrementQty: (id: string) => void;
   removeFromCart: (id: string) => void;
-  updateQty: (id: string, qty: number) => void;
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
+  globalAddingCartLoader: boolean;
+  removingWholeItemLoad: boolean;
 };
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -38,153 +48,213 @@ export const useCart = () => {
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>(() => getCart());
 
-  useEffect(() => {
-    saveCart(cart);
-  }, [cart]);
-
   const addToCartAction = CallApi();
+  const getToCartAction = CallApi();
+  const removeCartAction = CallApi();
 
-  // // Add to cart (FIXED - IMMUTABLE)
-  // const addToCart = (item: CartItem) => {
-  //   setCart((prev) => {
-  //     const existingItem = prev.find((i) => i.id === item.id);
+  const [globalAddingCartLoader, setGlobalAddingCartLoader] =
+    useState<boolean>(false);
 
-  //     if (existingItem) {
-  //       return prev.map((i) =>
-  //         i.id === item.id ? { ...i, qty: i.qty + item.qty } : i,
-  //       );
-  //     }
+  const [removingWholeItemLoad, setRemovingWholeItemLoad] =
+    useState<boolean>(false);
 
-  //     return [...prev, item];
-  //   });
-  // };
+  const mapApiCartToLocal = (apiCart: any) => {
+    return apiCart.map((item: any) => {
+      const tyre = item.tyre || {};
+      const model = tyre.tyreModel || {};
 
-  // const addToCart = (item: CartItem) => {
-  //   setCart((prev) => {
-  //     const stock = item.stock ?? 0;
-  //     const incomingQty = item.qty ?? 1;
+      return {
+        id: item.id,
 
-  //     const existingItem = prev.find((i) => i.id === item.id);
+        name: model.model_name || "",
 
-  //     // Out of stock
-  //     if (stock <= 0) {
-  //       alert("Out of stock");
-  //       return prev;
-  //     }
+        price: Number(item.price_snapshot) || 0,
 
-  //     if (existingItem) {
-  //       const totalQty = existingItem.qty + incomingQty;
+        quantity: item.quantity || 1,
 
-  //       // Cap to stock
-  //       const finalQty = Math.min(totalQty, stock);
+        image: model.images?.[0]?.image_url || "",
 
-  //       return prev.map((i) =>
-  //         i.id === item.id ? { ...i, qty: finalQty } : i,
-  //       );
-  //     }
+        tyreSize: tyre.tyreSize?.size_label || "",
 
-  //     // New item → also cap
-  //     const finalQty = Math.min(incomingQty, stock);
+        speedRating: tyre.speed_rating,
+      };
+    });
+  };
 
-  //     return [...prev, { ...item, qty: finalQty }];
-  //   });
-  // };
+  // =========================
+  //  SYNC CART ON LOAD / REFRESH
+  // =========================
 
-  // final with token
+  const syncCart = async () => {
+    try {
+      const res = await getCartApiService(getToCartAction.request);
 
-  const addToCart = async (item: CartItem) => {
+      const apiRawCart = res?.cart || [];
+
+      const apiCart = mapApiCartToLocal(apiRawCart);
+      setCart(apiCart);
+      saveCart(apiCart);
+      setGlobalAddingCartLoader(false);
+    } catch (err) {
+      console.error("Cart sync failed", err);
+    }
+  };
+
+  useEffect(() => {
+    syncCart();
+  }, []);
+
+  // =========================
+  // COMMON DATA
+  // =========================
+  const getCommon = () => {
     const isLoggedIn = getAccessToken();
+    const guestId = getGuestId();
+    return { isLoggedIn, guestId };
+  };
 
-    const stock = item.stock ?? 0;
-    const incomingQty = item.qty ?? 1;
+  // =========================
+  // ADD TO CART
+  // =========================
+  const addToCart = async (item: CartItem) => {
+    const { isLoggedIn, guestId } = getCommon();
 
-    // Out of stock (global check)
-    if (stock <= 0) {
+    if (item.stock <= 0) {
       alert("Out of stock");
       return;
     }
 
-    // If logged in → API flow
-    if (isLoggedIn) {
-      try {
-        const finalQty = Math.min(incomingQty, stock);
+    const qtyToAdd = Math.min(item.quantity ?? 1, item.stock);
 
-        const body = {
-          tyre_id: item.id,
-          quantity: finalQty,
-          warehouse_id: item.wareHouseId,
-        };
-
-        const cartRes = await addToCartApiService(
-          addToCartAction.request,
-          body,
-        );
-
-        // Optional: sync UI (recommended)
-        setCart((prev) => {
-          const existingItem = prev.find((i) => i.id === item.id);
-
-          if (existingItem) {
-            const totalQty = existingItem.qty + finalQty;
-            const updatedQty = Math.min(totalQty, stock);
-
-            return prev.map((i) =>
-              i.id === item.id ? { ...i, qty: updatedQty } : i,
-            );
-          }
-
-          return [...prev, { ...item, qty: finalQty }];
-        });
-      } catch (err) {
-        console.error("Add to cart API failed", err);
+    // API
+    try {
+      setGlobalAddingCartLoader(true);
+      const response = await addToCartApiService(addToCartAction.request, {
+        tyre_id: item.id,
+        quantity: qtyToAdd,
+        warehouse_id: item.wareHouseId,
+        ...(isLoggedIn ? {} : { guest_id: guestId }),
+      });
+      if (response?.success) {
+        syncCart();
       }
+    } catch (err: any) {
+      console.error("Add failed", err);
 
-      return;
+      const errorMessage =
+        err?.response?.data?.message || // API error (most useful)
+        err?.message || // generic JS error
+        "Something went wrong"; // fallback
+
+      toast.error(errorMessage);
+    } finally {
+      setGlobalAddingCartLoader(false);
     }
-
-    // Guest → local cart (your original logic)
-    setCart((prev) => {
-      const existingItem = prev.find((i) => i.id === item.id);
-
-      if (existingItem) {
-        const totalQty = existingItem.qty + incomingQty;
-        const finalQty = Math.min(totalQty, stock);
-
-        return prev.map((i) =>
-          i.id === item.id ? { ...i, qty: finalQty } : i,
-        );
-      }
-
-      const finalQty = Math.min(incomingQty, stock);
-      return [...prev, { ...item, qty: finalQty }];
-    });
   };
 
-  // Remove item
-  const removeFromCart = (id: string) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
-  };
+  // =========================
+  // INCREMENT
+  // =========================
+  const incrementQty = async (id: string) => {
+    const item = cart.find((i) => i.id === id);
+    if (!item || item.quantity >= item.stock) return;
 
-  // Update quantity
-  const updateQty = (id: string, qty: number) => {
+    const { isLoggedIn, guestId } = getCommon();
+
     setCart((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, qty: Math.max(1, qty) } : item,
-      ),
+      prev.map((i) => (i.id === id ? { ...i, quantity: i.quantity + 1 } : i)),
     );
+
+    try {
+      await addToCartApiService(addToCartAction.request, {
+        tyre_id: id,
+        quantity: 1,
+        warehouse_id: item.wareHouseId,
+        ...(isLoggedIn ? {} : { guest_id: guestId }),
+      });
+    } catch (err) {
+      console.error("Increment failed", err);
+    }
   };
 
-  // Clear cart
-  const clearCart = () => setCart([]);
+  // =========================
+  //  DECREMENT
+  // =========================
+  const decrementQty = async (id: string) => {
+    const item = cart.find((i) => i.id === id);
+    if (!item) return;
 
-  //  Total values
+    const { isLoggedIn, guestId } = getCommon();
+
+    setCart((prev) =>
+      prev
+        .map((i) => (i.id === id ? { ...i, qty: i.quantity - 1 } : i))
+        .filter((i) => i.quantity > 0),
+    );
+
+    try {
+      await fetch("/api/cart/decrement", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tyre_id: id,
+          quantity: 1,
+          ...(isLoggedIn ? {} : { guest_id: guestId }),
+        }),
+      });
+    } catch (err) {
+      console.error("Decrement failed", err);
+    }
+  };
+
+  // =========================
+  // REMOVE
+  // =========================
+  const removeFromCart = async (id: string) => {
+    setCart((prev) => {
+      const updated = prev.filter((item) => item.id !== id);
+      saveCart(updated);
+      return updated;
+    });
+
+    try {
+      setRemovingWholeItemLoad(true);
+
+      const response = await removeApiService(removeCartAction.request, id);
+
+      if (!response?.success) {
+        throw new Error("Failed");
+      }
+      toast.success("Item Removed");
+    } catch (err) {
+      toast.success("Remove failed");
+      console.error("Remove failed", err);
+
+      syncCart();
+    } finally {
+      setRemovingWholeItemLoad(false);
+    }
+  };
+
+  // =========================
+  // CLEAR
+  // =========================
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  // =========================
+  //  TOTALS
+  // =========================
   const totalItems = useMemo(
-    () => cart.reduce((acc, item) => acc + item.qty, 0),
+    () => cart.reduce((acc, item) => acc + item.quantity, 0),
     [cart],
   );
 
   const totalPrice = useMemo(
-    () => cart.reduce((acc, item) => acc + item.price * item.qty, 0),
+    () => cart.reduce((acc, item) => acc + item.price * item.quantity, 0),
     [cart],
   );
 
@@ -193,11 +263,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         cart,
         addToCart,
+        incrementQty,
+        decrementQty,
         removeFromCart,
-        updateQty,
         clearCart,
         totalItems,
         totalPrice,
+        globalAddingCartLoader,
+        removingWholeItemLoad,
       }}
     >
       {children}

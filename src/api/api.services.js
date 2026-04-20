@@ -3,9 +3,11 @@ import {
   BRAND_IMAGE_URL,
   GET_CART_FROM_BACKEND,
   GET_MAKE_URL,
+  GET_PROTECTION_PACKAGES,
   GET_YEAR_URL,
   MERGE_CART_TO_BACKEND,
   POSTAL_CODE_VERIFICATION,
+  REMOVE_CART,
   TYRE_ALL_NUMBER_FITS,
 } from "./apiRoutes";
 
@@ -93,5 +95,19 @@ export const mergeCartApiService = async (request, data) => {
     url: MERGE_CART_TO_BACKEND,
     method: "POST",
     data: data,
+  });
+};
+
+export const protectionPackageApiService = async (request) => {
+  return await request({
+    url: GET_PROTECTION_PACKAGES,
+    method: "GET",
+  });
+};
+
+export const removeApiService = async (request, id) => {
+  return await request({
+    url: `${REMOVE_CART}${id}`,
+    method: "DELETE",
   });
 };

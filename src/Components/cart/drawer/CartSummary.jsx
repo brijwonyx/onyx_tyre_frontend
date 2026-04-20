@@ -1,24 +1,16 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Button from "../../common/forms/Button";
 
 import { useCart } from "../../../context/cardContext";
-import { getAccessToken } from "../../../utils/cookiesManager";
 
 const CartSummary = ({ closeCart, setOpenCart }) => {
   const { cart: cartItems, totalPrice } = useCart();
   const router = useNavigate();
 
   const handleClick = () => {
-    const accessToken = getAccessToken();
-
-    if (accessToken) {
-      setOpenCart(false);
-      router("/checkout/delivery");
-    } else {
-      setOpenCart(false);
-      router("/login");
-    }
+    setOpenCart(false);
+    router("/checkout/delivery");
   };
 
   return (

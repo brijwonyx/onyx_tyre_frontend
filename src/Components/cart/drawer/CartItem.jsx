@@ -7,8 +7,6 @@ const CartItem = ({ item, variant = "drawer" }) => {
 
   const { removeFromCart } = useCart();
 
-  console.log(item, "item");
-
   return (
     <div
       className={`flex ${isDrawer ? "gap-3 py-3" : "gap-6 py-6"} border-b border-[#8E8E8E]`}
@@ -43,9 +41,9 @@ const CartItem = ({ item, variant = "drawer" }) => {
           </p>
 
           <p className="font-normal">
-            Total for {item?.qty}{" "}
+            Total for {item?.quantity}{" "}
             <span className="font-medium">
-              ${item.price * (item?.qty ?? 1)}
+              ${item.price * (item?.quantity ?? 1)}
             </span>
           </p>
         </div>

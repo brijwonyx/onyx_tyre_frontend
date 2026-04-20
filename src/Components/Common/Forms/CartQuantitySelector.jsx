@@ -1,18 +1,15 @@
 import { useCart } from "../../../context/cardContext";
 
-const CartQuantitySelector = ({
-  item,
-  min = 1,
-  variant = "border",
-}) => {
+const CartQuantitySelector = ({ item, min = 1, variant = "border" }) => {
   const { updateQty } = useCart();
 
   const handleDecrease = () => {
-    if (item?.qty > min) updateQty(item?.id, Number(item?.qty) - 1);
+    if (item?.quantity > min) updateQty(item?.id, Number(item?.quantity) - 1);
   };
 
   const handleIncrease = () => {
-    if (item?.qty < item?.stock) updateQty(item?.id, Number(item?.qty) + 1);
+    if (item?.quantity < item?.stock)
+      updateQty(item?.id, Number(item?.quantity) + 1);
   };
 
   return (
@@ -26,7 +23,7 @@ const CartQuantitySelector = ({
         −
       </button>
 
-      <div className="px-3 py-3  text-center">{item?.qty}</div>
+      <div className="px-3 py-3  text-center">{item?.quantity}</div>
 
       <button
         onClick={handleIncrease}

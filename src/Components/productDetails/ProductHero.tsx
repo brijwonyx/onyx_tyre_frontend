@@ -34,7 +34,7 @@ const ProductHero = ({
   wareHouseId,
   stock,
 }: ProductHeroPropsType) => {
-  const { addToCart } = useCart();
+  const { addToCart, globalAddingCartLoader } = useCart();
   const [qty, setQty] = useState(1);
   const { openCart } = useOutletContext<OutletContextType>();
 
@@ -62,14 +62,16 @@ const ProductHero = ({
       id: product.id,
       name: product.name,
       price: product.price,
-      qty: qty,
+      quantity: qty,
       image: product.images?.[0] || "",
       tyreSize: product.size,
       wareHouseId: product.wareHouseId,
       stock: product.stock,
     });
 
-    openCart();
+    setTimeout(() => {
+      openCart();
+    }, 2000);
 
     setQty(1);
   }, [addToCart, product, qty, openCart]);
@@ -114,8 +116,13 @@ const ProductHero = ({
               stock={product?.stock}
             />
 
-            <Button solid className="w-full" onClick={handleAddCart}>
-              Add to Cart
+            <Button
+              solid
+              className="w-full"
+              onClick={handleAddCart}
+              loading={globalAddingCartLoader}
+            >
+              {globalAddingCartLoader ? "Adding your items" : "Add to Cart"}
             </Button>
           </div>
 

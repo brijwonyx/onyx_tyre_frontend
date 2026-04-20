@@ -26,44 +26,53 @@ import Addresses from "./pages/account/Addresses";
 import ForgotPasswordScreen from "./pages/auth/ForgotPassword/ForgotPasswordScreen";
 import LoginWithOTP from "./pages/auth/LoginWithOTP";
 import ScrollToTop from "./utils/ScrollToTop";
+import AppInitializer from "./AppInitializer.jsx";
 
 function App() {
   return (
-    <BrowserRouter>
-     <ScrollToTop />
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<SignUp />} />
-          <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
-          <Route path="/otp-login" element={<LoginWithOTP />} />
-          <Route path="/reset-password" element={<ForgotPassword />} />
-          <Route path="/search" element={<SearchResults />} />
-          <Route path="/product-detail" element={<ProductDetails />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<CheckoutLayout />}>
-            <Route path="delivery" element={<Delivery />} />
-            <Route path="store-fitment/installer" element={<InstallerPage />} />
-            <Route path="home-fitment/mobile" element={<MobileInstaller />} />
-            <Route path="home-fitment/address" element={<ShippingAddress />} />
-            <Route path="review" element={<ReviewPage />} />
-            <Route path="payment" element={<PaymentPage />} />
+    <AppInitializer>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<SignUp />} />
+            <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+            <Route path="/otp-login" element={<LoginWithOTP />} />
+            <Route path="/reset-password" element={<ForgotPassword />} />
+            <Route path="/search" element={<SearchResults />} />
+            <Route path="/product-detail" element={<ProductDetails />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<CheckoutLayout />}>
+              <Route path="delivery" element={<Delivery />} />
+              <Route
+                path="store-fitment/installer"
+                element={<InstallerPage />}
+              />
+              <Route path="home-fitment/mobile" element={<MobileInstaller />} />
+              <Route
+                path="home-fitment/address"
+                element={<ShippingAddress />}
+              />
+              <Route path="review" element={<ReviewPage />} />
+              <Route path="payment" element={<PaymentPage />} />
+            </Route>
+            <Route path="/account" element={<AccountLayout />}>
+              <Route path="orders" element={<OrderHistory />} />
+              <Route path="orders/:id" element={<OrderDetails />} />
+              <Route path="vehicles" element={<Vehicles />} />
+              <Route path="addresses" element={<Addresses />} />
+              {/* <Route path="saved" element={<SavedItems />} /> */}
+              {/* <Route path="settings" element={<AccountSettings />} /> */}
+              {/* <Route path="ratings" element={<Ratings />} /> */}
+            </Route>
           </Route>
-          <Route path="/account" element={<AccountLayout />}>
-            <Route path="orders" element={<OrderHistory />} />
-            <Route path="orders/:id" element={<OrderDetails />} />
-            <Route path="vehicles" element={<Vehicles />} />
-            <Route path="addresses" element={<Addresses />} />
-            {/* <Route path="saved" element={<SavedItems />} /> */}
-            {/* <Route path="settings" element={<AccountSettings />} /> */}
-            {/* <Route path="ratings" element={<Ratings />} /> */}
-          </Route>
-        </Route>
 
-        {AdminRoutes}
-      </Routes>
-    </BrowserRouter>
+          {AdminRoutes}
+        </Routes>
+      </BrowserRouter>
+    </AppInitializer>
   );
 }
 
