@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import axios from "axios";
 import { getAccessToken } from "../utils/cookiesManager";
+import { getGuestId } from "../utils/guest";
 
 const API_KEY = "026a371d435c0a458898282bb3b0ef39332d8e63";
 
@@ -25,6 +26,7 @@ const CallApi = () => {
 
       try {
         const token = getAccessToken();
+        const guestId = getGuestId();
 
         const response = await axiosInstance({
           url,
@@ -33,6 +35,7 @@ const CallApi = () => {
           params,
           headers: {
             Authorization: token ? `Bearer ${token}` : "",
+            "x-guest-id": guestId,
             ...headers,
           },
           signal: controllerRef.current.signal,

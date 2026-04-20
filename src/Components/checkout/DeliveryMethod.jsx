@@ -26,12 +26,8 @@ const DeliveryMethod = () => {
         <ProtectionPackages />
       </div>
 
-      {/* <h2 className="text-2xl font-semibold font-montserrat">
-        Delivery and Installation
-      </h2> */}
-
       <h2 className="text-2xl font-bold font-montserrat">
-        Protection Packages
+        Delivery and Installation
       </h2>
       {/* OPTIONS */}
       <div className="grid grid-cols-2 gap-6 text-center">
