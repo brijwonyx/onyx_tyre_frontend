@@ -20,7 +20,7 @@ const TyreLineItem = ({ type, size, price, qty, stock }) => {
       </div>
       <div className="flex">
         <p>Remove This Item</p>
-        <p>Total for {qty} {price * qty}</p>
+        <p>Total for {qty} {price * qty}</p>
       </div>
     </div>
   );

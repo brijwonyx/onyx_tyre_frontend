@@ -16,7 +16,7 @@ const TrackingTimeline = () => {
 
       <div className="space-y-4">
 
-        {steps.map((step, i) => (
+        {steps.map((step) => (
           <div key={step} className="flex items-center gap-3">
 
             <div className="w-3 h-3 bg-green-600 rounded-full" />

@@ -1,14 +1,77 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 import CallApi from "../../../Common-Controller/controller";
 
-import { protectionPackageApiService } from "../../../api/api.services";
+import { Trash2 } from "lucide-react";
+
+import {
+  addProtectionService,
+  deleteProtectionService,
+  protectionPackageApiService,
+} from "../../../api/api.services";
+
+import { useCart } from "../../../context/cardContext";
 
 const ProtectionPackages = () => {
+  const { getPreviewCart, protectionAdd } = useCart();
+
+  const { id: protectionId } = protectionAdd?.[0] || {};
+
   const [protectionOptions, setProtectionOptions] = useState([]);
   const [selected, setSelected] = useState("");
 
   const getProtectionDataAction = CallApi();
+  const addProtectionDataAction = CallApi();
+  const removeProtectionDataAction = CallApi();
+
+  const addProtectionToCart = async () => {
+    // API
+    try {
+      const response = await addProtectionService(
+        addProtectionDataAction.request,
+        {
+          addonIds: [selected],
+        },
+      );
+      if (response?.success) {
+        getPreviewCart();
+      }
+    } catch (err) {
+      console.error("Add failed", err);
+
+      const errorMessage =
+        err?.response?.data?.message || err?.message || "Something went wrong";
+
+      toast.error(errorMessage);
+    } finally {
+      //
+    }
+  };
+
+  const removeProtectionToCart = async () => {
+    // API
+    try {
+      const response = await deleteProtectionService(
+        removeProtectionDataAction.request,
+        {
+          addonIds: selected,
+        },
+      );
+      if (response?.success) {
+        getPreviewCart();
+      }
+    } catch (err) {
+      console.error("Add failed", err);
+
+      const errorMessage =
+        err?.response?.data?.message || err?.message || "Something went wrong";
+
+      toast.error(errorMessage);
+    } finally {
+      //
+    }
+  };
 
   useEffect(() => {
     const fetchProtections = async () => {
@@ -30,31 +93,72 @@ const ProtectionPackages = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    const defaultOption = protectionOptions?.find(
-      (item) => item.name === "Basic Care Package",
-    );
+  const handleRemoveProtection = () => {
+    setSelected("");
 
-    if (defaultOption) {
-      setSelected(defaultOption?.id);
+    setTimeout(() => {
+      removeProtectionToCart();
+    }, [1000]);
+  };
+
+  // useEffect(() => {
+  //   const defaultOption = protectionOptions?.find(
+  //     (item) => item.name === "Basic Care Package",
+  //   );
+
+  //   if (defaultOption) {
+  //     setSelected(defaultOption?.id);
+  //   }
+  // }, [protectionOptions]);
+
+  const handleAddprotection = (id) => {
+    setSelected(id);
+  };
+
+  useEffect(() => {
+    if (selected !== "") {
+      addProtectionToCart();
     }
-  }, [protectionOptions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
 
   return (
     <div className="mt-10">
-      <h2 className="text-2xl font-bold mb-8 font-montserrat">
-        Protection Packages
-      </h2>
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl font-bold font-montserrat">
+          Add Protection Packages
+        </h2>
+        {selected?.length || protectionId ? (
+          <div className="relative group cursor-pointer inline-block">
+            <Trash2
+              className="transition-all duration-200 group-hover:text-red-500"
+              onClick={() => {
+                handleRemoveProtection();
+              }}
+            />
+
+            <span
+              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 
+                   opacity-0 group-hover:opacity-100 
+                   translate-y-1 group-hover:translate-y-0
+                   transition-all duration-200
+                   text-red-500 text-xs px-2 py-1 rounded shadow-md whitespace-nowrap"
+            >
+              Remove Protection
+            </span>
+          </div>
+        ) : null}
+      </div>
 
       <div className="grid grid-cols-2 gap-6">
         {protectionOptions &&
           protectionOptions?.map((pkg) => (
             <div
               key={pkg.id}
-              onClick={() => setSelected(pkg.id)}
+              onClick={() => handleAddprotection(pkg?.id)}
               className={`relative cursor-pointer rounded-lg p-6 border transition
               ${
-                selected === pkg?.id
+                protectionId === pkg?.id
                   ? "border-primary shadow-md"
                   : "border-gray-200"
               }

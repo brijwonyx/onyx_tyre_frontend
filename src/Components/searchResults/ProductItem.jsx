@@ -4,6 +4,7 @@ import ProductIdentity from "../common/ProductIdentity";
 import LineItem from "../common/LineItem";
 
 const ProductItem = ({
+  id,
   image,
   BrandImage,
   name,
@@ -14,10 +15,12 @@ const ProductItem = ({
   rating,
   loadIndex,
   className,
+  cartSummary,
 }) => {
   return (
     <>
       <ProductIdentity
+        id={id}
         name={name}
         image={image}
         desc={desc}
@@ -27,6 +30,7 @@ const ProductItem = ({
         rating={rating}
         loadIndex={loadIndex}
         className={className}
+        cartSummary={cartSummary}
       >
         {children && <div className="">{children}</div>}
       </ProductIdentity>
