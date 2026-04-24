@@ -38,6 +38,16 @@ const GET_PROTECTION_PACKAGES = `${API_BASE_URL}/addons`;
 
 const REMOVE_CART = `${API_BASE_URL}/cart/item/`;
 
+const PREVIEW_SUMMARY = `${API_BASE_URL}/order/summary`;
+
+const ADD_PROTECTION_PACKAGE = `${API_BASE_URL}/order/addons`;
+
+const REMOVE_PROTECTION_PACKAGE = `${API_BASE_URL}/order/addons/remove`;
+
+const ADD_APPLY_COUPON = `${API_BASE_URL}/order/coupon/apply`;
+
+const REMOVE_APPLY_COUPON = `${API_BASE_URL}/order/coupon/remove`;
+
 export {
   GET_MAKE_URL,
   GET_YEAR_URL,
@@ -58,4 +68,9 @@ export {
   MERGE_CART_TO_BACKEND,
   GET_PROTECTION_PACKAGES,
   REMOVE_CART,
+  PREVIEW_SUMMARY,
+  ADD_PROTECTION_PACKAGE,
+  REMOVE_PROTECTION_PACKAGE,
+  ADD_APPLY_COUPON,
+  REMOVE_APPLY_COUPON,
 };

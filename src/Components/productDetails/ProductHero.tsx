@@ -2,7 +2,9 @@ import { useMemo, useState, useCallback } from "react";
 import { useOutletContext } from "react-router-dom";
 
 import ProductGallery from "./ProductGallery";
+
 import QuantitySelector from "../common/forms/QuantitySelector";
+
 import Button from "../common/forms/Button";
 import InlineEditableField from "../Common/InlineEditableField";
 import ProductIdentity from "../common/ProductIdentity";
@@ -87,6 +89,7 @@ const ProductHero = ({
       <div className="p-4">
         <div className="flex flex-col w-full gap-6">
           <ProductIdentity
+            id={product.id}
             name={product.name}
             desc={product.description}
             BrandImage={product.brandLogo}
@@ -95,6 +98,7 @@ const ProductHero = ({
             rating={product.rating}
             season={product.season}
             car_type={product.carType}
+            cartSummary={false}
           />
 
           {/* Price */}

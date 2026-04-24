@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import TopBar from "./Components/Common/layout/TopBar";
 import Header from "./Components/Common/layout/Header";
 import Footer from "./Components/Common/layout/Footer";
@@ -12,15 +12,26 @@ const Layout = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return !!localStorage.getItem("token");
   });
-  
+
+  const location = useLocation();
+
+  const HIDE_HEADER_ROUTES = ["/checkout"];
+
+  const shouldHideHeader = HIDE_HEADER_ROUTES.some((path) =>
+    location.pathname.startsWith(path),
+  );
+
   return (
     <>
       <TopBar />
-      <Header
-        setIsLoggedIn={setIsLoggedIn}
-        isLoggedIn={isLoggedIn}
-        setOpenCart={setOpenCart}
-      />
+      {!shouldHideHeader && (
+        <Header
+          setIsLoggedIn={setIsLoggedIn}
+          isLoggedIn={isLoggedIn}
+          setOpenCart={setOpenCart}
+        />
+      )}
+
       <Outlet
         context={{
           openCart: () => setOpenCart(true),

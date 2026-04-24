@@ -1,5 +1,5 @@
 const QuantitySelector = ({
-  value = 1,
+  value,
   min = 1,
   stock,
   onChange,

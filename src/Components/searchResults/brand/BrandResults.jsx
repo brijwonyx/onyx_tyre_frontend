@@ -35,83 +35,6 @@ import ProductShimmerCard from "../../../Components/Common/Forms/ProductShimmerC
 import ShimmerCard from "../../../Components/Common/Forms/Shimmer";
 
 const BrandResults = () => {
-  const DUMMY_DATA = [
-    {
-      id: "35fe947f-55fe-486a-85b4-9ea42ff39ffc",
-      load_index: "91",
-      speed_rating: "V",
-      starting_price: 5200,
-      tyreSize: {
-        size_label: "205/55R16",
-      },
-      tyreModel: {
-        model_name: "BlueSnow",
-        season_type: "winter",
-        car_type: "suv",
-        production_flag: "on",
-        description: null,
-        runflat_flag: "off",
-        avgRating: null,
-        totalReviews: 0,
-        image_url:
-          "https://cdn.tyresaddict.com/tyres/rapid/bluesnow/rapid-bluesnow.7776.db.3398.png",
-        brand: {
-          vendor_name: "Rapid",
-          logo: "https://cdn.tyresaddict.com/vendor/rapid.png",
-        },
-      },
-    },
-    {
-      id: "35fe947f-55fe-486a-85b4-9ea42ff39ffc",
-      load_index: "91",
-      speed_rating: "V",
-      starting_price: 5200,
-      tyreSize: {
-        size_label: "205/55R16",
-      },
-      tyreModel: {
-        model_name: "Rapid",
-        season_type: "winter",
-        car_type: "suv",
-        production_flag: "on",
-        description: null,
-        runflat_flag: "off",
-        avgRating: null,
-        totalReviews: 0,
-        image_url:
-          "https://cdn.tyresaddict.com/tyres/rapid/bluesnow/rapid-bluesnow.7776.db.3398.png",
-        brand: {
-          vendor_name: "Rapid",
-          logo: "https://cdn.tyresaddict.com/vendor/rapid.png",
-        },
-      },
-    },
-    {
-      id: "35fe947f-55fe-486a-85b4-9ea42ff39ffc",
-      load_index: "91",
-      speed_rating: "V",
-      starting_price: 5200,
-      tyreSize: {
-        size_label: "205/55R16",
-      },
-      tyreModel: {
-        model_name: "GreenLander",
-        season_type: "winter",
-        car_type: "suv",
-        production_flag: "on",
-        description: null,
-        runflat_flag: "off",
-        avgRating: null,
-        totalReviews: 0,
-        image_url:
-          "https://cdn.tyresaddict.com/tyres/rapid/bluesnow/rapid-bluesnow.7776.db.3398.png",
-        brand: {
-          vendor_name: "Rapid",
-          logo: "https://cdn.tyresaddict.com/vendor/rapid.png",
-        },
-      },
-    },
-  ];
 
   const [selectedFilter, setSelectedFilter] = useState("All tyres");
 
@@ -193,8 +116,6 @@ const BrandResults = () => {
       );
 
       const rows = makeRes?.data?.rows || [];
-
-      // console.log(rows);
 
       const normalized = normalizeTyreData(rows, state?.historyPage);
 

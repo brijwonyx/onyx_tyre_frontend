@@ -9,6 +9,7 @@ import CallApi from "../Common-Controller/controller";
 import {
   addToCartApiService,
   getCartApiService,
+  previewSummaryService,
   removeApiService,
 } from "../api/api.services";
 import toast from "react-hot-toast";
@@ -22,6 +23,7 @@ type CartItem = {
   tyreSize: string;
   wareHouseId: string;
   stock: number;
+  brand?: string;
 };
 
 type CartContextType = {
@@ -35,6 +37,11 @@ type CartContextType = {
   totalPrice: number;
   globalAddingCartLoader: boolean;
   removingWholeItemLoad: boolean;
+  getPreviewCart: () => void;
+  cartSummayItems: any;
+  priceBreakup: any;
+  protectionAdd: any;
+  removeFromSummaryCart: (id: string) => void;
 };
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -48,6 +55,11 @@ export const useCart = () => {
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>(() => getCart());
 
+  const [cartSummayItems, setCartSummaryItems] = useState([]);
+  const [priceBreakup, setPriceBreakup] = useState(null);
+  const [protectionAdd, setProtectionAdd] = useState([]);
+
+  const previewApiAction = CallApi();
   const addToCartAction = CallApi();
   const getToCartAction = CallApi();
   const removeCartAction = CallApi();
@@ -74,7 +86,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
         image: model.images?.[0]?.image_url || "",
 
-        tyreSize: tyre.tyreSize?.size_label || "",
+        brand: model.brand.logo || "",
+
+        tyreSize: tyre.tyreSize?.size_label || "  ",
 
         speedRating: tyre.speed_rating,
       };
@@ -117,8 +131,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   // ADD TO CART
   // =========================
   const addToCart = async (item: CartItem) => {
-    const { isLoggedIn, guestId } = getCommon();
-
     if (item.stock <= 0) {
       alert("Out of stock");
       return;
@@ -133,7 +145,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         tyre_id: item.id,
         quantity: qtyToAdd,
         warehouse_id: item.wareHouseId,
-        ...(isLoggedIn ? {} : { guest_id: guestId }),
       });
       if (response?.success) {
         syncCart();
@@ -142,9 +153,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       console.error("Add failed", err);
 
       const errorMessage =
-        err?.response?.data?.message || // API error (most useful)
-        err?.message || // generic JS error
-        "Something went wrong"; // fallback
+        err?.response?.data?.message || err?.message || "Something went wrong";
 
       toast.error(errorMessage);
     } finally {
@@ -238,6 +247,54 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const getPreviewCart = async () => {
+    try {
+      const res = await previewSummaryService(previewApiAction.request);
+
+      if (!res.success) {
+        throw new Error("Failed");
+      }
+
+      const apiSummaryShow = res?.data || {};
+
+      const { items, price_breakup, addons } = apiSummaryShow || {};
+      setCartSummaryItems(items);
+      setPriceBreakup(price_breakup);
+      setProtectionAdd(addons);
+      
+    } catch (err) {
+      setCartSummaryItems([]);
+      setPriceBreakup(null);
+      setProtectionAdd([]);
+      console.error("Cart sync failed", err);
+    }
+  };
+
+  const removeFromSummaryCart = async (id: string) => {
+    setCart((prev) => {
+      const updated = prev.filter((item) => item.id !== id);
+      saveCart(updated);
+      return updated;
+    });
+
+    try {
+      // setRemovingWholeItemLoad(true);
+
+      const response = await removeApiService(removeCartAction.request, id);
+
+      if (!response?.success) {
+        throw new Error("Failed");
+      }
+      getPreviewCart();
+      toast.success("Item Removed");
+    } catch (err) {
+      toast.success("Remove failed");
+      console.error("Remove failed", err);
+    } finally {
+      // setRemovingWholeItemLoad(false);
+    }
+  };
+
   // =========================
   // CLEAR
   // =========================
@@ -271,6 +328,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         totalPrice,
         globalAddingCartLoader,
         removingWholeItemLoad,
+        getPreviewCart,
+        cartSummayItems,
+        priceBreakup,
+        protectionAdd,
+        removeFromSummaryCart,
       }}
     >
       {children}

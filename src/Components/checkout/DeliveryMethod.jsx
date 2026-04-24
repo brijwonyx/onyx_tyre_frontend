@@ -1,12 +1,40 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { useCart } from "../../context/cardContext";
+
 import InlineEditableField from "../common/InlineEditableField";
+
 import Button from "../common/forms/Button";
+
 import ProtectionPackages from "../cart/page/ProtectionPackage";
+
+import { ShoppingCart } from "lucide-react";
+
+import CartProductCard from "../cart/page/CartProductCard";
+
+import QuantityLineItem from "../Common/layout/QuantityLineItem";
+
+import ProductItem from "../searchResults/ProductItem";
 
 const DeliveryMethod = () => {
   const [selected, setSelected] = useState("store");
+
+  const { cartSummayItems: cartItems } = useCart();
+
   const navigate = useNavigate();
+
+  const handleContinue = () => {
+    navigate(
+      selected === "store"
+        ? "/checkout/store-fitment/installer"
+        : "/checkout/home-fitment/mobile",
+    );
+  };
+
+  const handleGoforShopping = () => {
+    navigate("/");
+  };
 
   return (
     <div className=" flex flex-col gap-6">
@@ -22,48 +50,87 @@ const DeliveryMethod = () => {
 
       <InlineEditableField label="Pincode" value="40004" grey="true" />
 
-      <div>
-        <ProtectionPackages />
+      <div className="flex gap-4 items-center">
+        <ShoppingCart className="text-2xl" />
+        <h2 className="text-2xl">Your Shopping Cart</h2>
       </div>
 
-      <h2 className="text-2xl font-bold font-montserrat">
-        Delivery and Installation
-      </h2>
-      {/* OPTIONS */}
-      <div className="grid grid-cols-2 gap-6 text-center">
-        {/* STORE */}
-        <Card
-          selected={selected === "store"}
-          onClick={() => setSelected("store")}
-          title="Store Fitment"
-          desc="Get Tyres Delivered and Fitted at a nearby Store"
-          icon="🏪"
-        />
+      {cartItems?.length ? (
+        cartItems?.map((item) => {
+          return (
+            <div className="flex flex-col">
+              <ProductItem
+                id={item.id}
+                image={item.image}
+                name={item.label}
+                price={item.price}
+                quantity={item.qty}
+                BrandImage={item.logo}
+                cartSummary={true}
+              >
+                <QuantityLineItem
+                  actions={{ quantity: false, subtotal: true, specs: true }}
+                  quantity={item?.qty}
+                  price={item?.price}
+                  total={item?.total}
+                  // size={item?.price}
+                  className="mt-16"
+                />
+              </ProductItem>
+            </div>
+          );
+        })
+      ) : (
+        <>
+          <div className="bg-[#bce8f1] p-3 text-[#31708f] border rounded-md">
+            <h5>You currently have no products in the cart.</h5>
+          </div>
+          <div className="">
+            <Button
+              className="font-montserrat font-semibold text-base uppercase"
+              onClick={() => {
+                handleGoforShopping();
+              }}
+            >
+              Keep Shoping
+            </Button>
+          </div>
+        </>
+      )}
 
-        {/* HOME */}
-        <Card
-          selected={selected === "home"}
-          onClick={() => setSelected("home")}
-          title="Home Fitment"
-          desc="Get Tyres Delivered and Fitted at your Doorstep as per your Convenience"
-          icon="🚚"
-        />
-      </div>
+      {cartItems?.length > 0 && (
+        <>
+          <div>
+            <ProtectionPackages />
+          </div>
 
-      <Button
-        onClick={() =>
-          navigate(
-            selected === "store"
-              ? "/checkout/store-fitment/installer"
-              : "/checkout/home-fitment/mobile",
-          )
-        }
-        solid
-        className="w-fit"
-      >
-        CONTINUE
-      </Button>
+          <h2 className="text-2xl font-bold font-montserrat">
+            Delivery and Installation
+          </h2>
 
+          <div className="grid grid-cols-2 gap-6 text-center">
+            <Card
+              selected={selected === "store"}
+              onClick={() => setSelected("store")}
+              title="Store Fitment"
+              desc="Get Tyres Delivered and Fitted at a nearby Store"
+              icon="🏪"
+            />
+
+            <Card
+              selected={selected === "home"}
+              onClick={() => setSelected("home")}
+              title="Home Fitment"
+              desc="Get Tyres Delivered and Fitted at your Doorstep as per your Convenience"
+              icon="🚚"
+            />
+          </div>
+
+          <Button onClick={handleContinue} solid className="w-fit">
+            CONTINUE
+          </Button>
+        </>
+      )}
       {/* <div className="bg-[#FFC857] py-6 px-4">
         <h3 className="font-semibold text-xl font-montserrat ">
           Unlock Loyalty Rewards

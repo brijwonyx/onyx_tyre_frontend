@@ -4,15 +4,10 @@ import ProtectionPackages from "./ProtectionPackage";
 import TyreLineItem from "./TyreLineItem";
 
 const CartProductCard = ({ product }) => {
-  // // ✅ Calculate subtotal dynamically
-  // const subtotal = product.tyres.reduce(
-  //   (acc, tyre) => acc + tyre.price * tyre.qty,
-  //   0,
-  // );
-
   return (
     <>
       <div className="flex flex-col">
+
         <ProductItem
           image={product.image}
           name={product.title}
