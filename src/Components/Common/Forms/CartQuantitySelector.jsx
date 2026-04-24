@@ -1,15 +1,25 @@
+import toast from "react-hot-toast";
+
 import { useCart } from "../../../context/cardContext";
 
 const CartQuantitySelector = ({ item, min = 1, variant = "border" }) => {
   const { updateQty } = useCart();
 
+  console.log(item,'paras nayal')
+
   const handleDecrease = () => {
-    if (item?.quantity > min) updateQty(item?.id, Number(item?.quantity) - 1);
+    if (item?.quantity > min) 
+      updateQty(item, Number(item?.quantity) - 1);
   };
 
   const handleIncrease = () => {
-    if (item?.quantity < item?.stock)
-      updateQty(item?.id, Number(item?.quantity) + 1);
+    console.log("increase",item)
+    if (item?.quantity < item?.totalStock){
+      updateQty(item, Number(item?.quantity) + 1);
+    }
+    else{
+      toast.error(`Only ${item?.totalStock} stock is present.`)
+    }
   };
 
   return (

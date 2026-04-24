@@ -10,6 +10,7 @@ import {
 } from "../../api/api.services";
 import { getWithExpiry } from "../../utils/localStorageWithExpiry";
 import toast from "react-hot-toast";
+import ShimmerCard from "../../Components/Common/Forms/Shimmer";
 
 const MobileInstaller = () => {
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
@@ -20,12 +21,18 @@ const MobileInstaller = () => {
 
   const [homeSlots, setHomeSlots] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [loader , setLoader] = useState(false);
 
+  const shimmerMap = new Array(3).fill(null);
+ 
   const getInstallerAction = CallApi();
   const getSlotAction = CallApi();
 
   const fetchInstaller = async () => {
     const storedPincode = getWithExpiry("shippment_pincode");
+
+    setLoader(true);
+
     if (storedPincode) {
       const pinCodeFinal = storedPincode?.pincode;
       try {
@@ -42,12 +49,15 @@ const MobileInstaller = () => {
         setInstallerVehicle([]);
         toast.success("Something going wrong");
         console.error("Something going wrong", err);
+      }finally{
+        setLoader(false);
       }
     }
   };
 
   const fetchInstallerSlot = async (selectedInstallerVehicle) => {
     const staticDate = "2026-04-13";
+
     try {
       const res = await getHomeSlotApiService(
         getSlotAction.request,
@@ -118,11 +128,17 @@ const MobileInstaller = () => {
       </div>
 
       {/* VAN CARD */}
+      {loader
+      ? 
+      shimmerMap.map((_,index)=>(
+        <ShimmerCard className="h-[200px] rounded-lg" key={index} /> 
+      ))
+      :
       <MobileInstallerCard
         installerVehicle={filteredInstallers}
         selectedInstallerVehicle={selectedInstallerVehicle}
         setSelectedInstallerVehicle={setSelectedInstallerVehicle}
-      />
+      />}
 
       {/* SLOT */}
       {selectedInstallerVehicle !== null ? (

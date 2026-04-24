@@ -10,9 +10,11 @@ import ShimmerCard from "../../Common/Forms/Shimmer";
 const AddToCartDrawer = ({ open, onClose, closeCart, setOpenCart }) => {
   const { cart, globalAddingCartLoader } = useCart();
 
+  console.log(cart,'cart')
+
   return (
     <>
-      <Drawer open={open} onClose={onClose} title="Cart" footer={null}>
+      <Drawer open={open} onClose={onClose} title={`Cart (${cart?.length})`} footer={null}>
         <div className="flex flex-col justify-between h-full">
           {!globalAddingCartLoader ? (
             cart?.length > 0 ? (

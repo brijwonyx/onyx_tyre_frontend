@@ -1,5 +1,8 @@
 import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
+
+import ShimmerCard from "../Common/Forms/Shimmer";
 
 import { useCart } from "../../context/cardContext";
 
@@ -20,7 +23,11 @@ import ProductItem from "../searchResults/ProductItem";
 const DeliveryMethod = () => {
   const [selected, setSelected] = useState("home");
 
-  const { cartSummayItems: cartItems } = useCart();
+  const { cartSummayItems: cartItems , globalAddingCartLoader } = useCart();
+
+  const shimmerMap = new Array(3).fill(null);
+
+  console.log(shimmerMap,'shimmerMap')
 
   const navigate = useNavigate();
 
@@ -55,10 +62,14 @@ const DeliveryMethod = () => {
         <h2 className="text-2xl">Your Shopping Cart</h2>
       </div>
 
-      {cartItems?.length ? (
+      {globalAddingCartLoader ? 
+      shimmerMap.map((_,index)=>(
+        <ShimmerCard className="h-[200px] rounded-lg" key={index} />
+      )) :
+      cartItems?.length ? (
         cartItems?.map((item) => {
           return (
-            <div className="flex flex-col">
+            <div className="flex flex-col rounded-lg shadow-md shadow-[5px_7px_11.9px_0px_#00000014]">
               <ProductItem
                 id={item.id}
                 image={item.image}
@@ -71,6 +82,7 @@ const DeliveryMethod = () => {
                 <QuantityLineItem
                   actions={{ quantity: false, subtotal: true, specs: true }}
                   quantity={item?.qty}
+                  item={item}
                   price={item?.price}
                   total={item?.total}
                   // size={item?.price}

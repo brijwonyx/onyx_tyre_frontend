@@ -1,4 +1,7 @@
+import React from "react";
+
 import QuantitySelector from "../Forms/QuantitySelector";
+import CartQuantitySelector from "../Forms/CartQuantitySelector";
 
 export default function QuantityLineItem({
   axle = "Size",
@@ -8,7 +11,9 @@ export default function QuantityLineItem({
   total,
   actions = {},
   className,
+  item
 }) {
+  console.log(item,'itememmemememmeme')
   return (
     <div
       className={`relative bg-white border shadow-md shadow-[5px_7px_11.9px_0px_#00000014] rounded-md p-3 ${className} `}
@@ -41,9 +46,10 @@ export default function QuantityLineItem({
           </p>
         </div>
 
-        <div className="text-right space-y-3">
+        {/* <div className="text-right space-y-3">
           <QuantitySelector value={quantity} />
-        </div>
+          <CartQuantitySelector item={item} variant="border"/>
+        </div> */}
       </div>
       <div className="flex justify-end mt-3 text-sm">
         {actions.subtotal && (

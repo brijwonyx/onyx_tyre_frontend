@@ -10,6 +10,7 @@ import {
   selectAddressApiService,
 } from "../../../api/api.services";
 import toast from "react-hot-toast";
+import ShimmerCard from "../../Common/Forms/Shimmer";
 
 const initialState = {
   name: "",
@@ -39,23 +40,33 @@ const ShippingForm = () => {
   const [apiAddresses, setApiAddresses] = useState([]);
 
   const [loadingCreate, setLoadingCreate] = useState(false);
+  const [loader , setLoader] = useState(false);
+  const [selectAddressLoader , setSelectAddressLoader] = useState(false)
 
   const addressListAction = CallApi();
   const createAddressAction = CallApi();
   const selectAddressAction = CallApi();
 
+  const shimmerMap = new Array(3).fill(null);
+
+  console.log(selectedAddressId , 'selectAddressId')
+
   const fetchAddressList = async () => {
     try {
+      setLoader(true);
       const res = await getAddressApiService(addressListAction.request);
 
       if (!res.success) {
         throw new Error("Failed");
       }
+
       setApiAddresses(res?.data);
     } catch (err) {
       setApiAddresses([]);
       toast.success("Something going wrong");
       console.error("Something going wrong", err);
+    }finally{
+      setLoader(false);
     }
   };
 
@@ -64,17 +75,16 @@ const ShippingForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSelectAddresss = async () => {
+  const handleSelectAddress = async () => {
     try {
+      setSelectAddressLoader(true);
       const res = await selectAddressApiService(selectAddressAction.request, {
-        addressId: selectedAddressId,
+        addressId: selectedAddressId ?? effectiveSelectedId,
       });
 
       if (!res.success) {
         throw new Error("Failed");
       }
-
-      toast.success("res?.message");
 
       setTimeout(() => {
         navigate("/checkout/payment");
@@ -82,6 +92,8 @@ const ShippingForm = () => {
     } catch (err) {
       toast.error("Something going wrong");
       console.error("Something going wrong", err);
+    }finally{
+      setSelectAddressLoader(false);
     }
   };
 
@@ -220,20 +232,25 @@ const ShippingForm = () => {
           <fieldset className="flex gap-4 flex-col">
             <legend className="sr-only">Saved addresses</legend>
 
-            {apiAddresses.map((addr) => (
-              <label
+            {loader ? 
+            shimmerMap.map((_,index)=>(
+              <ShimmerCard className="h-[150px] rounded-lg" key={index} />
+            )) : apiAddresses.map((addr) => (
+              <button
                 key={addr.id}
                 className={`flex gap-3 p-4 border rounded-lg cursor-pointer ${
                   effectiveSelectedId === addr.id
                     ? "border-primary bg-green-50"
                     : ""
                 }`}
+                onClick={() => {
+                    setSelectedAddressId(addr.id)
+                  }}
               >
                 <input
                   type="radio"
                   name="address"
                   checked={effectiveSelectedId === addr.id}
-                  onChange={() => setSelectedAddressId(addr.id)}
                 />
 
                 <div>
@@ -252,12 +269,12 @@ const ShippingForm = () => {
                   </p>
 
                   {addr.landmark && (
-                    <p className="text-xs text-gray-400">{addr.landmark}</p>
+                    <p className="text-xs text-gray-400 text-start">{addr.landmark}</p>
                   )}
 
-                  <p className="text-sm">{addr.phone}</p>
+                  <p className="text-sm text-start">{addr.phone}</p>
                 </div>
-              </label>
+              </button>
             ))}
           </fieldset>
         </div>
@@ -270,16 +287,17 @@ const ShippingForm = () => {
         </button>
 
         <button
-          disabled={!effectiveSelectedId}
+          disabled={!effectiveSelectedId || selectAddressLoader}
           // onClick={() => navigate("/checkout/payment")}
           onClick={() => {
-            handleSelectAddresss();
+            handleSelectAddress();
           }}
           className={`w-full py-3 rounded-full text-white ${
-            effectiveSelectedId ? "bg-primary" : "bg-gray-400"
+            effectiveSelectedId && !selectAddressLoader ? "bg-primary" : "bg-gray-400"
+            // !selectAddressLoader ? "bg-primary"  : 'bg-gray-400'
           }`}
         >
-          CONTINUE TO PAYMENT →
+        {selectAddressLoader ? 'loading...' : 'CONTINUE TO PAYMENT →'}
         </button>
       </div>
     );
