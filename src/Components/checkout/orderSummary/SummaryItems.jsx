@@ -1,15 +1,47 @@
 import SummaryRow from "../../common/SummaryRow";
-// import { cartItems } from "../../../mock/CartData";
 import CartList from "../../cart/drawer/CartList";
 import SummaryRewards from "./SummaryRewards";
 import { useCart } from "../../../context/cardContext";
+import CallApi from "../../../Common-Controller/controller";
+import toast from "react-hot-toast";
+import { deleteProtectionService } from "../../../api/api.services";
 
 const SummaryItems = ({ priceBreakup }) => {
   const { subtotal, tax, tyre_fee, shipping, discount } = priceBreakup || {};
-  const { protectionAdd } = useCart();
 
-  const { price: protectionPrice, name: protectionName } =
-    protectionAdd?.[0] || {};
+  const { protectionAdd, getPreviewCart } = useCart();
+
+  const {
+    price: protectionPrice,
+    name: protectionName,
+    id: protectionId,
+  } = protectionAdd?.[0] || {};
+
+  const removeProtectionDataAction = CallApi();
+
+  const removeProtectionToCart = async (id) => {
+    // API
+    try {
+      const response = await deleteProtectionService(
+        removeProtectionDataAction.request,
+        {
+          addonIds: id,
+        },
+      );
+      if (response?.success) {
+        getPreviewCart();
+      }
+    } catch (err) {
+      console.error("Add failed", err);
+
+      const errorMessage =
+        err?.response?.data?.message || err?.message || "Something went wrong";
+
+      toast.error(errorMessage);
+    } finally {
+      //
+    }
+  };
 
   return (
     <>
@@ -23,10 +55,16 @@ const SummaryItems = ({ priceBreakup }) => {
         />
         <SummaryRow label="STATE TAX (6%)" value={`$${tax}`} />
         <SummaryRow label="Motor Vehicle Tire Fee" value={`$${tyre_fee}`} />
-        {protectionAdd?.length ? (
-          <SummaryRow label={protectionName} value={`$${protectionPrice}`} />
+        {protectionAdd?.length > 0 ? (
+          <SummaryRow
+            label={protectionName}
+            value={`$${protectionPrice}`}
+            handleRemoveProtection={removeProtectionToCart}
+            protectionId={protectionId}
+          />
         ) : null}
       </div>
+
       {discount > 0 && (
         <SummaryRow
           label="Discount Applied"

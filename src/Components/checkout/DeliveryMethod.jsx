@@ -18,7 +18,7 @@ import QuantityLineItem from "../Common/layout/QuantityLineItem";
 import ProductItem from "../searchResults/ProductItem";
 
 const DeliveryMethod = () => {
-  const [selected, setSelected] = useState("store");
+  const [selected, setSelected] = useState("home");
 
   const { cartSummayItems: cartItems } = useCart();
 
@@ -109,13 +109,13 @@ const DeliveryMethod = () => {
           </h2>
 
           <div className="grid grid-cols-2 gap-6 text-center">
-            <Card
+            {/* <Card
               selected={selected === "store"}
               onClick={() => setSelected("store")}
               title="Store Fitment"
               desc="Get Tyres Delivered and Fitted at a nearby Store"
               icon="🏪"
-            />
+            /> */}
 
             <Card
               selected={selected === "home"}
