@@ -63,6 +63,7 @@ const BrandResults = () => {
   };
 
   const normalizeTyreData = (rows = [], type) => {
+    console.log("rows",rows)
     return rows.map((item) => {
       if (type === HISTORY_PAGE.TYRE_BY_BRAND) {
         const model = item?.tyreModels?.[0] || {};
@@ -127,9 +128,9 @@ const BrandResults = () => {
   };
 
   // Put Id here static Id is here right now
-  const handleProductDetail = () => {
+  const handleProductDetail = (item) => {
     const redirectState = {
-      productId: `35fe947f-55fe-486a-85b4-9ea42ff39ffc`,
+      productId: item.id,
     };
 
     router("/product-detail", {
@@ -184,7 +185,7 @@ const BrandResults = () => {
                 <div
                   key={item?.id}
                   className="cursor-pointer"
-                  onClick={() => handleProductDetail()}
+                  onClick={() => handleProductDetail(item)}
                 >
                   <ProductItem
                     image={item?.image}
@@ -225,7 +226,7 @@ const BrandResults = () => {
                       }}
                       size={item.size || "_"}
                       price={item.price || "_"}
-                      handleRedirection={handleProductDetail}
+                      handleRedirection={()=>handleProductDetail(item)}
                       className="mt-[72px]"
                     />
                   </ProductItem>

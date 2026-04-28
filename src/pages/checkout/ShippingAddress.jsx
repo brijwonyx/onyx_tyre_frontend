@@ -5,7 +5,6 @@ const ShippingAddress = () => {
   return (
     <div className="max-w-3xl">
         <ShippingForm/>
-
     </div>
   );
 };

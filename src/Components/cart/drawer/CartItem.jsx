@@ -5,6 +5,8 @@ import QuantitySelector from "../../common/forms/QuantitySelector";
 const CartItem = ({ item, variant = "drawer" }) => {
   const isDrawer = variant === "drawer";
 
+  console.log(item , 'itememmemeememem')
+
   const { removeFromCart } = useCart();
 
   return (
@@ -19,9 +21,9 @@ const CartItem = ({ item, variant = "drawer" }) => {
 
       {/* INFO */}
       <div className="flex-1">
-        <h3 className="font-openSans text-sm text-black pb-1">{`${item.name} (${item?.tyreSize})`}</h3>
+        <h3 className="font-openSans text-sm text-black pb-1">{`${item.name} `}</h3>
 
-        <p className="font-openSans text-sm text-black">{item.spec}</p>
+        <p className="font-openSans text-sm text-black">{`${item?.tyreSize} - ${item.loadIndex}${item.speedRating}`}</p>
 
         <div className="flex justify-between mt-2">
           <span className="font-bold font-montserrat text-2xl">

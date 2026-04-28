@@ -19,6 +19,7 @@ import {
   REMOVE_PROTECTION_PACKAGE,
   SELECT_ADDRESS_LIST,
   TYRE_ALL_NUMBER_FITS,
+  UPDATE_CART,
 } from "./apiRoutes";
 
 export const getMakes = async (request) => {
@@ -89,6 +90,13 @@ export const addToCartApiService = async (request, data) => {
   return await request({
     url: ADD_TO_CART,
     method: "POST",
+    data: data,
+  });
+};
+export const updateCartApiService = async (request, data , cartId) => {
+  return await request({
+    url: `${UPDATE_CART}${cartId}`,
+    method: "PUT",
     data: data,
   });
 };

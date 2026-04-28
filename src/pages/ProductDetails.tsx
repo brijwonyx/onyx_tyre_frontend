@@ -57,8 +57,8 @@
 // };
 // export default ProductDetails;
 
+import React , { useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { useMemo } from "react";
 
 import FindTyreBanner from "../components/common/FindTyreBanner";
 import GetYourTyres from "../components/home/GetYoursTyre";

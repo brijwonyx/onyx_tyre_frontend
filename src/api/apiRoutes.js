@@ -30,6 +30,8 @@ const BRAND_TYRE_LIST = `${TYRE_VEHICLE}/brand`;
 
 const ADD_TO_CART = `${API_BASE_URL}/cart/add`;
 
+const UPDATE_CART = `${API_BASE_URL}/cart/item/`;
+
 const GET_CART_FROM_BACKEND = `${API_BASE_URL}/cart`;
 
 const MERGE_CART_TO_BACKEND = `${API_BASE_URL}/cart/merge`;
@@ -61,6 +63,7 @@ const CREATE_ADDRESS_LIST = `${GET_ADDRESS_LIST}`;
 const SELECT_ADDRESS_LIST = `${GET_ADDRESS_LIST}/select-address`;
 
 const DELETE_ADDRESS = `${GET_ADDRESS_LIST}`;
+const CREATE_ADDRESS = `${API_BASE_URL}/address`;
 
 export {
   GET_MAKE_URL,
@@ -94,4 +97,7 @@ export {
   CREATE_ADDRESS_LIST,
   SELECT_ADDRESS_LIST,
   DELETE_ADDRESS,
+  UPDATE_CART,
+  // UPDATE_CART,
+  CREATE_ADDRESS
 };

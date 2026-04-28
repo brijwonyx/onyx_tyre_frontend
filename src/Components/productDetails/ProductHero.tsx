@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import { useOutletContext } from "react-router-dom";
 
 import ProductGallery from "./ProductGallery";
@@ -114,11 +114,12 @@ const ProductHero = ({
 
           {/* Actions */}
           <div className="flex gap-3">
-            <QuantitySelector
+            {/* <QuantitySelector
               value={qty}
               onChange={setQty}
               stock={product?.stock}
-            />
+              productId={product.id}
+            /> */}
 
             <Button
               solid

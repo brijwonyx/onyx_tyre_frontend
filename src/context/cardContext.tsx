@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 
 import { getCart, saveCart } from "../utils/cardUtils";
 import { getAccessToken } from "../utils/cookiesManager";
@@ -11,6 +18,7 @@ import {
   getCartApiService,
   previewSummaryService,
   removeApiService,
+  updateCartApiService,
 } from "../api/api.services";
 import toast from "react-hot-toast";
 
@@ -29,6 +37,7 @@ type CartItem = {
 type CartContextType = {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
+  updateQty: (item: CartItem,quantity:number) => void;
   incrementQty: (id: string) => void;
   decrementQty: (id: string) => void;
   removeFromCart: (id: string) => void;
@@ -52,7 +61,7 @@ export const useCart = () => {
   return context;
 };
 
-export const CartProvider = ({ children }: { children: React.ReactNode }) => {
+export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>(() => getCart());
 
   const [cartSummayItems, setCartSummaryItems] = useState([]);
@@ -63,6 +72,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const addToCartAction = CallApi();
   const getToCartAction = CallApi();
   const removeCartAction = CallApi();
+  const updateCartAction = CallApi();
 
   const [globalAddingCartLoader, setGlobalAddingCartLoader] =
     useState<boolean>(false);
@@ -75,10 +85,12 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       const tyre = item.tyre || {};
       const model = tyre.tyreModel || {};
 
+      console.log(tyre.inventories,'itemitem')
+
       return {
         id: item.id,
 
-        name: model.model_name || "",
+        name: `${model.brand.vendor_name} ${model.model_name}` || "",
 
         price: Number(item.price_snapshot) || 0,
 
@@ -91,6 +103,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         tyreSize: tyre.tyreSize?.size_label || "  ",
 
         speedRating: tyre.speed_rating,
+        
+        loadIndex:tyre.load_index,
+
+        totalStock : tyre?.inventories[0]?.stock
       };
     });
   };
@@ -154,6 +170,37 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
       const errorMessage =
         err?.response?.data?.message || err?.message || "Something went wrong";
+
+      toast.error(errorMessage);
+    } finally {
+      setGlobalAddingCartLoader(false);
+    }
+  };
+
+  const updateQty = async (item: CartItem,quantity:number) => {
+    const { isLoggedIn, guestId } = getCommon();
+
+    if (item.stock <= 0) {
+      alert("Out of stock");
+      return;
+    }
+
+    try {
+      setGlobalAddingCartLoader(true);
+      const response = await updateCartApiService(updateCartAction.request, {
+        quantity: quantity,
+        ...(isLoggedIn ? {} : { guest_id: guestId }),
+      },item.id);
+      if (response?.success) {
+        syncCart();
+      }
+    } catch (err: any) {
+      console.error("Add failed", err);
+
+      const errorMessage =
+        err?.response?.data?.message || // API error (most useful)
+        err?.message || // generic JS error
+        "Something went wrong"; // fallback
 
       toast.error(errorMessage);
     } finally {
@@ -249,6 +296,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getPreviewCart = async () => {
     try {
+      setGlobalAddingCartLoader(true);
       const res = await previewSummaryService(previewApiAction.request);
 
       if (!res.success) {
@@ -267,6 +315,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       setPriceBreakup(null);
       setProtectionAdd([]);
       console.error("Cart sync failed", err);
+    }finally{
+      setGlobalAddingCartLoader(false);
     }
   };
 
@@ -333,6 +383,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         priceBreakup,
         protectionAdd,
         removeFromSummaryCart,
+        updateQty
       }}
     >
       {children}
