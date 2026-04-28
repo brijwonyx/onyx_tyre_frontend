@@ -2,17 +2,22 @@ import {
   ADD_APPLY_COUPON,
   ADD_PROTECTION_PACKAGE,
   ADD_TO_CART,
+  AVALIABLE_INSTALLERS,
+  BOOK_TYRE_SLOT,
   BRAND_IMAGE_URL,
+  GET_ADDRESS_LIST,
   GET_CART_FROM_BACKEND,
   GET_MAKE_URL,
   GET_PROTECTION_PACKAGES,
   GET_YEAR_URL,
+  HOME_TYRE_SLOT,
   MERGE_CART_TO_BACKEND,
   POSTAL_CODE_VERIFICATION,
   PREVIEW_SUMMARY,
   REMOVE_APPLY_COUPON,
   REMOVE_CART,
   REMOVE_PROTECTION_PACKAGE,
+  SELECT_ADDRESS_LIST,
   TYRE_ALL_NUMBER_FITS,
 } from "./apiRoutes";
 
@@ -153,5 +158,60 @@ export const removeApplyCouponService = async (request, data) => {
     url: REMOVE_APPLY_COUPON,
     method: "POST",
     data: data,
+  });
+};
+
+export const getInstallerApiService = async (request, pincode) => {
+  const baseUrl = `${AVALIABLE_INSTALLERS}?pincode=${pincode}`;
+  return await request({
+    url: baseUrl,
+    method: "GET",
+  });
+};
+
+export const getHomeSlotApiService = async (
+  request,
+  selectedInstallerVehicle,
+  date,
+) => {
+  const baseUrl = `${HOME_TYRE_SLOT}?installer_id=${selectedInstallerVehicle}&date=${date}`;
+  return await request({
+    url: baseUrl,
+    method: "GET",
+  });
+};
+
+export const bookHomeSlotApiService = async (request, body) => {
+  const baseUrl = `${BOOK_TYRE_SLOT}`;
+  return await request({
+    url: baseUrl,
+    method: "Post",
+    data: body,
+  });
+};
+
+export const getAddressApiService = async (request) => {
+  const baseUrl = `${GET_ADDRESS_LIST}`;
+  return await request({
+    url: baseUrl,
+    method: "GET",
+  });
+};
+
+export const createAddressApiService = async (request, formData) => {
+  const baseUrl = `${GET_ADDRESS_LIST}`;
+  return await request({
+    url: baseUrl,
+    method: "POST",
+    data: formData,
+  });
+};
+
+export const selectAddressApiService = async (request, formData) => {
+  const baseUrl = `${SELECT_ADDRESS_LIST}`;
+  return await request({
+    url: baseUrl,
+    method: "POST",
+    data: formData,
   });
 };

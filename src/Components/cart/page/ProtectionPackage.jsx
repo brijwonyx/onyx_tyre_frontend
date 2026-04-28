@@ -7,7 +7,7 @@ import { Trash2 } from "lucide-react";
 
 import {
   addProtectionService,
-  deleteProtectionService,
+  // deleteProtectionService,
   protectionPackageApiService,
 } from "../../../api/api.services";
 
@@ -19,19 +19,19 @@ const ProtectionPackages = () => {
   const { id: protectionId } = protectionAdd?.[0] || {};
 
   const [protectionOptions, setProtectionOptions] = useState([]);
-  const [selected, setSelected] = useState("");
+  // const [selected, setSelected] = useState("");
 
   const getProtectionDataAction = CallApi();
   const addProtectionDataAction = CallApi();
-  const removeProtectionDataAction = CallApi();
 
-  const addProtectionToCart = async () => {
+
+  const addProtectionToCart = async (id) => {
     // API
     try {
       const response = await addProtectionService(
         addProtectionDataAction.request,
         {
-          addonIds: [selected],
+          addonIds: [id],
         },
       );
       if (response?.success) {
@@ -49,29 +49,7 @@ const ProtectionPackages = () => {
     }
   };
 
-  const removeProtectionToCart = async () => {
-    // API
-    try {
-      const response = await deleteProtectionService(
-        removeProtectionDataAction.request,
-        {
-          addonIds: selected,
-        },
-      );
-      if (response?.success) {
-        getPreviewCart();
-      }
-    } catch (err) {
-      console.error("Add failed", err);
 
-      const errorMessage =
-        err?.response?.data?.message || err?.message || "Something went wrong";
-
-      toast.error(errorMessage);
-    } finally {
-      //
-    }
-  };
 
   useEffect(() => {
     const fetchProtections = async () => {
@@ -93,13 +71,11 @@ const ProtectionPackages = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleRemoveProtection = () => {
-    setSelected("");
-
-    setTimeout(() => {
-      removeProtectionToCart();
-    }, [1000]);
-  };
+  // const handleRemoveProtection = () => {
+  //   setTimeout(() => {
+  //     removeProtectionToCart();
+  //   }, [1000]);
+  // };
 
   // useEffect(() => {
   //   const defaultOption = protectionOptions?.find(
@@ -112,15 +88,15 @@ const ProtectionPackages = () => {
   // }, [protectionOptions]);
 
   const handleAddprotection = (id) => {
-    setSelected(id);
+    // setSelected(id);
+    addProtectionToCart(id);
   };
 
-  useEffect(() => {
-    if (selected !== "") {
-      addProtectionToCart();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
+  // useEffect(() => {
+  //   if (selected !== "") {
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [selected]);
 
   return (
     <div className="mt-10">
@@ -128,7 +104,7 @@ const ProtectionPackages = () => {
         <h2 className="text-2xl font-bold font-montserrat">
           Add Protection Packages
         </h2>
-        {selected?.length || protectionId ? (
+        {/* {selected?.length || protectionId ? (
           <div className="relative group cursor-pointer inline-block">
             <Trash2
               className="transition-all duration-200 group-hover:text-red-500"
@@ -147,7 +123,7 @@ const ProtectionPackages = () => {
               Remove Protection
             </span>
           </div>
-        ) : null}
+        ) : null} */}
       </div>
 
       <div className="grid grid-cols-2 gap-6">

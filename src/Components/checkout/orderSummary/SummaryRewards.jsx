@@ -14,7 +14,7 @@ import { useCart } from "../../../context/cardContext";
 const SummaryRewards = () => {
   const { getPreviewCart, priceBreakup } = useCart();
 
-  const { discount } = priceBreakup || {};
+  const { discount , coupon_code } = priceBreakup || {};
 
   const [coupon, setCoupon] = useState("");
 
@@ -80,12 +80,12 @@ const SummaryRewards = () => {
 
       <div className="flex gap-3">
         <input
-          value={isCouponApplied ? `${discount} Coupon Applied` : coupon}
+          value={isCouponApplied ? `${coupon_code} Coupon Applied` : coupon}
           onChange={handleCoupon}
           placeholder="Enter coupon code"
           disabled={isCouponApplied}
           className={`flex-1 border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-primary ${
-            isCouponApplied ? "bg-gray-100 cursor-not-allowed" : ""
+            isCouponApplied ? "bg-white cursor-not-allowed border-none" : ""
           }`}
         />
         
