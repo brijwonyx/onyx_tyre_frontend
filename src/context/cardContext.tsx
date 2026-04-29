@@ -85,8 +85,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       const tyre = item.tyre || {};
       const model = tyre.tyreModel || {};
 
-      console.log(tyre.inventories,'itemitem')
-
       return {
         id: item.id,
 

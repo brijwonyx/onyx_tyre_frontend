@@ -5,15 +5,12 @@ import { useCart } from "../../../context/cardContext";
 const CartQuantitySelector = ({ item, min = 1, variant = "border" }) => {
   const { updateQty } = useCart();
 
-  console.log(item,'paras nayal')
-
   const handleDecrease = () => {
     if (item?.quantity > min) 
       updateQty(item, Number(item?.quantity) - 1);
   };
 
   const handleIncrease = () => {
-    console.log("increase",item)
     if (item?.quantity < item?.totalStock){
       updateQty(item, Number(item?.quantity) + 1);
     }

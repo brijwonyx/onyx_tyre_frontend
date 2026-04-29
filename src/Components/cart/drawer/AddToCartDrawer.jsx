@@ -10,7 +10,7 @@ import ShimmerCard from "../../Common/Forms/Shimmer";
 const AddToCartDrawer = ({ open, onClose, closeCart, setOpenCart }) => {
   const { cart, globalAddingCartLoader } = useCart();
 
-  console.log(cart,'cart')
+  (cart,'cart')
 
   return (
     <>
