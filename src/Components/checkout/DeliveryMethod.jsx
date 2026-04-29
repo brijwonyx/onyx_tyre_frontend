@@ -27,7 +27,7 @@ const DeliveryMethod = () => {
 
   const shimmerMap = new Array(3).fill(null);
 
-  console.log(shimmerMap,'shimmerMap')
+  (shimmerMap,'shimmerMap')
 
   const navigate = useNavigate();
 

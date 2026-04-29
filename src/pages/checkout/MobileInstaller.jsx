@@ -35,6 +35,7 @@ const MobileInstaller = () => {
 
     if (storedPincode) {
       const pinCodeFinal = storedPincode?.pincode;
+      setSelectedInstallerVehicle(null)
       try {
         const res = await getInstallerApiService(
           getInstallerAction.request,
@@ -109,7 +110,7 @@ const MobileInstaller = () => {
           Mobile fitment Installer
         </h1>
 
-        <InlineEditableField label="Pincode" grey="true" />
+        <InlineEditableField label="Pincode" grey="true" fetchInstaller={true} fetchInstallerApi={fetchInstaller}/>
       </div>
 
       {/* AVAILABLE VANS */}

@@ -5,7 +5,7 @@ import QuantitySelector from "../../common/forms/QuantitySelector";
 const CartItem = ({ item, variant = "drawer" }) => {
   const isDrawer = variant === "drawer";
 
-  console.log(item , 'itememmemeememem')
+  (item , 'itememmemeememem')
 
   const { removeFromCart } = useCart();
 

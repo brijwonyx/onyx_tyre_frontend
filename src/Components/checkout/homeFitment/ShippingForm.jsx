@@ -49,7 +49,7 @@ const ShippingForm = () => {
 
   const shimmerMap = new Array(3).fill(null);
 
-  console.log(selectedAddressId , 'selectAddressId')
+  (selectedAddressId , 'selectAddressId')
 
   const fetchAddressList = async () => {
     try {

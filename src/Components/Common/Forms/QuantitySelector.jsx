@@ -8,12 +8,8 @@ const QuantitySelector = ({
   variant = "border",
   productId
 }) => {
-  console.log("stock", stock);
-  console.log("productId", productId);
-  
   const location = useLocation();
 
-  console.log("location", location.state);
   const handleDecrease = () => {
     // const getCart = localStorage.getItem("tyre_cart");
 
@@ -21,15 +17,13 @@ const QuantitySelector = ({
 
     // const {value}  = cart || {};
 
-    // console.log("valuevalue", value);
+    // ("valuevalue", value);
 
     // const item = value.find((item) => item.id === stock.id);
-    // console.log("stock in localStorage", item);
+    // ("stock in localStorage", item);
 
     if (value > min) onChange(value - 1);
   };
-
-  console.log(value,'valuevalue')
 
   const handleIncrease = () => {
     if (value < stock) onChange(value + 1);

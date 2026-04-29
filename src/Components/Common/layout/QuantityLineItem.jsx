@@ -13,7 +13,6 @@ export default function QuantityLineItem({
   className,
   item
 }) {
-  console.log(item,'itememmemememmeme')
   return (
     <div
       className={`relative bg-white border shadow-md shadow-[5px_7px_11.9px_0px_#00000014] rounded-md p-3 ${className} `}

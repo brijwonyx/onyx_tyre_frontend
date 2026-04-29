@@ -8,7 +8,7 @@ import {
   setWithExpiry,
 } from "../../utils/localStorageWithExpiry";
 
-const InlineEditableField = ({ label, grey = false }) => {
+const InlineEditableField = ({ label, grey = false, fetchInstaller = false, fetchInstallerApi }) => {
   const [editing, setEditing] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [verifiedValue, setVerifiedValue] = useState("");
@@ -92,6 +92,10 @@ const InlineEditableField = ({ label, grey = false }) => {
 
     setWithExpiry("shippment_pincode", item, 365 * 24 * 60 * 60 * 1000);
 
+    if (fetchInstaller) {
+      fetchInstallerApi();
+    }
+
     // onSelect && onSelect(item);
   };
 
@@ -101,9 +105,8 @@ const InlineEditableField = ({ label, grey = false }) => {
       <p className="text-sm text-gray-600 mb-2">{label}</p>
 
       <div
-        className={`rounded-lg px-4 py-3 flex items-center justify-between ${
-          grey ? "bg-[#EAEAEA]" : "border border-[#E6E6E6] bg-white"
-        }`}
+        className={`rounded-lg px-4 py-3 flex items-center justify-between ${grey ? "bg-[#EAEAEA]" : "border border-[#E6E6E6] bg-white"
+          }`}
       >
         {!editing ? (
           <div className="flex items-center gap-3">

@@ -63,7 +63,7 @@ const BrandResults = () => {
   };
 
   const normalizeTyreData = (rows = [], type) => {
-    console.log("rows",rows)
+    ("rows",rows)
     return rows.map((item) => {
       if (type === HISTORY_PAGE.TYRE_BY_BRAND) {
         const model = item?.tyreModels?.[0] || {};
