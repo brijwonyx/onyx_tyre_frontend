@@ -21,17 +21,17 @@ const MobileInstaller = () => {
 
   const [homeSlots, setHomeSlots] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
-  const [loader , setLoader] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   const shimmerMap = new Array(3).fill(null);
- 
+
   const getInstallerAction = CallApi();
   const getSlotAction = CallApi();
 
-  const fetchInstaller = async () => {
-    const storedPincode = getWithExpiry("shippment_pincode");
+    const fetchInstaller = async () => {
+      const storedPincode = getWithExpiry("shippment_pincode");
 
-    setLoader(true);
+      setLoader(true);
 
     if (storedPincode) {
       const pinCodeFinal = storedPincode?.pincode;
@@ -42,19 +42,19 @@ const MobileInstaller = () => {
           pinCodeFinal,
         );
 
-        if (!res.success) {
-          throw new Error("Failed");
+          if (!res.success) {
+            throw new Error("Failed");
+          }
+          setInstallerVehicle(res?.data);
+        } catch (err) {
+          setInstallerVehicle([]);
+          toast.success("Something going wrong");
+          console.error("Something going wrong", err);
+        } finally {
+          setLoader(false);
         }
-        setInstallerVehicle(res?.data);
-      } catch (err) {
-        setInstallerVehicle([]);
-        toast.success("Something going wrong");
-        console.error("Something going wrong", err);
-      }finally{
-        setLoader(false);
       }
-    }
-  };
+    };
 
   const fetchInstallerSlot = async (selectedInstallerVehicle) => {
     const staticDate = "2026-04-13";
@@ -114,32 +114,34 @@ const MobileInstaller = () => {
       </div>
 
       {/* AVAILABLE VANS */}
-      <div className="flex justify-between items-center">
-        <div className="bg-green-700 text-white inline-block px-4 py-1 rounded">
-          Available vans
-        </div>
-        {selectedInstallerVehicle !== null ? (
-          <div
-            className="cursor-pointer text-red-600"
-            onClick={() => handleChangeInstaller()}
-          >
-            Change Installer
+      {installerVehicle?.length ? (
+        <div className="flex justify-between items-center">
+          <div className="bg-green-700 text-white inline-block px-4 py-1 rounded">
+            Available vans
           </div>
-        ) : null}
-      </div>
+          {selectedInstallerVehicle !== null ? (
+            <div
+              className="cursor-pointer text-red-600"
+              onClick={() => handleChangeInstaller()}
+            >
+              Change Installer
+            </div>
+          ) : null}
+        </div>
+      ) : null}
 
       {/* VAN CARD */}
-      {loader
-      ? 
-      shimmerMap.map((_,index)=>(
-        <ShimmerCard className="h-[200px] rounded-lg" key={index} /> 
-      ))
-      :
-      <MobileInstallerCard
-        installerVehicle={filteredInstallers}
-        selectedInstallerVehicle={selectedInstallerVehicle}
-        setSelectedInstallerVehicle={setSelectedInstallerVehicle}
-      />}
+      {loader ? (
+        shimmerMap.map((_, index) => (
+          <ShimmerCard className="h-[200px] rounded-lg" key={index} />
+        ))
+      ) : (
+        <MobileInstallerCard
+          installerVehicle={filteredInstallers}
+          selectedInstallerVehicle={selectedInstallerVehicle}
+          setSelectedInstallerVehicle={setSelectedInstallerVehicle}
+        />
+      )}
 
       {/* SLOT */}
       {selectedInstallerVehicle !== null ? (

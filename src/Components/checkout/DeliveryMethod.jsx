@@ -23,11 +23,11 @@ import ProductItem from "../searchResults/ProductItem";
 const DeliveryMethod = () => {
   const [selected, setSelected] = useState("home");
 
-  const { cartSummayItems: cartItems , globalAddingCartLoader } = useCart();
+  const { cartSummayItems: cartItems, globalAddingCartLoader } = useCart();
+
+  (cartItems, "cartItems");
 
   const shimmerMap = new Array(3).fill(null);
-
-  (shimmerMap,'shimmerMap')
 
   const navigate = useNavigate();
 
@@ -62,11 +62,11 @@ const DeliveryMethod = () => {
         <h2 className="text-2xl">Your Shopping Cart</h2>
       </div>
 
-      {globalAddingCartLoader ? 
-      shimmerMap.map((_,index)=>(
-        <ShimmerCard className="h-[200px] rounded-lg" key={index} />
-      )) :
-      cartItems?.length ? (
+      {globalAddingCartLoader ? (
+        shimmerMap.map((_, index) => (
+          <ShimmerCard className="h-[200px] rounded-lg" key={index} />
+        ))
+      ) : cartItems?.length ? (
         cartItems?.map((item) => {
           return (
             <div className="flex flex-col rounded-lg shadow-md shadow-[5px_7px_11.9px_0px_#00000014]">
@@ -78,6 +78,10 @@ const DeliveryMethod = () => {
                 quantity={item.qty}
                 BrandImage={item.logo}
                 cartSummary={true}
+                carType={item?.car_type}
+                season={item?.season_type}
+                speedRating={item?.speed_rating}
+                loadIndex={item?.load_index}
               >
                 <QuantityLineItem
                   actions={{ quantity: false, subtotal: true, specs: true }}

@@ -14,6 +14,7 @@ const CheckoutLayout = () => {
     getPreviewCart,
     cartSummayItems: cartItems,
     priceBreakup,
+    shippingAddress
   } = useCart();
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const CheckoutLayout = () => {
         </div>
         {cartItems.length ? (
           <div className="sticky top-24 h-fit">
-            <CheckoutOrderSummary priceBreakup={priceBreakup} />
+            <CheckoutOrderSummary priceBreakup={priceBreakup} shippingAddress={shippingAddress} />
           </div>
         ) : (
           <div className="flex justify-center">Safe And Simple Payments</div>

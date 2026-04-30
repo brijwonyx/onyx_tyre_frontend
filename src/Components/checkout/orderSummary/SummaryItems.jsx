@@ -7,7 +7,8 @@ import toast from "react-hot-toast";
 import { deleteProtectionService } from "../../../api/api.services";
 
 const SummaryItems = ({ priceBreakup }) => {
-  const { subtotal, tax, tyre_fee, shipping, discount } = priceBreakup || {};
+  const { subtotal, tax, tyre_fee, shipping, discount, installer_charge } =
+    priceBreakup || {};
 
   const { protectionAdd, getPreviewCart } = useCart();
 
@@ -50,7 +51,7 @@ const SummaryItems = ({ priceBreakup }) => {
         <SummaryRow label="Subtotal" value={`$${subtotal}`} />
         <SummaryRow
           label="Shipping"
-          value={shipping === 0 ? "Free" : `${shipping}%`}
+          value={shipping === 0 ? "Free" : `$${shipping}`}
           free={shipping === 0}
         />
         <SummaryRow label="STATE TAX (6%)" value={`$${tax}`} />
@@ -72,6 +73,10 @@ const SummaryItems = ({ priceBreakup }) => {
           className="text-red-500"
         />
       )}
+
+      {installer_charge ? (
+        <SummaryRow label="Installer Charge" value={`$${installer_charge}`} />
+      ) : null}
 
       <SummaryRewards />
     </>

@@ -18,6 +18,7 @@ interface ProductIdentityPropsType {
   car_type?: string;
   size?: string;
   cartSummary: boolean;
+  speedRating?: string;
 }
 
 const ProductIdentity = (props: ProductIdentityPropsType) => {
@@ -37,6 +38,7 @@ const ProductIdentity = (props: ProductIdentityPropsType) => {
     car_type,
     size,
     cartSummary,
+    speedRating,
   } = props;
 
   return (
@@ -85,13 +87,12 @@ const ProductIdentity = (props: ProductIdentityPropsType) => {
 
           {!cartSummary && <RatingStars rating={rating} reviews={review} />}
         </div>
-        {!cartSummary && (
-          <ProductBadges
-            car_type={car_type}
-            season={season}
-            loadIndex={loadIndex}
-          />
-        )}
+
+        <ProductBadges
+          car_type={car_type}
+          season={season}
+          loadIndex={loadIndex}
+        />
 
         {children}
       </div>
