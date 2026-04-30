@@ -50,6 +50,8 @@ const ADD_APPLY_COUPON = `${API_BASE_URL}/order/coupon/apply`;
 
 const REMOVE_APPLY_COUPON = `${API_BASE_URL}/order/coupon/remove`;
 
+const CREATE_ORDER = `${API_BASE_URL}/order`;
+
 const AVALIABLE_INSTALLERS = `${API_BASE_URL}/installer`;
 
 const HOME_TYRE_SLOT = `${AVALIABLE_INSTALLERS}/slots`;

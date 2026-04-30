@@ -11,8 +11,8 @@ export default function QuantityLineItem({
   total,
   actions = {},
   className,
-  item
 }) {
+
   return (
     <div
       className={`relative bg-white border shadow-md shadow-[5px_7px_11.9px_0px_#00000014] rounded-md p-3 ${className} `}
@@ -52,7 +52,7 @@ export default function QuantityLineItem({
       </div>
       <div className="flex justify-end mt-3 text-sm">
         {actions.subtotal && (
-          <p className="text-black font-openSans font-normal ">
+          <p className="text-black font-openSans font-bold ">
             Total for {quantity}{" "}
             <span className="font-medium font-montserrat ">
               ${total ?? price * (quantity ?? 1)}

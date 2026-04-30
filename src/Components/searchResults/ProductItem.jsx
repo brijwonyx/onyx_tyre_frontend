@@ -15,7 +15,9 @@ const ProductItem = ({
   rating,
   loadIndex,
   className,
+  carType,
   cartSummary,
+  speedRating,
 }) => {
   return (
     <>
@@ -31,6 +33,8 @@ const ProductItem = ({
         loadIndex={loadIndex}
         className={className}
         cartSummary={cartSummary}
+        car_type={carType}
+        speedRating={speedRating}
       >
         {children && <div className="">{children}</div>}
       </ProductIdentity>

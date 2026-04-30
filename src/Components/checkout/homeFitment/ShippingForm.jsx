@@ -40,16 +40,14 @@ const ShippingForm = () => {
   const [apiAddresses, setApiAddresses] = useState([]);
 
   const [loadingCreate, setLoadingCreate] = useState(false);
-  const [loader , setLoader] = useState(false);
-  const [selectAddressLoader , setSelectAddressLoader] = useState(false)
+  const [loader, setLoader] = useState(false);
+  const [selectAddressLoader, setSelectAddressLoader] = useState(false);
 
   const addressListAction = CallApi();
   const createAddressAction = CallApi();
   const selectAddressAction = CallApi();
 
   const shimmerMap = new Array(3).fill(null);
-
-  (selectedAddressId , 'selectAddressId')
 
   const fetchAddressList = async () => {
     try {
@@ -65,7 +63,7 @@ const ShippingForm = () => {
       setApiAddresses([]);
       toast.success("Something going wrong");
       console.error("Something going wrong", err);
-    }finally{
+    } finally {
       setLoader(false);
     }
   };
@@ -92,7 +90,7 @@ const ShippingForm = () => {
     } catch (err) {
       toast.error("Something going wrong");
       console.error("Something going wrong", err);
-    }finally{
+    } finally {
       setSelectAddressLoader(false);
     }
   };
@@ -193,24 +191,26 @@ const ShippingForm = () => {
         throw new Error(res?.message || "Failed to create address");
       }
 
+      fetchAddressList();
+
       toast.success("Address added successfully");
 
-      const newAddress = res?.data || {
-        id: Date.now().toString(),
-        ...formData,
-      };
+      // const newAddress = res?.data || {
+      //   id: Date.now().toString(),
+      //   ...formData,
+      // };
 
-      setApiAddresses((prev) => {
-        if (newAddress.is_default) {
-          return [
-            ...prev.map((a) => ({ ...a, is_default: false })),
-            newAddress,
-          ];
-        }
-        return [...prev, newAddress];
-      });
+      // setApiAddresses((prev) => {
+      //   if (newAddress.is_default) {
+      //     return [
+      //       ...prev.map((a) => ({ ...a, is_default: false })),
+      //       newAddress,
+      //     ];
+      //   }
+      //   return [...prev, newAddress];
+      // });
 
-      setSelectedAddressId(newAddress.id);
+      // setSelectedAddressId(newAddress.id);
 
       setFormData(initialState);
       setTouched({});
@@ -232,50 +232,53 @@ const ShippingForm = () => {
           <fieldset className="flex gap-4 flex-col">
             <legend className="sr-only">Saved addresses</legend>
 
-            {loader ? 
-            shimmerMap.map((_,index)=>(
-              <ShimmerCard className="h-[150px] rounded-lg" key={index} />
-            )) : apiAddresses.map((addr) => (
-              <button
-                key={addr.id}
-                className={`flex gap-3 p-4 border rounded-lg cursor-pointer ${
-                  effectiveSelectedId === addr.id
-                    ? "border-primary bg-green-50"
-                    : ""
-                }`}
-                onClick={() => {
-                    setSelectedAddressId(addr.id)
-                  }}
-              >
-                <input
-                  type="radio"
-                  name="address"
-                  checked={effectiveSelectedId === addr.id}
-                />
+            {loader
+              ? shimmerMap.map((_, index) => (
+                  <ShimmerCard className="h-[150px] rounded-lg" key={index} />
+                ))
+              : apiAddresses.map((addr) => (
+                  <button
+                    key={addr.id}
+                    className={`flex gap-3 p-4 border rounded-lg cursor-pointer ${
+                      effectiveSelectedId === addr.id
+                        ? "border-primary bg-green-50"
+                        : ""
+                    }`}
+                    onClick={() => {
+                      setSelectedAddressId(addr.id);
+                    }}
+                  >
+                    <input
+                      type="radio"
+                      name="address"
+                      checked={effectiveSelectedId === addr.id}
+                    />
 
-                <div>
-                  <p className="font-semibold flex gap-2">
-                    {addr.name}
-                    {addr.is_default && (
-                      <span className="text-xs bg-black text-white px-2 rounded flex justify-center items-center">
-                        Default
-                      </span>
-                    )}
-                  </p>
+                    <div>
+                      <p className="font-semibold flex gap-2">
+                        {addr.name}
+                        {addr.is_default && (
+                          <span className="text-xs bg-black text-white px-2 rounded flex justify-center items-center">
+                            Default
+                          </span>
+                        )}
+                      </p>
 
-                  <p className="text-sm text-gray-600">
-                    {addr.address_line1}, {addr.city}, {addr.state} -{" "}
-                    {addr.pincode}
-                  </p>
+                      <p className="text-sm text-gray-600">
+                        {addr.address_line1}, {addr.city}, {addr.state} -{" "}
+                        {addr.pincode}
+                      </p>
 
-                  {addr.landmark && (
-                    <p className="text-xs text-gray-400 text-start">{addr.landmark}</p>
-                  )}
+                      {addr.landmark && (
+                        <p className="text-xs text-gray-400 text-start">
+                          {addr.landmark}
+                        </p>
+                      )}
 
-                  <p className="text-sm text-start">{addr.phone}</p>
-                </div>
-              </button>
-            ))}
+                      <p className="text-sm text-start">{addr.phone}</p>
+                    </div>
+                  </button>
+                ))}
           </fieldset>
         </div>
 
@@ -293,11 +296,13 @@ const ShippingForm = () => {
             handleSelectAddress();
           }}
           className={`w-full py-3 rounded-full text-white ${
-            effectiveSelectedId && !selectAddressLoader ? "bg-primary" : "bg-gray-400"
+            effectiveSelectedId && !selectAddressLoader
+              ? "bg-primary"
+              : "bg-gray-400"
             // !selectAddressLoader ? "bg-primary"  : 'bg-gray-400'
           }`}
         >
-        {selectAddressLoader ? 'loading...' : 'CONTINUE TO PAYMENT →'}
+          {selectAddressLoader ? "loading..." : "CONTINUE TO PAYMENT →"}
         </button>
       </div>
     );

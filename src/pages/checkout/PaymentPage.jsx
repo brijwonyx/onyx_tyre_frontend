@@ -6,7 +6,7 @@ import affirm from "../../assets/affirm.png";
 
 const PaymentPage = () => {
 
-  const [sameAddress, setSameAddress] = useState(true);
+  // const [sameAddress, setSameAddress] = useState(true);
 
   return (
     <div className="space-y-10">
@@ -15,7 +15,7 @@ const PaymentPage = () => {
       <PaymentMethods />
 
       {/* SAME ADDRESS */}
-      <div className="flex items-center gap-2">
+      {/* <div className="flex items-center gap-2">
         <input
           type="checkbox"
           checked={sameAddress}
@@ -24,10 +24,10 @@ const PaymentPage = () => {
         <span className="text-sm">
           My billing and shipping address are the same
         </span>
-      </div>
+      </div> */}
 
       {/* BILLING FORM */}
-      {!sameAddress && <BillingForm />}
+      {/* {!sameAddress && <BillingForm />} */}
 
       {/* CTA */}
       <div className="flex w-full justify-end">

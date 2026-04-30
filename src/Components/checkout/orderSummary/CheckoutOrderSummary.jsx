@@ -5,7 +5,7 @@ import SummaryRewards from "./SummaryRewards";
 import SummaryDiscount from "./SummaryDiscount";
 import SummaryShipping from "./SummaryShipping";
 
-const CheckoutOrderSummary = ({ priceBreakup }) => {
+const CheckoutOrderSummary = ({ priceBreakup, shippingAddress }) => {
   const { pathname } = useLocation();
 
   const { total } = priceBreakup || {};
@@ -37,7 +37,7 @@ h-fit"
       </div>
 
       {/* FINAL STEP */}
-      {isPayment && <SummaryShipping />}
+      {isPayment && <SummaryShipping shippingAddress={shippingAddress} />}
     </div>
   );
 };

@@ -37,7 +37,7 @@ type CartItem = {
 type CartContextType = {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
-  updateQty: (item: CartItem,quantity:number) => void;
+  updateQty: (item: CartItem, quantity: number) => void;
   incrementQty: (id: string) => void;
   decrementQty: (id: string) => void;
   removeFromCart: (id: string) => void;
@@ -51,6 +51,7 @@ type CartContextType = {
   priceBreakup: any;
   protectionAdd: any;
   removeFromSummaryCart: (id: string) => void;
+  shippingAddress: any;
 };
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -67,6 +68,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartSummayItems, setCartSummaryItems] = useState([]);
   const [priceBreakup, setPriceBreakup] = useState(null);
   const [protectionAdd, setProtectionAdd] = useState([]);
+  const [shippingAddress, setShippingAddress] = useState(null);
 
   const previewApiAction = CallApi();
   const addToCartAction = CallApi();
@@ -101,10 +103,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         tyreSize: tyre.tyreSize?.size_label || "  ",
 
         speedRating: tyre.speed_rating,
-        
-        loadIndex:tyre.load_index,
 
-        totalStock : tyre?.inventories[0]?.stock
+        loadIndex: tyre.load_index,
+
+        totalStock: tyre?.inventories[0]?.stock,
       };
     });
   };
@@ -175,7 +177,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const updateQty = async (item: CartItem,quantity:number) => {
+  const updateQty = async (item: CartItem, quantity: number) => {
     const { isLoggedIn, guestId } = getCommon();
 
     if (item.stock <= 0) {
@@ -185,10 +187,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       setGlobalAddingCartLoader(true);
-      const response = await updateCartApiService(updateCartAction.request, {
-        quantity: quantity,
-        ...(isLoggedIn ? {} : { guest_id: guestId }),
-      },item.id);
+      const response = await updateCartApiService(
+        updateCartAction.request,
+        {
+          quantity: quantity,
+          ...(isLoggedIn ? {} : { guest_id: guestId }),
+        },
+        item.id,
+      );
       if (response?.success) {
         syncCart();
       }
@@ -303,17 +309,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
       const apiSummaryShow = res?.data || {};
 
-      const { items, price_breakup, addons } = apiSummaryShow || {};
+      const { items, price_breakup, addons , address } = apiSummaryShow || {};
       setCartSummaryItems(items);
       setPriceBreakup(price_breakup);
       setProtectionAdd(addons);
-      
+      setShippingAddress(address)
     } catch (err) {
       setCartSummaryItems([]);
       setPriceBreakup(null);
       setProtectionAdd([]);
+      setShippingAddress(null)
       console.error("Cart sync failed", err);
-    }finally{
+    } finally {
       setGlobalAddingCartLoader(false);
     }
   };
@@ -381,7 +388,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         priceBreakup,
         protectionAdd,
         removeFromSummaryCart,
-        updateQty
+        updateQty,
+        shippingAddress,
       }}
     >
       {children}

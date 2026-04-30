@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 
 const QuantitySelector = ({
   value,
@@ -6,10 +6,8 @@ const QuantitySelector = ({
   stock,
   onChange,
   variant = "border",
-  productId
+  // productId
 }) => {
-  const location = useLocation();
-
   const handleDecrease = () => {
     // const getCart = localStorage.getItem("tyre_cart");
 
@@ -24,6 +22,7 @@ const QuantitySelector = ({
 
     if (value > min) onChange(value - 1);
   };
+
 
   const handleIncrease = () => {
     if (value < stock) onChange(value + 1);

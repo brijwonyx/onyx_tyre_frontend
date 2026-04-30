@@ -1,6 +1,6 @@
 import { Settings } from "lucide-react";
 
-const SummaryShipping = () => {
+const SummaryShipping = ({ shippingAddress }) => {
   return (
     <div className="mt-6 border-t pt-4">
       <div className="flex justify-between items-center">
@@ -9,12 +9,15 @@ const SummaryShipping = () => {
         </h3>
         <Settings />
       </div>
-
-      <p className="text-sm text-gray-600">
-        Abernathy Greenbriar <br />
-        555 Aspen Way <br />
-        Apartment 3B, California
-      </p>
+      {shippingAddress !== null ? (
+        <p className="text-sm text-gray-600">
+          {shippingAddress?.name} <br />
+          {shippingAddress?.address_line1}
+          <br />
+          {shippingAddress?.landmark} {shippingAddress?.city},{" "}
+          {shippingAddress?.state}
+        </p>
+      ) : null}
 
       <div className="mt-4">
         <div className="flex justify-between items-center">
@@ -24,9 +27,7 @@ const SummaryShipping = () => {
           <Settings />
         </div>
 
-        <p className="text-sm text-black font-openSans">
-          Free Shipping - Mobile Van
-        </p>
+        <p className="text-sm text-black font-openSans">Mobile Van</p>
       </div>
     </div>
   );

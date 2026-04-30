@@ -16,6 +16,7 @@ const ProductBadges = ({ season, loadIndex, car_type }) => {
           <img src={winter} alt="winter" />
           {season}
         </span>
+
         <span className="rounded-[4px] [&_span]:py-2  flex gap-[1px]">
           <span className="bg-[#FF9800] px-1 rounded-l-[4px]">{loadIndex}</span>
           <span className="bg-[#05935D] px-2 rounded-r-[4px]">H</span>
