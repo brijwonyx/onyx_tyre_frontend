@@ -130,8 +130,8 @@ const ShippingForm = () => {
       newErrors.phone = "Enter valid 10 digit phone";
     }
 
-    if (data.pincode && !/^\d{6}$/.test(data.pincode)) {
-      newErrors.pincode = "Enter valid 6 digit pincode";
+    if (data.pincode && !/^\d{4}$/.test(data.pincode)) {
+      newErrors.pincode = "Enter valid 4 digit pincode";
     }
 
     return newErrors;
@@ -143,7 +143,7 @@ const ShippingForm = () => {
 
     if (name === "name" && !/^[a-zA-Z\s]*$/.test(value)) return;
     if (name === "phone" && (!/^\d*$/.test(value) || value.length > 10)) return;
-    if (name === "pincode" && (!/^\d*$/.test(value) || value.length > 6))
+    if (name === "pincode" && (!/^\d*$/.test(value) || value.length > 4))
       return;
 
     setFormData((prev) => ({

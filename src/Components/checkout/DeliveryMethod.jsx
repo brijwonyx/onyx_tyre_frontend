@@ -6,7 +6,7 @@ import ShimmerCard from "../Common/Forms/Shimmer";
 
 import { useCart } from "../../context/cardContext";
 
-import InlineEditableField from "../common/InlineEditableField";
+// import InlineEditableField from "../common/InlineEditableField";
 
 import Button from "../common/forms/Button";
 
@@ -24,8 +24,6 @@ const DeliveryMethod = () => {
   const [selected, setSelected] = useState("home");
 
   const { cartSummayItems: cartItems, globalAddingCartLoader } = useCart();
-
-  (cartItems, "cartItems");
 
   const shimmerMap = new Array(3).fill(null);
 
@@ -55,7 +53,7 @@ const DeliveryMethod = () => {
 
       {/* PINCODE */}
 
-      <InlineEditableField label="Pincode" value="40004" grey="true" />
+      {/* <InlineEditableField label="Pincode" value="40004" grey="true" /> */}
 
       <div className="flex gap-4 items-center">
         <ShoppingCart className="text-2xl" />

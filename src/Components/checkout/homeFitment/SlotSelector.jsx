@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 
 import { bookHomeSlotApiService } from "../../../api/api.services";
 import { useState } from "react";
+import { useCart } from "../../../context/cardContext";
 
 const SlotSelector = ({
   date,
@@ -20,6 +21,8 @@ const SlotSelector = ({
   selectedTimeSlot,
 }) => {
   const navigate = useNavigate();
+
+  const { getPreviewCart } = useCart();
 
   const [bookLoader, setBookLoader] = useState(false);
 
@@ -44,6 +47,7 @@ const SlotSelector = ({
         toast.success(message);
 
         setTimeout(() => {
+          getPreviewCart();
           navigate("/checkout/home-fitment/address");
           setBookLoader(false);
         }, 1000);

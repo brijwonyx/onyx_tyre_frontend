@@ -8,13 +8,15 @@ import CheckoutOrderSummary from "../../components/checkout/orderSummary/Checkou
 import CallApi from "../../Common-Controller/controller";
 
 import { useCart } from "../../context/cardContext";
+import ShimmerCard from "../../Components/Common/Forms/Shimmer";
 
 const CheckoutLayout = () => {
   const {
     getPreviewCart,
     cartSummayItems: cartItems,
     priceBreakup,
-    shippingAddress
+    shippingAddress,
+    globalAddingCartLoader,
   } = useCart();
 
   useEffect(() => {
@@ -29,12 +31,22 @@ const CheckoutLayout = () => {
         <div className="col-span-2">
           <Outlet />
         </div>
-        {cartItems.length ? (
-          <div className="sticky top-24 h-fit">
-            <CheckoutOrderSummary priceBreakup={priceBreakup} shippingAddress={shippingAddress} />
-          </div>
+        {!globalAddingCartLoader ? (
+          cartItems.length ? (
+            <div className="sticky top-24 h-fit">
+              <CheckoutOrderSummary
+                priceBreakup={priceBreakup}
+                shippingAddress={shippingAddress}
+              />
+            </div>
+          ) : (
+            <div className="flex justify-center">Safe And Simple Payments</div>
+          )
         ) : (
-          <div className="flex justify-center">Safe And Simple Payments</div>
+          <div>
+            {" "}
+            <ShimmerCard className="h-[800px] rounded-lg" />
+          </div>
         )}
       </div>
     </div>
