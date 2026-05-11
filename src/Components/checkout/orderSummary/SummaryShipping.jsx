@@ -12,10 +12,10 @@ const SummaryShipping = ({ shippingAddress }) => {
       {shippingAddress !== null ? (
         <p className="text-sm text-gray-600">
           {shippingAddress?.name} <br />
-          {shippingAddress?.address_line1}
+          {shippingAddress?.street_address}
           <br />
-          {shippingAddress?.landmark} {shippingAddress?.city},{" "}
-          {shippingAddress?.state}
+          {shippingAddress?.suburb} {shippingAddress?.city},{" "}
+          {shippingAddress?.state} {shippingAddress?.pincode}
         </p>
       ) : null}
 

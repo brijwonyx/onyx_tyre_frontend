@@ -1,15 +1,22 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+
 import MobileInstallerCard from "../../components/checkout/homeFitment/MobileInstallerCard";
+
 import SlotSelector from "../../components/checkout/homeFitment/SlotSelector";
+
 import CallApi from "../../Common-Controller/controller";
+
 import { MapPin } from "lucide-react";
+
 import {
   getHomeSlotApiService,
   getInstallerApiService,
 } from "../../api/api.services";
+
 import toast from "react-hot-toast";
+
 import ShimmerCard from "../../Components/Common/Forms/Shimmer";
 
 const MobileInstaller = () => {
@@ -67,11 +74,13 @@ const MobileInstaller = () => {
 
   // FETCH SLOTS
   const fetchInstallerSlot = async (vehicle) => {
+    const staticDate = "2026-04-30";
     try {
       const res = await getHomeSlotApiService(
         getSlotAction.request,
         vehicle,
-        date,
+        staticDate,
+        // date,
       );
 
       if (!res || !res.success) throw new Error("Failed");

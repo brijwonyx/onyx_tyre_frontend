@@ -16,7 +16,7 @@ const HeroSection = () => {
             Buy Tyres Online. <br /> Fit Locally. Drive Happy.
           </h1>
         </div>
-        <SearchPanel Sizedata={"hello"} />
+        <SearchPanel />
       </div>
     </section>
   );

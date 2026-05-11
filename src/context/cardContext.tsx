@@ -148,7 +148,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // =========================
   const addToCart = async (item: CartItem) => {
     if (item.stock <= 0) {
-      alert("Out of stock");
+      toast.error("Out of stock");
       return;
     }
 
@@ -181,7 +181,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const { isLoggedIn, guestId } = getCommon();
 
     if (item.stock <= 0) {
-      alert("Out of stock");
+      toast.error("Out of stock");
       return;
     }
 
