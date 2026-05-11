@@ -35,7 +35,6 @@ import ProductShimmerCard from "../../../Components/Common/Forms/ProductShimmerC
 import ShimmerCard from "../../../Components/Common/Forms/Shimmer";
 
 const BrandResults = () => {
-
   const [selectedFilter, setSelectedFilter] = useState("All tyres");
 
   const filterOption = ["All tyres", "Run Flat"];
@@ -62,44 +61,52 @@ const BrandResults = () => {
     [HISTORY_PAGE.TYRE_BY_VEHICLE]: TYRE_VEHICLE,
   };
 
-  const normalizeTyreData = (rows = [], type) => {
-    ("rows",rows)
-    return rows.map((item) => {
-      if (type === HISTORY_PAGE.TYRE_BY_BRAND) {
-        const model = item?.tyreModels?.[0] || {};
+  const normalizeTyreData = (rows = []) => {
+    if (!Array.isArray(rows)) return [];
 
-        return {
-          id: item.id,
-          name: model?.model_name || "_",
-          image: item.image_url,
-          brandLogo: item.logo,
-          description:
-            item?.description ||
-            `Tailored for luxury touring vehicles, the ${item?.name} Tour A/S combines comfort with exceptional wet and dry traction, ensuring`,
-          rating: item.avgRating || 0,
-          reviews: item.totalReviews || 0,
-          season: model?.season_type,
-          loadIndex: item.load_index,
-          size: "_",
-          price: item.starting_price || "_",
-        };
-      }
+    return rows.map((item) => {
+      const model = item?.tyreModel || {};
+      const brand = model?.brand || {};
 
       return {
-        id: item.id,
-        name: item?.tyreModel?.model_name || "_",
-        image: item?.tyreModel?.image_url,
-        brandLogo: item?.tyreModel?.brand?.logo,
+        id: item?.id,
+
+        name: model?.model_name || "_",
+        image: model?.image_url || item?.image_url || "",
+        brandLogo: brand?.logo || item?.logo || "",
+        brandName: brand?.vendor_name || item?.vendor_name || "_",
+
         description:
-          item?.tyreModel?.description ||
-          `Tailored for luxury touring vehicles, the ${item?.name} Tour A/S combines comfort with exceptional wet and dry traction, ensuring`,
-        rating: item?.tyreModel?.avgRating || 0,
-        reviews: item?.tyreModel?.totalReviews || 0,
-        season: item?.tyreModel?.season_type,
-        loadIndex: item?.load_index,
-        size: item?.tyreSize?.size_label,
-        price: item?.starting_price || "_",
+          model?.description ||
+          `Tailored for ${model?.car_type || "vehicles"}, the ${
+            model?.model_name || "tyre"
+          } delivers reliable ${model?.season_type || "all-season"} performance.`,
+
+        // smart fallback (handles both APIs)
+        rating: model?.avgRating ?? item?.avgRating ?? 0,
+        reviews: model?.totalReviews ?? item?.totalReviews ?? 0,
+
+        season: model?.season_type || "_",
+        loadIndex: item?.load_index || "_",
+
+        //  works for both cases
+        size: item?.tyreSize?.size_label || "_",
+
+        price: item?.starting_price ?? "_",
       };
+    });
+  };
+
+  const flattenTyreModels = (data = []) => {
+    if (!Array.isArray(data)) return [];
+
+    return data.flatMap((item) => {
+      const models = item?.tyreModels || [];
+
+      return models.map((model) => ({
+        ...item,
+        tyreModel: model,
+      }));
     });
   };
 
@@ -116,7 +123,14 @@ const BrandResults = () => {
         finalUrl,
       );
 
-      const rows = makeRes?.data?.rows || [];
+      let rows = makeRes?.data?.rows || [];
+
+      console.log(rows, "Rows");
+
+      // ONLY flatten for brand page
+      if (state?.historyPage === HISTORY_PAGE.TYRE_BY_BRAND) {
+        rows = flattenTyreModels(rows);
+      }
 
       const normalized = normalizeTyreData(rows, state?.historyPage);
 
@@ -226,7 +240,7 @@ const BrandResults = () => {
                       }}
                       size={item.size || "_"}
                       price={item.price || "_"}
-                      handleRedirection={()=>handleProductDetail(item)}
+                      handleRedirection={() => handleProductDetail(item)}
                       className="mt-[72px]"
                     />
                   </ProductItem>

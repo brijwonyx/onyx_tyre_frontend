@@ -1,11 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchSideTabs from "./SearchSideTabs";
 import SearchTabs from "./SearchTabs";
 import SearchForm from "./SearchForm";
+import { tyreCart } from "../../context/tyreContext";
 
 const SearchPanel = () => {
   const [activeTab, setActiveTab] = useState("tyres");
   const [activeSideTab, setActiveSideTab] = useState("vehicle");
+
+  const { getAllWidRDiam, fetchBrand, fetchMakes } = tyreCart();
+
+  useEffect(() => {
+    getAllWidRDiam();
+    fetchBrand();
+    fetchMakes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="max-w-[1040px] sp mt-5">
       <SearchTabs activeTab={activeTab} onTabChange={setActiveTab} />

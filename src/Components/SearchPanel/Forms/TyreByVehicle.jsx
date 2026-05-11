@@ -8,14 +8,15 @@ import CallApi from "../../../Common-Controller/controller";
 
 import {
   getAllFitments,
-  getMakes,
   getModalByMakes,
   getStyleByAll,
   getYearByModel,
 } from "../../../api/api.services.js";
 import TyreByAllDetail from "./TyreByAllDetail.jsx";
+import { tyreCart } from "../../../context/tyreContext.js";
 
 const TyreByVehicle = () => {
+  const { makeApi, setOptionsVehicle, optionsVehicle } = tyreCart();
   const [vehicle, setVehicle] = useState({
     make: null,
     model: null,
@@ -23,23 +24,15 @@ const TyreByVehicle = () => {
     style: null,
   });
 
-  const [options, setOptions] = useState({
-    make: [],
-    model: [],
-    year: [],
-    style: [],
-  });
-
   const [fitmentDetail, setFitmentDetail] = useState(null);
-
-  const makeApi = CallApi();
+  
   const modelApi = CallApi();
   const yearApi = CallApi();
   const styleApi = CallApi();
   const fitmentsApi = CallApi();
 
   const updateOptions = (key, value) => {
-    setOptions((prev) => ({
+    setOptionsVehicle((prev) => ({
       ...prev,
       [key]: value,
     }));
@@ -54,15 +47,6 @@ const TyreByVehicle = () => {
 
   useEffect(() => {
     setFitmentDetail(null);
-    const fetchMakes = async () => {
-      const makeRes = await getMakes(makeApi.request);
-      const { data: finalMakesData } = makeRes || {};
-      updateOptions("make", finalMakesData);
-    };
-
-    fetchMakes();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /* MAKE → MODEL */
@@ -192,7 +176,7 @@ const TyreByVehicle = () => {
         <CustomSelect
           label="Make"
           placeholder={makeApi?.loading ? "Loading..." : "Select Make"}
-          options={options?.make}
+          options={optionsVehicle?.make}
           labelKey="make_name"
           value={vehicle.make}
           onChange={handleSelectChange("make")}
@@ -203,7 +187,7 @@ const TyreByVehicle = () => {
           label="Model"
           labelKey="model_name"
           placeholder={modelApi?.loading ? "Loading..." : "Select Model"}
-          options={options?.model}
+          options={optionsVehicle?.model}
           value={vehicle?.model}
           onChange={handleSelectChange("model")}
         />
@@ -213,7 +197,7 @@ const TyreByVehicle = () => {
           label="Year"
           labelKey="label"
           placeholder={yearApi?.loading ? "Loading..." : "Select Year"}
-          options={options?.year}
+          options={optionsVehicle?.year}
           value={vehicle?.year}
           onChange={handleSelectChange("year")}
         />
@@ -223,7 +207,7 @@ const TyreByVehicle = () => {
           label="Style"
           labelKey="mod_name"
           placeholder={styleApi?.loading ? "Loading..." : "Select Style"}
-          options={options?.style}
+          options={optionsVehicle?.style}
           value={vehicle?.style}
           onChange={handleSelectChange("style")}
         />

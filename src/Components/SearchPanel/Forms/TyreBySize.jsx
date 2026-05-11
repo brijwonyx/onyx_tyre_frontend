@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -10,19 +10,17 @@ import CallApi from "../../../Common-Controller/controller";
 
 import PincodeAutocomplete from "../../Common/Forms/PincodeAutocomplete";
 
-import { getWidthRatioDiam } from "../../../api/api.services";
+import { tyreCart } from "../../../context/tyreContext";
 
 const TyreBySize = () => {
   const router = useNavigate();
 
+  const { AlltyreSpecApi, tyreWdrOptions } = tyreCart();
+
   // Initial States
   const [inputZipvalue, setInputZipValue] = useState("");
   const [verifiedZipValue, setVerifiedZipValue] = useState("");
-  const [options, setOptions] = useState({
-    width: [],
-    Ratio: [],
-    Diameter: [],
-  });
+
   const [selectedValue, setSelectedValue] = useState({
     width: null,
     diameter: null,
@@ -42,37 +40,6 @@ const TyreBySize = () => {
     });
   };
 
-  // Update Function
-  const updateOptions = (key, value) => {
-    setOptions((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
-
-  const formatOptions = (arr) => {
-    if (!arr || !arr.length) return [];
-
-    return arr.map((item) => ({
-      label: item,
-      value: item,
-    }));
-  };
-
-  // Api Call
-  const AlltyreSpecApi = CallApi();
-
-  const getAllWidRDiam = async () => {
-    const makeRes = await getWidthRatioDiam(AlltyreSpecApi.request);
-    const { data: finalAllSpecData } = makeRes || {};
-
-    const { tyre_width, tyre_r, tyre_profile } = finalAllSpecData || {};
-
-    updateOptions("width", formatOptions(tyre_width));
-    updateOptions("Ratio", formatOptions(tyre_r));
-    updateOptions("Diameter", formatOptions(tyre_profile));
-  };
-
   // handle Change
   const handleSelectChange = (field) => (option) => {
     setSelectedValue((prev) => ({
@@ -80,13 +47,7 @@ const TyreBySize = () => {
       [field]: option,
     }));
   };
-
-  useEffect(() => {
-    getAllWidRDiam();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  
   // Disable Button Functionality
   const isButtonValid =
     !selectedValue?.width ||
@@ -107,7 +68,7 @@ const TyreBySize = () => {
               placeholder={
                 AlltyreSpecApi?.loading ? "Loading..." : "Select Width"
               }
-              options={options?.width}
+              options={tyreWdrOptions?.width}
               labelKey="label"
               value={selectedValue?.width}
               onChange={handleSelectChange("width")}
@@ -117,7 +78,7 @@ const TyreBySize = () => {
               placeholder={
                 AlltyreSpecApi?.loading ? "Loading..." : "Select Diameter"
               }
-              options={options?.Diameter}
+              options={tyreWdrOptions?.Diameter}
               labelKey="label"
               value={selectedValue?.diameter}
               onChange={handleSelectChange("diameter")}
@@ -127,7 +88,7 @@ const TyreBySize = () => {
               placeholder={
                 AlltyreSpecApi?.loading ? "Loading..." : "Select Ratio"
               }
-              options={options?.Ratio}
+              options={tyreWdrOptions?.Ratio}
               labelKey="label"
               value={selectedValue?.ratio}
               onChange={handleSelectChange("ratio")}

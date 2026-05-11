@@ -1,16 +1,22 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Input from "../../Common/Forms/Input";
+import ShimmerCard from "../../Common/Forms/Shimmer";
+import CustomSelect from "../../common/forms/CustomSelect";
 
 import CallApi from "../../../Common-Controller/controller";
+
 import {
   createAddressApiService,
   getAddressApiService,
   selectAddressApiService,
 } from "../../../api/api.services";
+
 import toast from "react-hot-toast";
-import ShimmerCard from "../../Common/Forms/Shimmer";
+
+import { stateOptions } from "./constant";
+import { useCart } from "../../../context/cardContext";
 
 const initialState = {
   name: "",
@@ -18,18 +24,19 @@ const initialState = {
   phone: "",
   pincode: "",
   state: "",
-  city: "",
+  street_address: "",
   address_line1: "",
-  landmark: "",
-  address_line2: "",
-  address_type: "",
+  suburb: "",
   is_default: false,
 };
 
 const ShippingForm = () => {
   const navigate = useNavigate();
 
+  const { getPreviewCart } = useCart();
+
   const [formData, setFormData] = useState(initialState);
+
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
@@ -43,26 +50,31 @@ const ShippingForm = () => {
   const [loader, setLoader] = useState(false);
   const [selectAddressLoader, setSelectAddressLoader] = useState(false);
 
+  const [addOptionalAddress, setAddOptionalAddress] = useState(false);
+
   const addressListAction = CallApi();
   const createAddressAction = CallApi();
   const selectAddressAction = CallApi();
 
   const shimmerMap = new Array(3).fill(null);
 
+  // ================= FETCH ADDRESS =================
+
   const fetchAddressList = async () => {
     try {
       setLoader(true);
+
       const res = await getAddressApiService(addressListAction.request);
 
-      if (!res.success) {
-        throw new Error("Failed");
+      if (!res?.success) {
+        throw new Error("Failed to fetch addresses");
       }
 
-      setApiAddresses(res?.data);
+      setApiAddresses(res?.data || []);
     } catch (err) {
       setApiAddresses([]);
-      toast.success("Something going wrong");
-      console.error("Something going wrong", err);
+      toast.error("Something went wrong");
+      console.error(err);
     } finally {
       setLoader(false);
     }
@@ -70,39 +82,23 @@ const ShippingForm = () => {
 
   useEffect(() => {
     fetchAddressList();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSelectAddress = async () => {
-    try {
-      setSelectAddressLoader(true);
-      const res = await selectAddressApiService(selectAddressAction.request, {
-        addressId: selectedAddressId ?? effectiveSelectedId,
-      });
+  // ================= EFFECTIVE SELECTED =================
 
-      if (!res.success) {
-        throw new Error("Failed");
-      }
+  const effectiveSelectedId = useMemo(() => {
+    return (
+      selectedAddressId ??
+      apiAddresses.find((a) => a.is_default)?.id ??
+      apiAddresses[0]?.id ??
+      null
+    );
+  }, [selectedAddressId, apiAddresses]);
 
-      setTimeout(() => {
-        navigate("/checkout/payment");
-      }, 1000);
-    } catch (err) {
-      toast.error("Something going wrong");
-      console.error("Something going wrong", err);
-    } finally {
-      setSelectAddressLoader(false);
-    }
-  };
+  // ================= VALIDATION =================
 
-  //   // ---------------- DERIVED DEFAULT ----------------
-  const effectiveSelectedId =
-    selectedAddressId ??
-    apiAddresses.find((a) => a.is_default)?.id ??
-    apiAddresses[0]?.id ??
-    null;
-
-  // ---------------- PURE VALIDATION ----------------
   const getErrors = (data) => {
     const newErrors = {};
 
@@ -112,24 +108,33 @@ const ShippingForm = () => {
       "phone",
       "pincode",
       "state",
-      "city",
-      "address_line1",
+      "suburb",
+      "street_address",
     ];
 
     requiredFields.forEach((field) => {
-      if (!data[field]?.trim()) {
+      const value = data[field];
+
+      if (typeof value === "string" && !value.trim()) {
+        newErrors[field] = "This field is required";
+      }
+
+      if (value == null) {
         newErrors[field] = "This field is required";
       }
     });
 
+    // EMAIL
     if (data.email && !/^\S+@\S+\.\S+$/.test(data.email)) {
       newErrors.email = "Enter a valid email";
     }
 
+    // PHONE
     if (data.phone && !/^\d{10}$/.test(data.phone)) {
-      newErrors.phone = "Enter valid 10 digit phone";
+      newErrors.phone = "Enter valid 10 digit phone number";
     }
 
+    // PINCODE
     if (data.pincode && !/^\d{4}$/.test(data.pincode)) {
       newErrors.pincode = "Enter valid 4 digit pincode";
     }
@@ -137,14 +142,33 @@ const ShippingForm = () => {
     return newErrors;
   };
 
-  // ---------------- HANDLE CHANGE ----------------
+  // ================= LIVE VALIDATION =================
+
+  useEffect(() => {
+    setErrors(getErrors(formData));
+  }, [formData]);
+
+  const isFormValid = Object.keys(errors).length === 0;
+
+  // ================= HANDLE CHANGE =================
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    if (name === "name" && !/^[a-zA-Z\s]*$/.test(value)) return;
-    if (name === "phone" && (!/^\d*$/.test(value) || value.length > 10)) return;
-    if (name === "pincode" && (!/^\d*$/.test(value) || value.length > 4))
+    // NAME
+    if (name === "name" && !/^[a-zA-Z\s]*$/.test(value)) {
       return;
+    }
+
+    // PHONE
+    if (name === "phone" && (!/^\d*$/.test(value) || value.length > 10)) {
+      return;
+    }
+
+    // PINCODE
+    if (name === "pincode" && (!/^\d*$/.test(value) || value.length > 4)) {
+      return;
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -152,7 +176,8 @@ const ShippingForm = () => {
     }));
   };
 
-  // ---------------- BLUR ----------------
+  // ================= BLUR =================
+
   const handleBlur = (e) => {
     const { name } = e.target;
 
@@ -160,288 +185,319 @@ const ShippingForm = () => {
       ...prev,
       [name]: true,
     }));
-
-    const newErrors = getErrors(formData);
-    setErrors(newErrors);
   };
 
-  // ---------------- FORM VALID ----------------
-  const currentErrors = getErrors(formData);
-  const isFormValid = Object.keys(currentErrors).length === 0;
+  // ================= SUBMIT =================
 
   const handleSubmit = async () => {
-    const newErrors = getErrors(formData);
-    setErrors(newErrors);
+    const validationErrors = getErrors(formData);
 
-    if (Object.keys(newErrors).length > 0) {
-      const firstField = Object.keys(newErrors)[0];
+    setErrors(validationErrors);
+
+    // touch all fields
+    const touchedFields = {};
+
+    Object.keys(formData).forEach((key) => {
+      touchedFields[key] = true;
+    });
+
+    setTouched(touchedFields);
+
+    if (Object.keys(validationErrors).length > 0) {
+      const firstField = Object.keys(validationErrors)[0];
+
       document.querySelector(`[name="${firstField}"]`)?.focus();
+
       return;
     }
 
     try {
       setLoadingCreate(true);
 
+      const payload = {
+        ...formData,
+        state: formData.state?.value || "",
+      };
+
       const res = await createAddressApiService(
         createAddressAction.request,
-        formData,
+        payload,
       );
 
       if (!res?.success) {
         throw new Error(res?.message || "Failed to create address");
       }
 
-      fetchAddressList();
-
       toast.success("Address added successfully");
 
-      // const newAddress = res?.data || {
-      //   id: Date.now().toString(),
-      //   ...formData,
-      // };
-
-      // setApiAddresses((prev) => {
-      //   if (newAddress.is_default) {
-      //     return [
-      //       ...prev.map((a) => ({ ...a, is_default: false })),
-      //       newAddress,
-      //     ];
-      //   }
-      //   return [...prev, newAddress];
-      // });
-
-      // setSelectedAddressId(newAddress.id);
+      await fetchAddressList();
 
       setFormData(initialState);
       setTouched({});
+      setErrors({});
+
       setView("list");
     } catch (err) {
-      console.error("Create address failed", err);
+      console.error(err);
       toast.error(err?.message || "Something went wrong");
     } finally {
       setLoadingCreate(false);
     }
   };
 
-  // ================= LIST =================
+  // ================= SELECT ADDRESS =================
+
+  const handleSelectAddress = async () => {
+    try {
+      setSelectAddressLoader(true);
+
+      const res = await selectAddressApiService(selectAddressAction.request, {
+        addressId: effectiveSelectedId,
+      });
+
+      if (!res?.success) {
+        throw new Error("Failed");
+      }
+      getPreviewCart();
+      navigate("/checkout/payment");
+    } catch (err) {
+      toast.error("Something went wrong");
+      console.error(err);
+    } finally {
+      setSelectAddressLoader(false);
+    }
+  };
+
+  // ================= ADDRESS LIST =================
+
   if (view === "list") {
     return (
-      <div className="p-6 border rounded-xl bg-gray-50 space-y-6">
-        <h2 className="text-2xl font-bold">Select Address</h2>
-        <div>
-          <fieldset className="flex gap-4 flex-col">
-            <legend className="sr-only">Saved addresses</legend>
+      <section
+        className="p-6 border rounded-xl bg-gray-50 space-y-6"
+        aria-labelledby="saved-address-heading"
+      >
+        <h2 id="saved-address-heading" className="text-2xl font-bold">
+          Select Address
+        </h2>
 
-            {loader
-              ? shimmerMap.map((_, index) => (
-                  <ShimmerCard className="h-[150px] rounded-lg" key={index} />
-                ))
-              : apiAddresses.map((addr) => (
-                  <button
-                    key={addr.id}
-                    className={`flex gap-3 p-4 border rounded-lg cursor-pointer ${
-                      effectiveSelectedId === addr.id
-                        ? "border-primary bg-green-50"
-                        : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedAddressId(addr.id);
-                    }}
-                  >
-                    <input
-                      type="radio"
-                      name="address"
-                      checked={effectiveSelectedId === addr.id}
-                    />
+        <fieldset className="flex gap-4 flex-col">
+          <legend className="sr-only">Saved addresses</legend>
 
-                    <div>
-                      <p className="font-semibold flex gap-2">
-                        {addr.name}
-                        {addr.is_default && (
-                          <span className="text-xs bg-black text-white px-2 rounded flex justify-center items-center">
-                            Default
-                          </span>
-                        )}
-                      </p>
+          {loader
+            ? shimmerMap.map((_, index) => (
+                <ShimmerCard className="h-[150px] rounded-lg" key={index} />
+              ))
+            : apiAddresses.map((addr) => (
+                <label
+                  key={addr.id}
+                  className={`flex gap-3 p-4 border rounded-lg cursor-pointer transition ${
+                    effectiveSelectedId === addr.id
+                      ? "border-primary bg-green-50"
+                      : "border-gray-300"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="address"
+                    checked={effectiveSelectedId === addr.id}
+                    onChange={() => setSelectedAddressId(addr.id)}
+                    className="mt-1"
+                  />
 
-                      <p className="text-sm text-gray-600">
-                        {addr.address_line1}, {addr.city}, {addr.state} -{" "}
-                        {addr.pincode}
-                      </p>
+                  <div>
+                    <p className="font-semibold flex gap-2 items-center">
+                      {addr.name}
 
-                      {addr.landmark && (
-                        <p className="text-xs text-gray-400 text-start">
-                          {addr.landmark}
-                        </p>
+                      {addr.is_default && (
+                        <span className="text-xs bg-black text-white px-2 py-1 rounded">
+                          Default
+                        </span>
                       )}
+                    </p>
 
-                      <p className="text-sm text-start">{addr.phone}</p>
-                    </div>
-                  </button>
-                ))}
-          </fieldset>
-        </div>
+                    <p className="text-sm text-gray-600">
+                      {addr.street_address}, {addr.suburb}, {addr.state} -{" "}
+                      {addr.pincode}
+                    </p>
+
+                    <p className="text-sm text-gray-700">{addr.phone}</p>
+                  </div>
+                </label>
+              ))}
+        </fieldset>
 
         <button
+          type="button"
           onClick={() => setView("form")}
-          className="w-full border border-dashed py-3 rounded-lg"
+          className="w-full border border-dashed py-3 rounded-lg hover:bg-gray-100 transition"
         >
-          + Add New Address
+          + Add New Address (Optional)
         </button>
 
         <button
+          type="button"
           disabled={!effectiveSelectedId || selectAddressLoader}
-          // onClick={() => navigate("/checkout/payment")}
-          onClick={() => {
-            handleSelectAddress();
-          }}
-          className={`w-full py-3 rounded-full text-white ${
+          onClick={handleSelectAddress}
+          className={`w-full py-3 rounded-full text-white transition ${
             effectiveSelectedId && !selectAddressLoader
               ? "bg-primary"
-              : "bg-gray-400"
-            // !selectAddressLoader ? "bg-primary"  : 'bg-gray-400'
+              : "bg-gray-400 cursor-not-allowed"
           }`}
         >
-          {selectAddressLoader ? "loading..." : "CONTINUE TO PAYMENT →"}
+          {selectAddressLoader ? "Loading..." : "CONTINUE TO PAYMENT →"}
         </button>
-      </div>
+      </section>
     );
   }
 
-  // ---------------- UI ----------------
+  // ================= FORM =================
+
   return (
-    <div className="border rounded-xl p-8 bg-gray-50 space-y-6">
-      <div className="border-t border-black ">
-        <div className="w-10 bg-primary h-[2px]"></div>
+    <section className="border rounded-xl p-8 bg-gray-50">
+      <div className="border-t border-black">
+        <div className="w-10 bg-primary h-[2px]" />
+
         <h2 className="text-2xl font-bold font-montserrat my-3">
           Shipping Information
         </h2>
-        <p className="text-sm text-black font-openSans ">
+
+        <p className="text-sm text-black font-openSans">
           Please enter your shipping information and confirm a few additional
           details for your order.
         </p>
       </div>
 
-      <Input
-        label="Email Address"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={touched.email && errors.email}
-        aria-invalid={!!errors.email}
-        placeholder="user@gmail.com"
-      />
-
-      <Input
-        label="Full Name"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={touched.name && errors.name}
-        placeholder="Full Name"
-      />
-
-      <Input
-        label="Address Line 1"
-        name="address_line1"
-        value={formData.address_line1}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={touched.address_line1 && errors.address_line1}
-        placeholder="Address Line 1"
-      />
-
-      <Input
-        label="Address Line 2"
-        name="address_line2"
-        value={formData.address_line2}
-        onChange={handleChange}
-        placeholder="Address Line 2 (alternate)"
-      />
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 mt-6">
         <Input
-          label="Landmark"
-          name="landmark"
-          value={formData.landmark}
+          label="Email Address"
+          name="email"
+          value={formData.email}
           onChange={handleChange}
           onBlur={handleBlur}
-          error={touched.landmark && errors.landmark}
-          placeholder="Landmark"
+          error={touched.email && errors.email}
+          aria-invalid={!!errors.email}
+          placeholder="user@gmail.com"
         />
+
         <Input
-          label="Address type"
-          name="address_type"
-          value={formData.address_type}
+          label="Full Name"
+          name="name"
+          value={formData.name}
           onChange={handleChange}
           onBlur={handleBlur}
-          error={touched.city && errors.city}
-          placeholder="office / house"
+          error={touched.name && errors.name}
+          aria-invalid={!!errors.name}
+          placeholder="Full Name"
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <Input
+        label="Street Address"
+        name="street_address"
+        value={formData.street_address}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={touched.street_address && errors.street_address}
+        aria-invalid={!!errors.street_address}
+        placeholder="Street Address"
+      />
+
+      <div className="mb-4">
+        {addOptionalAddress ? (
+          <Input
+            label="Address Line"
+            name="address_line"
+            value={formData.address_line1}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={touched.address_line1 && errors.address_line1}
+            aria-invalid={!!errors.address_line1}
+            placeholder="Address Line"
+          />
+        ) : (
+          <button
+            type="button"
+            className="text-blue-500"
+            onClick={() => setAddOptionalAddress(true)}
+          >
+            + Add address line
+          </button>
+        )}
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
         <Input
-          label="Pincode"
+          label="Suburb"
+          name="suburb"
+          value={formData.suburb}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={touched.suburb && errors.suburb}
+          aria-invalid={!!errors.suburb}
+          placeholder="Suburb"
+        />
+
+        <CustomSelect
+          label="State"
+          placeholder="Select State"
+          options={stateOptions}
+          value={formData.state}
+          onChange={(option) =>
+            setFormData((prev) => ({
+              ...prev,
+              state: option,
+            }))
+          }
+          className="border w-full h-[58px] rounded-md"
+          labelKey="label"
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <Input
+          label="Postcode"
           name="pincode"
           value={formData.pincode}
           onChange={handleChange}
           onBlur={handleBlur}
           error={touched.pincode && errors.pincode}
+          aria-invalid={!!errors.pincode}
           placeholder="ZIP/Postal Code"
         />
 
         <Input
-          label="City"
-          name="city"
-          value={formData.city}
+          label="Phone Number"
+          name="phone"
+          value={formData.phone}
           onChange={handleChange}
           onBlur={handleBlur}
-          error={touched.city && errors.city}
-          placeholder="City"
-        />
-
-        <Input
-          label="State"
-          name="state"
-          value={formData.state}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          error={touched.state && errors.state}
-          placeholder="State"
+          error={touched.phone && errors.phone}
+          aria-invalid={!!errors.phone}
+          placeholder="04XXXXXXXX"
         />
       </div>
 
-      <Input
-        label="Phone Number"
-        name="phone"
-        value={formData.phone}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={touched.phone && errors.phone}
-        placeholder="+61 04*** *** ***"
-      />
-
       <div className="flex items-center gap-2">
         <input
+          id="default-address"
           type="checkbox"
           name="is_default"
           checked={formData.is_default}
           onChange={handleChange}
         />
-        <span>Save as default address</span>
+
+        <label htmlFor="default-address">Save as default address</label>
       </div>
 
-      {/* GLOBAL MESSAGE */}
       {!isFormValid && (
-        <p className="text-sm text-red-500 text-right">
-          Please fill all required fields correctly
+        <p className="text-sm text-red-500 mt-4" role="alert">
+          Please fill all required fields correctly.
         </p>
       )}
 
-      <div className="flex justify-end gap-4">
+      <div className="flex justify-end gap-4 mt-6">
         <button
+          type="button"
           onClick={() => setView("list")}
           className="px-6 py-2 border rounded-full"
         >
@@ -449,16 +505,19 @@ const ShippingForm = () => {
         </button>
 
         <button
+          type="button"
           onClick={handleSubmit}
-          disabled={!isFormValid}
-          className={`px-6 py-2 rounded-full text-white ${
-            isFormValid ? "bg-primary" : "bg-gray-400 cursor-not-allowed"
+          disabled={!isFormValid || loadingCreate}
+          className={`px-6 py-2 rounded-full text-white transition ${
+            isFormValid && !loadingCreate
+              ? "bg-primary"
+              : "bg-gray-400 cursor-not-allowed"
           }`}
         >
           {loadingCreate ? "Saving..." : "Save Address"}
         </button>
       </div>
-    </div>
+    </section>
   );
 };
 
