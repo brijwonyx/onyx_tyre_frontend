@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import toast from "react-hot-toast";
 
@@ -20,10 +21,12 @@ const cardElementOptions = {
 };
 
 const StripeCardForm = ({
-  clientSecret,
   billingDetails,
   isSubmitting,
   setIsSubmitting,
+  createPaymentIntent,
+  onSuccess,
+  onFailure,
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -37,47 +40,80 @@ const StripeCardForm = ({
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!stripe || !elements || !clientSecret) return;
+    if (!stripe || !elements) return;
 
     setIsSubmitting(true);
     setCardError("");
 
-    const cardElement = elements.getElement(CardElement);
+    try {
+      const paymentIntentData = await createPaymentIntent();
+      const clientSecret = paymentIntentData?.clientSecret;
+      const paymentIntentId = paymentIntentData?.intentId || "";
 
-    const result = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: cardElement,
-        billing_details: {
-          name: billingDetails?.name || "",
-          email: billingDetails?.email || "",
-          phone: billingDetails?.phone || "",
-          address: {
-            line1: billingDetails?.address_line1 || "",
-            line2: billingDetails?.address_line2 || "",
-            city: billingDetails?.city || "",
-            state: billingDetails?.state || "",
-            postal_code: billingDetails?.pincode || "",
-            country: billingDetails?.country || "US",
+      if (!clientSecret) {
+        throw new Error("Payment intent client secret is missing.");
+      }
+
+      const cardElement = elements.getElement(CardElement);
+
+      const result = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            name: billingDetails?.name || "",
+            email: billingDetails?.email || "",
+            phone: billingDetails?.phone || "",
+            address: {
+              line1: billingDetails?.address_line1 || "",
+              line2: billingDetails?.address_line2 || "",
+              city: billingDetails?.city || "",
+              state: billingDetails?.state || "",
+              postal_code: billingDetails?.pincode || "",
+              country: billingDetails?.country || "US",
+            },
           },
         },
-      },
-    });
+      });
 
-    if (result.error) {
-      const message = result.error.message || "Payment failed";
+      if (result.error) {
+        const message = result.error.message || "Payment failed";
+        setCardError(message);
+        toast.error(message);
+        onFailure?.({
+          message,
+          paymentIntentId:
+            result.error.payment_intent?.id || paymentIntentId || "",
+        });
+        return;
+      }
+
+      if (result.paymentIntent?.status === "succeeded") {
+        toast.success("Payment successful");
+        onSuccess?.(result.paymentIntent);
+        return;
+      }
+
+      const message =
+        result.paymentIntent?.status === "processing"
+          ? "Payment is processing."
+          : `Payment status: ${result.paymentIntent?.status || "unknown"}`;
+
+      toast(message);
+      onFailure?.({
+        message,
+        paymentIntentId: result.paymentIntent?.id || paymentIntentId || "",
+      });
+    } catch (error) {
+      const message = error?.message || "Unable to process payment";
       setCardError(message);
       toast.error(message);
+      onFailure?.({
+        message,
+        paymentIntentId: "",
+      });
+    } finally {
       setIsSubmitting(false);
-      return;
     }
-
-    if (result.paymentIntent?.status === "succeeded") {
-      toast.success("Payment successful");
-    } else {
-      toast("Payment submitted. Waiting for confirmation.");
-    }
-
-    setIsSubmitting(false);
   };
 
   return (

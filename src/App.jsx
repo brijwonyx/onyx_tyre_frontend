@@ -7,7 +7,6 @@ import SignUp from "./pages/auth/SignUp";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import AdminRoutes from "./admin/routes/AdminRoutes";
 import Home from "./pages/Home";
-// import OtpLogin from "./pages/auth/OtpLogin";
 import SearchResults from "./pages/SearchResults";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
@@ -63,9 +62,6 @@ function App() {
               <Route path="orders/:id" element={<OrderDetails />} />
               <Route path="vehicles" element={<Vehicles />} />
               <Route path="addresses" element={<Addresses />} />
-              {/* <Route path="saved" element={<SavedItems />} /> */}
-              {/* <Route path="settings" element={<AccountSettings />} /> */}
-              {/* <Route path="ratings" element={<Ratings />} /> */}
             </Route>
           </Route>
 
