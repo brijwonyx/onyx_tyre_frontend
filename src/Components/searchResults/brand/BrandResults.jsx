@@ -105,6 +105,7 @@ const BrandResults = () => {
 
       return models.map((model) => ({
         ...item,
+        id: model?.tyre_id,
         tyreModel: model,
       }));
     });
@@ -124,8 +125,6 @@ const BrandResults = () => {
       );
 
       let rows = makeRes?.data?.rows || [];
-
-      console.log(rows, "Rows");
 
       // ONLY flatten for brand page
       if (state?.historyPage === HISTORY_PAGE.TYRE_BY_BRAND) {
