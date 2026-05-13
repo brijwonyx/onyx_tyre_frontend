@@ -74,13 +74,11 @@ const MobileInstaller = () => {
 
   // FETCH SLOTS
   const fetchInstallerSlot = async (vehicle) => {
-    const staticDate = "2026-04-30";
     try {
       const res = await getHomeSlotApiService(
         getSlotAction.request,
         vehicle,
-        staticDate,
-        // date,
+        date,
       );
 
       if (!res || !res.success) throw new Error("Failed");
