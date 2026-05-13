@@ -1,9 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 import { createPaymentIntentApi } from "../../api/payment.services";
+import Modal from "../../Components/Common/Modal";
 import PaymentMethods from "../../Components/checkout/payment/PaymentMethods";
 import StripeCardForm from "../../Components/checkout/payment/StripeCardForm";
 import { useCart } from "../../context/cardContext";
@@ -12,143 +15,23 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const PaymentPage = () => {
   const { priceBreakup, shippingAddress } = useCart();
+  const navigate = useNavigate();
   const [selectedMethod, setSelectedMethod] = useState("card");
-  const [clientSecret, setClientSecret] = useState("");
   const [intentId, setIntentId] = useState("");
-  const [isLoadingIntent, setIsLoadingIntent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const inFlightRequestRef = useRef("");
+  const [showExitModal, setShowExitModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showFailureModal, setShowFailureModal] = useState(false);
+  const [paymentResult, setPaymentResult] = useState({
+    amount: 0,
+    intentId: "",
+    message: "",
+  });
 
   const orderTotal = useMemo(() => {
     const total = Number(priceBreakup?.total || 0);
     return Number.isFinite(total) ? total : 0;
   }, [priceBreakup]);
-
-  const amountInSmallestUnit = useMemo(
-    () => Math.round(orderTotal * 100),
-    [orderTotal],
-  );
-
-  const paymentRequestKey = useMemo(() => {
-    return [
-      selectedMethod,
-      shippingAddress?.id || "",
-      shippingAddress?.guest_id || "",
-      amountInSmallestUnit,
-    ].join(":");
-  }, [
-    amountInSmallestUnit,
-    selectedMethod,
-    shippingAddress?.guest_id,
-    shippingAddress?.id,
-  ]);
-
-  useEffect(() => {
-    const createIntent = async () => {
-      if (selectedMethod !== "card") {
-        setClientSecret("");
-        setIntentId("");
-        return;
-      }
-
-      if (!amountInSmallestUnit) {
-        setClientSecret("");
-        setIntentId("");
-        return;
-      }
-
-      const cachedIntent = sessionStorage.getItem(
-        `stripe-payment-intent:${paymentRequestKey}`,
-      );
-
-      if (cachedIntent) {
-        try {
-          const parsedIntent = JSON.parse(cachedIntent);
-          setClientSecret(parsedIntent.clientSecret || "");
-          setIntentId(parsedIntent.intentId || "");
-          return;
-        } catch {
-          sessionStorage.removeItem(`stripe-payment-intent:${paymentRequestKey}`);
-        }
-      }
-
-      if (inFlightRequestRef.current === paymentRequestKey) {
-        return;
-      }
-
-      try {
-        inFlightRequestRef.current = paymentRequestKey;
-        setIsLoadingIntent(true);
-
-        const response = await createPaymentIntentApi({
-          addressId: shippingAddress?.id,
-          guest_id : shippingAddress?.guest_id,           
-        });
-
-//         const response = {
-//     "success": true,
-//     "data": {
-//         "order_id": "d047fea3-5cd7-4726-84d0-8ccb49fe0459",
-//         "total_amount": 105.36,
-//         "pricing": {
-//             "subtotal": 2,
-//             "shipping": 100,
-//             "tax": 0.36,
-//             "tyre_fee": 3,
-//             "addons_total": 0,
-//             "installer_charge": 0,
-//             "discount": 0,
-//             "coupon_code": null,
-//             "total": 105.36
-//         },
-//         "payment_intent_id": "pi_3TRrTFJVEMg9rTF90tJQOdda",
-//         "client_secret": "pi_3TRrTFJVEMg9rTF90tJQOdda_secret_WrxQp1wAMGHbqocQCDZN8aBOz",
-//         "status": "pending",
-//         "expires_at": "2026-04-30T10:20:25.615Z"
-//     }
-// }
-
-        const {success , data} = response || {};
-
-
-        if(!success){
-          throw new Error("Failed to create payment intent");
-        }
-
-        const { client_secret, payment_intent_id } = data || {};
-
-        setClientSecret(client_secret || "");
-        setIntentId(payment_intent_id || "");
-
-        sessionStorage.setItem(
-          `stripe-payment-intent:${paymentRequestKey}`,
-          JSON.stringify({
-            clientSecret: client_secret || "",
-            intentId: payment_intent_id || "",
-          }),
-        );
-      } catch (error) {
-        const message =
-          error?.response?.data?.message ||
-          error?.message ||
-          "Unable to initialize payment";
-        toast.error(message);
-        setClientSecret("");
-        setIntentId("");
-      } finally {
-        inFlightRequestRef.current = "";
-        setIsLoadingIntent(false);
-      }
-    };
-
-    createIntent();
-  }, [
-    amountInSmallestUnit,
-    paymentRequestKey,
-    selectedMethod,
-    shippingAddress?.guest_id,
-    shippingAddress?.id,
-  ]);
 
   const billingDetails = useMemo(
     () => ({
@@ -165,8 +48,85 @@ const PaymentPage = () => {
     [shippingAddress],
   );
 
+  const createIntentForPayment = async () => {
+    if (selectedMethod !== "card") {
+      throw new Error("Only card payment is available right now.");
+    }
+
+    if (!shippingAddress?.id) {
+      throw new Error("Please select your shipping address before payment.");
+    }
+
+    const response = await createPaymentIntentApi({
+      addressId: shippingAddress?.id,
+      guest_id: shippingAddress?.guest_id,
+    });
+
+    const { success, data, message } = response || {};
+
+    if (!success) {
+      throw new Error(message || "Failed to create payment intent");
+    }
+
+    const { client_secret, payment_intent_id } = data || {};
+
+    if (!client_secret) {
+      throw new Error("Payment intent client secret is missing.");
+    }
+
+    setIntentId(payment_intent_id || "");
+
+    return {
+      clientSecret: client_secret,
+      intentId: payment_intent_id || "",
+    };
+  };
+
+  const handlePaymentSuccess = (paymentIntent) => {
+    setPaymentResult({
+      amount: orderTotal,
+      intentId: paymentIntent?.id || intentId,
+      message: "Payment completed successfully.",
+    });
+    setShowSuccessModal(true);
+  };
+
+  const handlePaymentFailure = ({ message, paymentIntentId }) => {
+    setPaymentResult({
+      amount: orderTotal,
+      intentId: paymentIntentId || intentId,
+      message,
+    });
+    setShowFailureModal(true);
+  };
+
+  const handleExitPayment = () => {
+    setShowExitModal(true);
+  };
+
+  const handleRetryPayment = () => {
+    setShowFailureModal(false);
+    setIntentId("");
+    setPaymentResult({
+      amount: 0,
+      intentId: "",
+      message: "",
+    });
+    toast("You can try your payment again.");
+  };
+
   return (
     <div className="space-y-10">
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={handleExitPayment}
+          className="rounded-full border border-black px-6 py-2 font-montserrat text-sm font-semibold uppercase text-black"
+        >
+          Exit Payment
+        </button>
+      </div>
+
       <PaymentMethods
         selectedMethod={selectedMethod}
         onChange={setSelectedMethod}
@@ -188,30 +148,174 @@ const PaymentPage = () => {
             <p className="font-openSans text-xs text-[#8E8E93]">
               Payment Intent: {intentId}
             </p>
-          ) : null}
+          ) : (
+            <p className="font-openSans text-xs text-[#8E8E93]">
+              Payment intent will be created after you click Pay Now.
+            </p>
+          )}
         </div>
 
-        {isLoadingIntent ? (
-          <p className="font-openSans text-sm text-[#5B5B5B]">
-            Preparing secure payment...
-          </p>
-        ) : clientSecret ? (
-          <Elements stripe={stripePromise}>
-            <StripeCardForm
-              clientSecret={clientSecret}
-              billingDetails={billingDetails}
-              isSubmitting={isSubmitting}
-              setIsSubmitting={setIsSubmitting}
-            />
-          </Elements>
-        ) : (
-          <p className="font-openSans text-sm text-red-600">
-            Unable to initialize payment. Make sure your payment API is running
-            at `http://localhost:5000/api/payment/create-payment-intent` and
-            accepts a POST request.
-          </p>
-        )}
+        <Elements stripe={stripePromise}>
+          <StripeCardForm
+            billingDetails={billingDetails}
+            isSubmitting={isSubmitting}
+            setIsSubmitting={setIsSubmitting}
+            createPaymentIntent={createIntentForPayment}
+            onSuccess={handlePaymentSuccess}
+            onFailure={handlePaymentFailure}
+          />
+        </Elements>
       </div>
+
+      <Modal
+        open={showExitModal}
+        onClose={() => setShowExitModal(false)}
+        title="Leave payment?"
+        size="md"
+      >
+        <div className="space-y-5">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#FFF7E8] text-[#B7791F]">
+            <AlertTriangle size={34} />
+          </div>
+
+          <p className="font-openSans text-sm text-[#5B5B5B]">
+            Your payment is not completed yet. If you leave now, you can return
+            later and try again with a fresh payment session.
+          </p>
+
+          <div className="rounded-lg border border-[#E6E6E6] bg-gray-50 p-4">
+            <ul className="space-y-2 font-openSans text-sm text-[#5B5B5B]">
+              <li>Your checkout items will stay in place.</li>
+              <li>No successful charge will be created by leaving now.</li>
+              <li>You can come back and restart payment when you are ready.</li>
+            </ul>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              onClick={() => setShowExitModal(false)}
+              className="rounded-full bg-primary px-6 py-2 font-montserrat text-sm font-semibold uppercase text-white"
+            >
+              Continue Payment
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/checkout/review")}
+              className="rounded-full border border-black px-6 py-2 font-montserrat text-sm font-semibold uppercase text-black"
+            >
+              Leave To Review
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        open={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        title="Payment completed"
+        size="lg"
+      >
+        <div className="space-y-6">
+          <div className="text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#EAF8EE] text-[#2E7D32]">
+              <CheckCircle2 size={34} />
+            </div>
+            <h3 className="font-montserrat text-2xl font-bold text-black">
+              Your order is confirmed
+            </h3>
+            <p className="mt-2 font-openSans text-sm text-[#5B5B5B]">
+              We have received your payment and the order is ready for the next
+              checkout step.
+            </p>
+          </div>
+
+          <div className="grid gap-4 rounded-lg border border-[#E6E6E6] bg-gray-50 p-5 md:grid-cols-2">
+            <div className="rounded-md bg-white p-4">
+              <p className="font-openSans text-sm text-[#5B5B5B]">
+                Amount paid
+              </p>
+              <p className="mt-1 font-montserrat text-3xl font-bold text-black">
+                ${Number(paymentResult.amount || 0).toFixed(2)}
+              </p>
+            </div>
+            <div className="rounded-md bg-white p-4">
+              <p className="font-openSans text-sm text-[#5B5B5B]">
+                Payment status
+              </p>
+              <p className="mt-1 font-montserrat text-xl font-bold text-black">
+                Success
+              </p>
+              {paymentResult.intentId ? (
+                <p className="mt-2 break-all font-openSans text-xs text-[#8E8E93]">
+                  Intent: {paymentResult.intentId}
+                </p>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="rounded-full border border-black px-6 py-2 font-montserrat text-sm font-semibold uppercase text-black"
+            >
+              Continue Shopping
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        open={showFailureModal}
+        onClose={() => setShowFailureModal(false)}
+        title="Payment failed"
+        size="md"
+      >
+        <div className="space-y-5">
+          <div className="text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#FDECEC] text-[#C62828]">
+              <XCircle size={34} />
+            </div>
+            <h3 className="font-montserrat text-2xl font-bold text-black">
+              We could not complete your payment
+            </h3>
+            <p className="mt-2 font-openSans text-sm text-[#5B5B5B]">
+              {paymentResult.message ||
+                "Payment could not be processed right now."}
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-[#F4C7C7] bg-[#FFF7F7] p-4">
+            <p className="font-openSans text-sm text-[#5B5B5B]">
+              You can retry this payment now or return to review and choose a
+              different step.
+            </p>
+            {paymentResult.intentId ? (
+              <p className="mt-2 break-all font-openSans text-xs text-[#8E8E93]">
+                Intent: {paymentResult.intentId}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              onClick={handleRetryPayment}
+              className="rounded-full bg-primary px-6 py-2 font-montserrat text-sm font-semibold uppercase text-white"
+            >
+              Retry Payment
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/checkout/review")}
+              className="rounded-full border border-black px-6 py-2 font-montserrat text-sm font-semibold uppercase text-black"
+            >
+              Back To Review
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
