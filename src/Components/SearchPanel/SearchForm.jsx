@@ -12,11 +12,12 @@ const SearchForm = ({ type, method }) => {
       size: TyreBySize,
       brand: TyreByBrand,
     },
-    wheels: {
-      vehicle: WheelByVehicle,
-      size: WheelBySize,
-      brand: WheelByBrand,
-    },
+    // Giving green flag to phase 1
+    // wheels: {
+    //   vehicle: WheelByVehicle,
+    //   size: WheelBySize,
+    //   brand: WheelByBrand,
+    // },
   };
   const FormComponent = FORM_MAP?.[type]?.[method];
 

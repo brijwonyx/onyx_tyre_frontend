@@ -18,12 +18,24 @@ const CheckoutLayout = () => {
     priceBreakup,
     shippingAddress,
     globalAddingCartLoader,
+    // syncCart,
   } = useCart();
+
+  // const navigate = useNavigate();
 
   useEffect(() => {
     getPreviewCart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (!cartItems?.length) {
+  //       syncCart();
+  //       navigate("/");
+  //     }
+  //   }, 1000);
+  // });
 
   return (
     <div className=" mx-auto">

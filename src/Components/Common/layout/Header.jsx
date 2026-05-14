@@ -112,9 +112,9 @@ const Header = (props) => {
             </>
           )} */}
 
-          <div>
+          {/* <div>
             <User />{" "}
-          </div>
+          </div> */}
 
           <div
             onClick={() => setOpenCart(true)}
