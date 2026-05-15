@@ -2,31 +2,31 @@ import  michelin  from "../assets/tyre-brand.png";
 
 
 export const NAV_LINKS = [
-  {
-    id: "tyres",
-    label: "Tyres",
-    menu: "TYRES_MENU",
-  },
-  {
-    id: "brands",
-    label: "Tyre Brands",
-    menu: "BRANDS_MENU",
-  },
-  {
-    id: "wheels",
-    label: "Wheels",
-    path: "/wheels",
-  },
-  {
-    id: "deals",
-    label: "Deals",
-    path: "/deals",
-  },
-  {
-    id: "delivery",
-    label: "Delivery & Installation",
-    path: "/delivery-installation",
-  },
+  // {
+  //   id: "tyres",
+  //   label: "Tyres",
+  //   menu: "TYRES_MENU",
+  // },
+  // {
+  //   id: "brands",
+  //   label: "Tyre Brands",
+  //   menu: "BRANDS_MENU",
+  // },
+  // {
+  //   id: "wheels",
+  //   label: "Wheels",
+  //   path: "/wheels",
+  // },
+  // {
+  //   id: "deals",
+  //   label: "Deals",
+  //   path: "/deals",
+  // },
+  // {
+  //   id: "delivery",
+  //   label: "Delivery & Installation",
+  //   path: "/delivery-installation",
+  // },
 ];
 
 export const TYRES_MENU = {

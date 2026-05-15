@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import Footer from "../Components/Common/layout/Footer";
 import Header from "../Components/Common/layout/Header";
 import TopBar from "../Components/Common/layout/TopBar";
@@ -11,20 +12,43 @@ import ServicBanner from "../components/home/ServiceBanner";
 import TopPicks from "../components/home/TopPicks";
 import TyreBrand from "../components/home/TyreBrand";
 import TyreTips from "../components/home/TyreTips";
+import TyreBySizeModal from "../Components/Model/tyreSizeModel";
 
 const Home = () => {
+  const heroRef = useRef(null);
+
+  const scrollToHero = () => {
+    heroRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  console.log(isModalOpen, "IsModel");
+
   return (
     <>
-      <HeroSection/> 
-      <Deals/>
-      <HowItWorks/>
-      <ServicBanner/>
-      <TopPicks/>
-      <GetTyres/>
-      <TyreBrand/>
-      <TyreTips/>
-      <GetYourTyres variant="white"/>
-      <ContactBanner/>
+      <div ref={heroRef}>
+        <HeroSection />
+      </div>
+      <Deals />
+      <HowItWorks />
+      <ServicBanner />
+      <TopPicks onScrollToHero={scrollToHero} />
+      <GetTyres setIsModalOpen={setIsModalOpen} />
+      <TyreBrand />
+      <TyreTips />
+      <GetYourTyres variant="white" />
+      <ContactBanner setIsModalOpen={setIsModalOpen} />
+
+      {isModalOpen && (
+        <TyreBySizeModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </>
   );
 };

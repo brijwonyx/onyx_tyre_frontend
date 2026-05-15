@@ -14,8 +14,10 @@ import { useCart } from "../../context/cardContext";
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const PaymentPage = () => {
-  const { priceBreakup, shippingAddress } = useCart();
+  const { priceBreakup, shippingAddress, syncCart } = useCart();
+
   const navigate = useNavigate();
+
   const [selectedMethod, setSelectedMethod] = useState("card");
   const [intentId, setIntentId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -115,6 +117,15 @@ const PaymentPage = () => {
     toast("You can try your payment again.");
   };
 
+  const handleFailedRedirection = () => {
+    navigate("/checkout/home-fitment/address");
+  };
+
+  const handleSuccessRedirection = () => {
+    syncCart();
+    navigate("/");
+  };
+
   return (
     <div className="space-y-10">
       <div className="flex justify-end">
@@ -201,7 +212,7 @@ const PaymentPage = () => {
             </button>
             <button
               type="button"
-              onClick={() => navigate("/checkout/review")}
+              onClick={() => handleFailedRedirection()}
               className="rounded-full border border-black px-6 py-2 font-montserrat text-sm font-semibold uppercase text-black"
             >
               Leave To Review
@@ -257,10 +268,10 @@ const PaymentPage = () => {
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
             <button
               type="button"
-              onClick={() => navigate("/")}
+              onClick={() => handleSuccessRedirection()}
               className="rounded-full border border-black px-6 py-2 font-montserrat text-sm font-semibold uppercase text-black"
             >
-              Continue Shopping
+              Track your order
             </button>
           </div>
         </div>
@@ -308,7 +319,7 @@ const PaymentPage = () => {
             </button>
             <button
               type="button"
-              onClick={() => navigate("/checkout/review")}
+              onClick={() => handleFailedRedirection()}
               className="rounded-full border border-black px-6 py-2 font-montserrat text-sm font-semibold uppercase text-black"
             >
               Back To Review

@@ -54,7 +54,7 @@ const SummaryItems = ({ priceBreakup }) => {
           value={shipping === 0 ? "Free" : `$${shipping}`}
           free={shipping === 0}
         />
-        <SummaryRow label="STATE TAX (6%)" value={`$${tax}`} />
+        <SummaryRow label="GST (10%)" value={`$${tax}`} />
         <SummaryRow label="Motor Vehicle Tire Fee" value={`$${tyre_fee}`} />
         {protectionAdd?.length > 0 ? (
           <SummaryRow

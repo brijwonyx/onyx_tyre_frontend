@@ -4,10 +4,11 @@ const SearchTabs = ({onTabChange,activeTab}) => {
       id: "tyres",
       label: "Tyres",
     },
-    {
-      id: "wheels",
-      label: "Wheels",
-    },
+    // Giving green flag to phase 1
+    // {
+    //   id: "wheels",
+    //   label: "Wheels",
+    // },
   ];
   return (
     <div className="flex">

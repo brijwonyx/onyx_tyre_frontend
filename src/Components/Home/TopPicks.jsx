@@ -1,7 +1,7 @@
 import Button from "../common/forms/Button";
 import tyreIitem from "../../assets/tyre-item.png";
 import rattings from "../../assets/rattings.png";
-const TopPicks = () => {
+const TopPicks = ({onScrollToHero}) => {
   return (
     <>
       <div className="bg-white text-black py-20">
@@ -17,11 +17,15 @@ const TopPicks = () => {
         <div className="grid grid-cols-2 gap-6 pt-20 px-[120px] ">
           {Array.from({ length: 4 }).map((_, index) => (
             <div className="flex" key={index}>
-              <img src={tyreIitem} alt="Tyre" className="max-w-[220px] h-full" />
+              <img
+                src={tyreIitem}
+                alt="Tyre"
+                className="max-w-[220px] h-full"
+              />
               <div className="flex flex-col pl-4 gap-6">
                 <div>
                   <h6 className="font-montserrat font-bold text-xl leading-[30px] tracking-normal mb-[10px]">
-                    Michelin Pilot Sport 4
+                    Michelin Pilot Sport {index + 1}
                   </h6>
                   <p className="text-[#231F20] font-openSans font-normal text-base leading-[24px]">
                     Designed for high performance and sports cars, the Michelin
@@ -47,7 +51,13 @@ const TopPicks = () => {
                       /tire
                     </span>
                   </p>
-                  <Button solid className="w-fit">find your size</Button>
+                  <Button
+                    solid
+                    className="w-fit"
+                    onClick={onScrollToHero}
+                  >
+                    find your size
+                  </Button>
                 </div>
               </div>
             </div>

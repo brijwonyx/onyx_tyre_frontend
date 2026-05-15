@@ -21,6 +21,7 @@ import {
   updateCartApiService,
 } from "../api/api.services";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 type CartItem = {
   id: string;
@@ -52,6 +53,7 @@ type CartContextType = {
   protectionAdd: any;
   removeFromSummaryCart: (id: string) => void;
   shippingAddress: any;
+  syncCart: any;
 };
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -64,7 +66,6 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>(() => getCart());
-
   const [cartSummayItems, setCartSummaryItems] = useState([]);
   const [priceBreakup, setPriceBreakup] = useState(null);
   const [protectionAdd, setProtectionAdd] = useState([]);
@@ -309,16 +310,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
       const apiSummaryShow = res?.data || {};
 
-      const { items, price_breakup, addons , address } = apiSummaryShow || {};
+      const { items, price_breakup, addons, address } = apiSummaryShow || {};
       setCartSummaryItems(items);
       setPriceBreakup(price_breakup);
       setProtectionAdd(addons);
-      setShippingAddress(address)
+      setShippingAddress(address);
     } catch (err) {
       setCartSummaryItems([]);
       setPriceBreakup(null);
       setProtectionAdd([]);
-      setShippingAddress(null)
+      setShippingAddress(null);
       console.error("Cart sync failed", err);
     } finally {
       setGlobalAddingCartLoader(false);
@@ -390,6 +391,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         removeFromSummaryCart,
         updateQty,
         shippingAddress,
+        syncCart,
       }}
     >
       {children}

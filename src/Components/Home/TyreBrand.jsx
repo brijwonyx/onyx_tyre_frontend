@@ -10,7 +10,7 @@ const TyreBrand = () => {
             </div>
             <div className="mt-20">
                 <img src={brands} className="w-full h-full mb-10"/>
-                <Button solid className="block mx-auto">Shop All Tyres brands</Button>
+                {/* <Button solid className="block mx-auto">Shop All Tyres brands</Button> */}
             </div>
         </section>
     )
